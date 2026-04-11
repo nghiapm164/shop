@@ -39,7 +39,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 });
 
-Route::name('cl\)->group(function () {
+Route::name('client.')->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('login', [ClientAuthController::class, 'showLoginForm'])->name('login');
         Route::post('login', [ClientAuthController::class, 'login']);
