@@ -1,7 +1,12 @@
 <?php
 
-use App\Http\Controllers\Admin\AuthController as AdminAuthController;
-use App\Http\Controllers\Client\AuthController as ClientAuthController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Livewire\CartPage;
+use App\Livewire\CheckoutPage;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -11,50 +16,36 @@ use Illuminate\Support\Facades\Route;
 |
 | Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group.
+| be assigned to the "web" middleware group. Make something great!
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Public Routes
+Route::get('/', HomeController::class)->name('home');
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('products.show');
+
+// Shopping Cart & Checkout (Protected)
+Route::middleware('auth')->group(function () {
+    Route::get('/cart', CartPage::class)->name('cart.index');
+    Route::get('/checkout', CheckoutPage::class)->name('checkout.index');
+    Route::get('/order/{code}/success', [OrderController::class, 'success'])->name('order.success');
+    Route::get('/order/{code}', [OrderController::class, 'show'])->name('order.detail');
 });
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::middleware('guest')->group(function () {
-        Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login');
-        Route::post('login', [AdminAuthController::class, 'login']);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-        Route::get('register', [AdminAuthController::class, 'showRegisterForm'])->name('register');
-        Route::post('register', [AdminAuthController::class, 'register']);
-
-        Route::get('forgot-password', [AdminAuthController::class, 'showForgotPasswordForm'])->name('password.request');
-        Route::post('forgot-password', [AdminAuthController::class, 'sendResetLinkEmail'])->name('password.email');
-        Route::get('reset-password/{token}', [AdminAuthController::class, 'showResetForm'])->name('password.reset');
-        Route::post('reset-password', [AdminAuthController::class, 'reset'])->name('password.update');
-    });
-
-    Route::middleware('auth')->group(function () {
-        Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
-        Route::get('dashboard', [AdminAuthController::class, 'dashboard'])->name('dashboard');
-    });
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::name('client.')->group(function () {
-    Route::middleware('guest')->group(function () {
-        Route::get('login', [ClientAuthController::class, 'showLoginForm'])->name('login');
-        Route::post('login', [ClientAuthController::class, 'login']);
-
-        Route::get('register', [ClientAuthController::class, 'showRegisterForm'])->name('register');
-        Route::post('register', [ClientAuthController::class, 'register']);
-
-        Route::get('forgot-password', [ClientAuthController::class, 'showForgotPasswordForm'])->name('password.request');
-        Route::post('forgot-password', [ClientAuthController::class, 'sendResetLinkEmail'])->name('password.email');
-        Route::get('reset-password/{token}', [ClientAuthController::class, 'showResetForm'])->name('password.reset');
-        Route::post('reset-password', [ClientAuthController::class, 'reset'])->name('password.update');
-    });
-
-    Route::middleware('auth')->group(function () {
-        Route::post('logout', [ClientAuthController::class, 'logout'])->name('logout');
-        Route::get('dashboard', [ClientAuthController::class, 'dashboard'])->name('dashboard');
-    });
+// Admin Routes (Protected)
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 });
+
+require __DIR__.'/auth.php';
