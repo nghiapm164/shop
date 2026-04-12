@@ -1,29 +1,29 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="bg-white">
+<div class="pb-12">
     <!-- Breadcrumb -->
-    <div class="max-w-7xl mx-auto px-4 py-4 border-b border-gray-200">
-        <div class="flex items-center gap-2 text-sm">
-            <a href="{{ route('home') }}" class="text-gray-600 hover:text-red-600">Trang chủ</a>
-            <span class="text-gray-400">/</span>
+    <div class="max-w-7xl mx-auto px-4 py-5">
+        <div class="fashion-section px-4 py-3 flex items-center gap-2 text-sm text-slate-500">
+            <a href="{{ route('home') }}" class="hover:text-red-500">Trang chủ</a>
+            <span>/</span>
             @if ($product->category)
-                <a href="{{ route('products.index', ['category' => $product->category->id]) }}" class="text-gray-600 hover:text-red-600">
+                <a href="{{ route('products.index', ['category' => $product->category->id]) }}" class="hover:text-red-500">
                     {{ $product->category->name }}
                 </a>
-                <span class="text-gray-400">/</span>
+                <span>/</span>
             @endif
-            <span class="text-gray-900 font-semibold">{{ $product->name }}</span>
+            <span class="font-semibold text-slate-900">{{ $product->name }}</span>
         </div>
     </div>
 
     <!-- Product Detail Section -->
-    <div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="max-w-7xl mx-auto px-4 py-6">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <!-- LEFT COLUMN - Image Gallery -->
             <div x-data="{ mainImage: 0, showLightbox: false }" class="space-y-4">
                 <!-- Main Image -->
-                <div class="relative bg-gray-100 rounded-lg overflow-hidden aspect-square cursor-zoom-in" 
+                <div class="relative fashion-section overflow-hidden aspect-square cursor-zoom-in" 
                      @click="showLightbox = true"
                      x-transition>
                     @if ($product->images->count() > 0)
@@ -41,12 +41,12 @@
 
                     <!-- Sale Badge -->
                     @if ($product->sale_price && $product->sale_price < $product->price)
-                        <div class="absolute top-3 right-3 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">
-                            SALE
+                        <div class="absolute top-3 right-3 chip border-red-200 bg-red-50 text-red-600">
+                            GIẢM GIÁ
                         </div>
                     @elseif ($product->is_featured)
-                        <div class="absolute top-3 right-3 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-bold">
-                            NEW
+                        <div class="absolute top-3 right-3 chip border-green-200 bg-green-50 text-green-700">
+                            MỚI
                         </div>
                     @endif
 
@@ -60,12 +60,12 @@
 
                 <!-- Image Thumbnails -->
                 @if ($product->images->count() > 0)
-                    <div class="flex gap-2 overflow-x-auto">
+                    <div class="flex gap-2 overflow-x-auto pb-1">
                         @foreach ($product->images as $index => $image)
                             <button
                                 @click="mainImage = {{ $index }}"
                                 :class="{ 'ring-2 ring-red-600': mainImage === {{ $index }} }"
-                                class="flex-shrink-0 w-20 h-20 rounded-lg border-2 border-transparent hover:border-gray-300 overflow-hidden transition-all">
+                                class="flex-shrink-0 w-20 h-20 rounded-xl border-2 border-transparent hover:border-slate-400 overflow-hidden transition-all">
                                 <img
                                     src="{{ asset('storage/' . $image->image_path) }}"
                                     alt="Thumbnail {{ $index + 1 }}"
@@ -92,38 +92,38 @@
             </div>
 
             <!-- RIGHT COLUMN - Product Info -->
-            <div class="space-y-6">
+            <div class="fashion-section p-6 md:p-8 space-y-6">
                 @livewire('add-to-cart', ['product' => $product])
             </div>
         </div>
     </div>
 
     <!-- Tabs Section -->
-    <div class="border-t border-gray-200 mt-12">
+    <div class="mt-12">
         <div class="max-w-7xl mx-auto px-4">
-            <div x-data="{ activeTab: 'description' }" class="pt-12">
+            <div x-data="{ activeTab: 'description' }" class="fashion-section p-6 md:p-8">
                 <!-- Tab Navigation -->
-                <div class="flex border-b border-gray-200 mb-8" role="tablist">
+                <div class="flex flex-wrap border-b border-slate-200 mb-8" role="tablist">
                     <button
                         @click="activeTab = 'description'"
-                        :class="{ 'border-b-2 border-red-600 text-red-600': activeTab === 'description' }"
-                        class="px-6 py-4 font-semibold text-gray-600 hover:text-gray-900 transition-colors"
+                        :class="{ 'border-b-2 border-red-500 text-red-500': activeTab === 'description' }"
+                        class="px-4 md:px-6 py-4 font-semibold text-slate-500 hover:text-slate-900 transition-colors"
                         role="tab"
                         :aria-selected="activeTab === 'description'">
                         Mô tả sản phẩm
                     </button>
                     <button
                         @click="activeTab = 'specs'"
-                        :class="{ 'border-b-2 border-red-600 text-red-600': activeTab === 'specs' }"
-                        class="px-6 py-4 font-semibold text-gray-600 hover:text-gray-900 transition-colors"
+                        :class="{ 'border-b-2 border-red-500 text-red-500': activeTab === 'specs' }"
+                        class="px-4 md:px-6 py-4 font-semibold text-slate-500 hover:text-slate-900 transition-colors"
                         role="tab"
                         :aria-selected="activeTab === 'specs'">
                         Thông số kỹ thuật
                     </button>
                     <button
                         @click="activeTab = 'reviews'"
-                        :class="{ 'border-b-2 border-red-600 text-red-600': activeTab === 'reviews' }"
-                        class="px-6 py-4 font-semibold text-gray-600 hover:text-gray-900 transition-colors"
+                        :class="{ 'border-b-2 border-red-500 text-red-500': activeTab === 'reviews' }"
+                        class="px-4 md:px-6 py-4 font-semibold text-slate-500 hover:text-slate-900 transition-colors"
                         role="tab"
                         :aria-selected="activeTab === 'reviews'">
                         Đánh giá
@@ -134,11 +134,11 @@
                 <div class="pb-12">
                     <!-- Description Tab -->
                     <div x-show="activeTab === 'description'" x-transition role="tabpanel">
-                        <div class="prose prose-sm max-w-none text-gray-700">
+                        <div class="prose prose-sm max-w-none text-slate-700">
                             @if ($product->description)
                                 {!! nl2br(e($product->description)) !!}
                             @else
-                                <p class="text-gray-500">Chưa có mô tả cho sản phẩm này</p>
+                                <p class="text-slate-500">Chưa có mô tả cho sản phẩm này</p>
                             @endif
                         </div>
                     </div>
@@ -147,18 +147,18 @@
                     <div x-show="activeTab === 'specs'" x-transition role="tabpanel">
                         <div class="space-y-4">
                             <div class="grid grid-cols-2 gap-4">
-                                <div class="bg-gray-50 p-4 rounded-lg">
-                                    <div class="text-sm text-gray-600">Chất liệu</div>
-                                    <div class="font-semibold text-gray-900">Polyester 100%</div>
+                                <div class="bg-slate-50 p-4 rounded-xl">
+                                    <div class="text-sm text-slate-600">Chất liệu</div>
+                                    <div class="font-semibold text-slate-900">Polyester 100%</div>
                                 </div>
-                                <div class="bg-gray-50 p-4 rounded-lg">
-                                    <div class="text-sm text-gray-600">Xuất xứ</div>
-                                    <div class="font-semibold text-gray-900">Việt Nam</div>
+                                <div class="bg-slate-50 p-4 rounded-xl">
+                                    <div class="text-sm text-slate-600">Xuất xứ</div>
+                                    <div class="font-semibold text-slate-900">Việt Nam</div>
                                 </div>
                             </div>
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <div class="text-sm text-gray-600">Cách bảo quản</div>
-                                <div class="text-gray-900">
+                            <div class="bg-slate-50 p-4 rounded-xl">
+                                <div class="text-sm text-slate-600">Cách bảo quản</div>
+                                <div class="text-slate-900">
                                     <ul class="list-disc list-inside space-y-2 mt-2">
                                         <li>Giặt với nước lạnh dưới 30°C</li>
                                         <li>Không tẩy trắng</li>
@@ -168,9 +168,9 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <div class="text-sm text-gray-600">SKU</div>
-                                <div class="font-semibold text-gray-900">{{ $product->sku }}</div>
+                            <div class="bg-slate-50 p-4 rounded-xl">
+                                <div class="text-sm text-slate-600">SKU</div>
+                                <div class="font-semibold text-slate-900">{{ $product->sku }}</div>
                             </div>
                         </div>
                     </div>
@@ -186,22 +186,22 @@
 
     <!-- Related Products -->
     @if ($related->count() > 0)
-        <div class="border-t border-gray-200 mt-12">
+        <div class="mt-12">
             <div class="max-w-7xl mx-auto px-4 py-12">
-                <h3 class="text-2xl font-bold text-gray-900 mb-8">Sản phẩm liên quan</h3>
+                <h3 class="fashion-title text-3xl mb-8">Sản phẩm liên quan</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     @foreach ($related as $relatedProduct)
-                        <div class="group cursor-pointer">
-                            <div class="relative bg-gray-100 rounded-lg overflow-hidden aspect-square mb-4 hover:bg-gray-200 transition-colors">
+                        <div class="fashion-card p-3 group cursor-pointer">
+                            <div class="relative bg-slate-100 rounded-xl overflow-hidden aspect-square mb-4">
                                 <a href="{{ route('products.show', $relatedProduct->slug) }}" class="absolute inset-0">
                                     @if ($relatedProduct->images->count() > 0)
                                         <img
                                             src="{{ asset('storage/' . $relatedProduct->images->first()->image_path) }}"
                                             alt="{{ $relatedProduct->name }}"
-                                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                     @else
-                                        <div class="w-full h-full flex items-center justify-center bg-gray-200">
-                                            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="w-full h-full flex items-center justify-center bg-slate-200">
+                                            <svg class="w-12 h-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                             </svg>
                                         </div>
@@ -209,15 +209,15 @@
                                 </a>
 
                                 @if ($relatedProduct->sale_price && $relatedProduct->sale_price < $relatedProduct->price)
-                                    <div class="absolute top-3 right-3 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">
-                                        SALE
+                                    <div class="absolute top-3 right-3 chip border-red-200 bg-red-50 text-red-600">
+                                        GIẢM GIÁ
                                     </div>
                                 @endif
                             </div>
 
-                            <a href="{{ route('products.show', $relatedProduct->slug) }}" class="block hover:text-red-600 transition-colors">
-                                <p class="text-sm text-gray-600">{{ $relatedProduct->category?->name }}</p>
-                                <h4 class="font-semibold text-gray-900 line-clamp-2 group-hover:text-red-600">
+                            <a href="{{ route('products.show', $relatedProduct->slug) }}" class="block hover:text-red-500 transition-colors">
+                                <p class="text-sm text-slate-500">{{ $relatedProduct->category?->name }}</p>
+                                <h4 class="font-semibold text-slate-900 line-clamp-2 group-hover:text-red-500">
                                     {{ $relatedProduct->name }}
                                 </h4>
 
@@ -231,7 +231,7 @@
                                                 </svg>
                                             @endfor
                                         </div>
-                                        <span class="text-xs text-gray-500">({{ $relatedProduct->reviews_count }})</span>
+                                        <span class="text-xs text-slate-500">({{ $relatedProduct->reviews_count }})</span>
                                     </div>
                                 @endif
 
@@ -240,7 +240,7 @@
                                         {{ number_format($relatedProduct->sale_price ?? $relatedProduct->price, 0, ',', '.') }}₫
                                     </span>
                                     @if ($relatedProduct->sale_price && $relatedProduct->sale_price < $relatedProduct->price)
-                                        <span class="text-sm text-gray-400 line-through">
+                                        <span class="text-sm text-slate-400 line-through">
                                             {{ number_format($relatedProduct->price, 0, ',', '.') }}₫
                                         </span>
                                     @endif

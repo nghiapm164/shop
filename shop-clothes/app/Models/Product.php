@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Product extends Model
 {
@@ -99,10 +100,10 @@ class Product extends Model
         return $this->hasManyThrough(
             OrderItem::class,
             ProductVariant::class,
-            'id', // foreignKey on ProductVariant  
+            'product_id', // foreign key on ProductVariant table
             'product_variant_id', // foreignKey on OrderItem
-            'id',
-            'product_id'
+            'id', // local key on Product table
+            'id' // local key on ProductVariant table
         );
     }
 
@@ -173,6 +174,38 @@ class Product extends Model
     public function getIsInStockAttribute()
     {
         return $this->variants()->sum('stock_quantity') > 0;
+    }
+
+    /**
+     * Get product colors collection through variants.
+     */
+    public function getColorsAttribute()
+    {
+        return $this->variants->pluck('color')->filter()->unique('id')->values();
+    }
+
+    /**
+     * Primary image URL fallback.
+     */
+    public function getImageUrlAttribute(): string
+    {
+        $primary = $this->images->firstWhere('is_primary', true) ?? $this->images->first();
+
+        return $primary?->image_path
+            ? 'storage/' . $primary->image_path
+            : 'images/placeholder.jpg';
+    }
+
+    /**
+     * Secondary image URL fallback.
+     */
+    public function getSecondaryImageUrlAttribute(): ?string
+    {
+        $secondary = $this->images->where('is_primary', false)->first();
+
+        return $secondary?->image_path
+            ? 'storage/' . $secondary->image_path
+            : null;
     }
 
     /**

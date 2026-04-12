@@ -27,12 +27,14 @@ class ColorSeeder extends Seeder
         ];
 
         foreach ($colors as $color) {
-            DB::table('colors')->insert([
-                'name' => $color['name'],
-                'hex_code' => $color['hex_code'],
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            DB::table('colors')->updateOrInsert(
+                ['name' => $color['name']],
+                [
+                    'hex_code' => $color['hex_code'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
         }
     }
 }

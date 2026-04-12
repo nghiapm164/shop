@@ -1,12 +1,12 @@
 <!-- Footer -->
-<footer class="bg-gray-900 text-gray-300 mt-20">
+<footer class="bg-slate-950 text-slate-300 mt-16">
     <!-- Main Footer -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <!-- Brand Info -->
             <div>
-                <a href="{{ route('home') }}" class="text-2xl font-bold text-white mb-4 block">
-                    <span class="text-red-500">Sport</span>Wear
+                <a href="{{ route('home') }}" class="display-font text-2xl font-extrabold text-white mb-4 block tracking-tight">
+                    MODE<span class="text-red-500">SPORT</span>
                 </a>
                 <p class="text-sm text-gray-400 mb-4">
                     Cửa hàng chuyên cung cấp quần áo thể thao nam chất lượng cao, giá cạnh tranh, giao hàng nhanh.
@@ -67,7 +67,7 @@
     </div>
 
     <!-- Newsletter -->
-    <div class="border-t border-gray-800">
+    <div class="border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <div>
@@ -76,7 +76,7 @@
                 </div>
                 <form class="flex gap-2">
                     <input type="email" placeholder="Email của bạn..." 
-                        class="flex-1 px-4 py-2 rounded-lg bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500">
+                        class="flex-1 px-4 py-2 rounded-xl bg-slate-900 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-red-500">
                     <button type="submit" class="btn-primary">Đăng ký</button>
                 </form>
             </div>
@@ -84,7 +84,7 @@
     </div>
 
     <!-- Bottom Bar -->
-    <div class="border-t border-gray-800 bg-gray-950">
+    <div class="border-t border-slate-800 bg-black">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div class="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400 gap-4">
                 <p>&copy; 2026 SportWear Shop. All rights reserved.</p>
@@ -98,7 +98,17 @@
     </div>
 
     <!-- Scroll to Top Button -->
-    <div class="fixed bottom-8 right-8" x-data="null" x-show="window.scrollY > 300" x-transition class="z-40">
+    <div
+        class="fixed bottom-8 right-8 z-40"
+        x-data="{ show: false }"
+        x-init="
+            const onScroll = () => { show = window.scrollY > 300 };
+            onScroll();
+            window.addEventListener('scroll', onScroll);
+        "
+        x-show="show"
+        x-transition
+    >
         <button @click="window.scrollTo({ top: 0, behavior: 'smooth' })" 
             class="bg-red-500 hover:bg-red-600 text-white rounded-full p-3 shadow-lg transition-all">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

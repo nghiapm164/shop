@@ -13,9 +13,20 @@ class BannerSlider extends Component
     public function mount()
     {
         $this->banners = Banner::where('is_active', true)
-            ->where('position', 'hero')
+            ->whereIn('position', ['home_top', 'home_middle', 'home_bottom'])
             ->orderBy('sort_order')
             ->get()
+            ->map(function (Banner $banner) {
+                return [
+                    'id' => $banner->id,
+                    'title' => $banner->title,
+                    'subtitle' => 'Khám phá ưu đãi mới nhất từ SportWear Shop',
+                    'image_url' => $banner->image_url,
+                    'link' => $banner->link ?: '#',
+                    'cta_text' => 'Xem ngay',
+                ];
+            })
+            ->values()
             ->toArray();
 
         if (empty($this->banners)) {
@@ -44,7 +55,7 @@ class BannerSlider extends Component
                 'id' => 1,
                 'title' => 'Quần áo thể thao chất lượng cao',
                 'subtitle' => 'Khám phá bộ sưu tập mới nhất của chúng tôi',
-                'image_url' => asset('images/banner-default-1.jpg'),
+                'image_url' => 'images/banner-default-1.svg',
                 'link' => '#',
                 'cta_text' => 'Mua sắm ngay',
             ],
@@ -52,7 +63,7 @@ class BannerSlider extends Component
                 'id' => 2,
                 'title' => 'Giảm giá đến 50%',
                 'subtitle' => 'Cho các sản phẩm được chọn',
-                'image_url' => asset('images/banner-default-2.jpg'),
+                'image_url' => 'images/banner-default-2.svg',
                 'link' => '#',
                 'cta_text' => 'Xem sale',
             ],
@@ -60,7 +71,7 @@ class BannerSlider extends Component
                 'id' => 3,
                 'title' => 'Miễn phí vận chuyển',
                 'subtitle' => 'Cho đơn hàng từ 200.000₫',
-                'image_url' => asset('images/banner-default-3.jpg'),
+                'image_url' => 'images/banner-default-3.svg',
                 'link' => '#',
                 'cta_text' => 'Mua ngay',
             ],

@@ -25,10 +25,23 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        $credentials['role'] = 'admin';
-
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            if (!in_array(Auth::user()?->role, ['admin', 'super_admin'], true)) {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Tài khoản này không có quyền quản trị.',
+                ])->onlyInput('email');
+            }
+
+            if (Auth::user()?->is_active === false) {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Tài khoản quản trị đang bị khóa.',
+                ])->onlyInput('email');
+            }
+
             $request->session()->regenerate();
+            Auth::user()?->forceFill(['last_login_at' => now()])->save();
             return redirect()->route('admin.dashboard');
         }
 

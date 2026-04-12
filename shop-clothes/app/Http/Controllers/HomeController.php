@@ -16,7 +16,7 @@ class HomeController extends Controller
     {
         // Latest products (8 items) - ordered by creation date
         $newProducts = Product::where('is_active', true)
-            ->with('category', 'colors', 'reviews')
+            ->with(['category', 'images', 'variants.color', 'reviews'])
             ->latest('created_at')
             ->limit(8)
             ->get();
@@ -25,7 +25,7 @@ class HomeController extends Controller
         $bestSellers = Product::where('is_active', true)
             ->withCount('orderItems as orders_count')
             ->orderByDesc('orders_count')
-            ->with('category', 'colors', 'reviews')
+            ->with(['category', 'images', 'variants.color', 'reviews'])
             ->limit(8)
             ->get();
 

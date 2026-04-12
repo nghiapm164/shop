@@ -24,12 +24,14 @@ class SizeSeeder extends Seeder
         ];
 
         foreach ($sizes as $size) {
-            DB::table('sizes')->insert([
-                'name' => $size['name'],
-                'code' => $size['code'],
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            DB::table('sizes')->updateOrInsert(
+                ['name' => $size['name']],
+                [
+                    'code' => $size['code'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
         }
     }
 }

@@ -1,8 +1,10 @@
-<div class="bg-white min-h-screen">
+<div class="min-h-screen pb-12">
     <!-- Header -->
-    <div class="max-w-7xl mx-auto px-4 py-8 border-b border-gray-200">
-        <h1 class="text-3xl font-bold text-gray-900">Thanh toán</h1>
-        <p class="text-gray-500 mt-2">{{ $this->cartItems->count() }} sản phẩm</p>
+    <div class="max-w-7xl mx-auto px-4 pt-8 pb-4">
+        <div class="fashion-section p-6 md:p-7">
+            <h1 class="fashion-title text-3xl md:text-4xl">Thanh toán</h1>
+            <p class="fashion-subtitle mt-2">Hoàn tất đơn hàng trong vài bước nhanh gọn.</p>
+        </div>
     </div>
 
     <div class="max-w-7xl mx-auto px-4 py-8">
@@ -10,8 +12,8 @@
             <!-- Left Column - Forms -->
             <div class="lg:col-span-2 space-y-8">
                 <!-- Shipping Address Section -->
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
-                    <h2 class="text-xl font-bold text-gray-900 mb-6">Địa chỉ giao hàng</h2>
+                <div class="fashion-section p-6">
+                    <h2 class="fashion-title text-2xl mb-6">Địa chỉ giao hàng</h2>
 
                     <!-- Saved Addresses -->
                     @if ($this->savedAddresses->count() > 0)
@@ -169,8 +171,8 @@
                 </div>
 
                 <!-- Order Notes -->
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
-                    <h2 class="text-xl font-bold text-gray-900 mb-6">Ghi chú đơn hàng</h2>
+                <div class="fashion-section p-6">
+                    <h2 class="fashion-title text-2xl mb-6">Ghi chú đơn hàng</h2>
                     <textarea
                         wire:model.lazy="notes"
                         placeholder="Nhập ghi chú cho đơn hàng (tùy chọn)"
@@ -182,8 +184,8 @@
                 </div>
 
                 <!-- Payment Method -->
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
-                    <h2 class="text-xl font-bold text-gray-900 mb-6">Phương thức thanh toán</h2>
+                <div class="fashion-section p-6">
+                    <h2 class="fashion-title text-2xl mb-6">Phương thức thanh toán</h2>
 
                     <div class="space-y-3">
                         <!-- COD -->
@@ -248,11 +250,11 @@
 
             <!-- Right Column - Order Summary -->
             <div class="lg:col-span-1">
-                <div class="bg-gray-50 rounded-lg p-6 sticky top-24">
-                    <h3 class="text-lg font-bold text-gray-900 mb-6">Tóm tắt đơn hàng</h3>
+                <div class="fashion-section p-6 sticky top-24">
+                    <h3 class="fashion-title text-xl mb-6">Tóm tắt đơn hàng</h3>
 
                     <!-- Items List -->
-                    <div class="space-y-3 mb-6 pb-6 border-b border-gray-200 max-h-96 overflow-y-auto">
+                    <div class="space-y-3 mb-6 pb-6 border-b border-slate-200 max-h-96 overflow-y-auto">
                         @foreach ($this->cartItems as $item)
                             <div class="flex gap-3">
                                 @php
@@ -264,7 +266,7 @@
                                 <img
                                     src="{{ $imageUrl }}"
                                     alt="{{ $item['product_name'] }}"
-                                    class="w-12 h-12 object-cover rounded">
+                                    class="w-12 h-12 object-cover rounded-xl border border-slate-200">
                                 <div class="flex-1 text-sm">
                                     <p class="font-semibold text-gray-900 line-clamp-1">{{ $item['product_name'] }}</p>
                                     <p class="text-gray-500">{{ $item['size'] }} - {{ $item['color'] }}</p>
@@ -278,7 +280,7 @@
                     </div>
 
                     <!-- Summary -->
-                    <div class="space-y-3 border-b border-gray-200 pb-6">
+                    <div class="space-y-3 border-b border-slate-200 pb-6">
                         <div class="flex justify-between text-sm">
                             <span class="text-gray-600">Tạm tính:</span>
                             <span class="font-semibold">{{ number_format($this->subtotal, 0, ',', '.') }}₫</span>
@@ -314,14 +316,14 @@
                     <!-- Place Order Button -->
                     <button
                         type="submit"
-                        class="w-full px-6 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-colors">
+                        class="w-full btn-primary py-3">
                         Đặt hàng
                     </button>
 
                     <!-- Back to Cart -->
                     <a
                         href="/cart"
-                        class="block text-center mt-3 px-6 py-3 border-2 border-red-600 text-red-600 rounded-lg font-semibold hover:bg-red-50 transition-colors">
+                        class="block text-center mt-3 px-6 py-3 rounded-xl border border-red-500 text-red-500 font-semibold hover:bg-red-50 transition-colors">
                         Quay lại giỏ hàng
                     </a>
                 </div>

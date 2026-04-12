@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('page-title', 'Dashboard')
+@section('page-title', 'Tổng quan')
 
 @section('content')
 <div class="space-y-6">
@@ -111,7 +111,7 @@
             <!-- Alert -->
             @if ($stats['low_stock_count'] > 0)
                 <div class="mt-4 pt-4 border-t border-red-300">
-                    <a href="{{ route('admin.products.index') ?? '#' }}" class="text-red-600 text-sm font-semibold hover:underline">
+                    <a href="{{ Route::has('admin.products.index') ? route('admin.products.index') : 'javascript:void(0)' }}" class="text-red-600 text-sm font-semibold hover:underline">
                         Xem chi tiết <i class="fas fa-arrow-right ml-1"></i>
                     </a>
                 </div>
@@ -150,7 +150,7 @@
         <div class="lg:col-span-2 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-lg font-bold text-gray-900">Đơn hàng mới nhất</h3>
-                <a href="{{ route('admin.orders.index') ?? '#' }}" class="text-red-600 hover:text-red-700 text-sm font-semibold">
+                <a href="{{ Route::has('admin.orders.index') ? route('admin.orders.index') : 'javascript:void(0)' }}" class="text-red-600 hover:text-red-700 text-sm font-semibold">
                     Xem tất cả <i class="fas fa-arrow-right ml-1"></i>
                 </a>
             </div>
@@ -185,12 +185,20 @@
                                         @case('shipped')
                                             <span class="px-2 py-1 text-xs font-semibold text-purple-600 bg-purple-100 rounded-full">Đang giao</span>
                                             @break
-                                        @case('completed')
-                                            <span class="px-2 py-1 text-xs font-semibold text-green-600 bg-green-100 rounded-full">Hoàn thành</span>
+                                        @case('confirmed')
+                                            <span class="px-2 py-1 text-xs font-semibold text-sky-600 bg-sky-100 rounded-full">Đã xác nhận</span>
+                                            @break
+                                        @case('delivered')
+                                            <span class="px-2 py-1 text-xs font-semibold text-green-600 bg-green-100 rounded-full">Đã giao</span>
+                                            @break
+                                        @case('refunded')
+                                            <span class="px-2 py-1 text-xs font-semibold text-gray-600 bg-gray-100 rounded-full">Hoàn tiền</span>
                                             @break
                                         @case('cancelled')
                                             <span class="px-2 py-1 text-xs font-semibold text-red-600 bg-red-100 rounded-full">Đã hủy</span>
                                             @break
+                                        @default
+                                            <span class="px-2 py-1 text-xs font-semibold text-gray-600 bg-gray-100 rounded-full">{{ ucfirst($order->status) }}</span>
                                     @endswitch
                                 </td>
                                 <td class="py-3 px-4 text-sm text-gray-600">{{ $order->created_at->format('d/m/Y H:i') }}</td>
@@ -219,7 +227,7 @@
                 @forelse ($topProducts as $product)
                     <div class="flex gap-3 pb-4 border-b border-gray-200 last:border-0 hover:bg-gray-50 p-2 rounded transition-colors">
                         <img
-                            src="{{ asset('storage/' . $product->image_path) }}"
+                            src="{{ $product->image_path ? asset('storage/' . $product->image_path) : asset('images/placeholder.jpg') }}"
                             alt="{{ $product->name }}"
                             class="w-12 h-12 object-cover rounded">
                         <div class="flex-1 min-w-0">
