@@ -1,13 +1,13 @@
 @extends('layouts.client')
 
-@section('title', 'Client Dashboard | Shop Nam')
+@section('title', 'Bảng điều khiển khách hàng | Shop Nam')
 
 @section('content')
     <div class="card">
         <div class="card-inner">
             <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; align-items: center;">
                 <div>
-                    <h1 class="hero-title">Client Dashboard</h1>
+                    <h1 class="hero-title">Bảng điều khiển khách hàng</h1>
                     <p class="hero-subtitle">Quản lý đơn hàng, xem lịch sử mua sắm và tiếp tục khám phá trang phục nam.</p>
                 </div>
                 <form method="POST" action="{{ route('client.logout') }}" style="margin:0;">
