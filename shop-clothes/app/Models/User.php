@@ -28,6 +28,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'address',
         'avatar',
         'role',
+        'is_active',
+        'last_login_at',
     ];
 
     /**
@@ -47,6 +49,8 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_active' => 'boolean',
+        'last_login_at' => 'datetime',
     ];
 
     /**
@@ -94,7 +98,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return in_array($this->role, ['admin', 'super_admin'], true);
     }
 
     /**

@@ -1,138 +1,89 @@
 @props(['product'])
 
-<div class="group bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300">
-    <!-- Image Container -->
-    <div class="relative overflow-hidden bg-gray-100 h-80 flex items-center justify-center" x-data="{ showSecond: false }">
-        <!-- Primary Image -->
-        <img x-show="!showSecond" 
-            src="{{ asset($product->image_url ?? 'images/placeholder.jpg') }}" 
-            alt="{{ $product->name }}"
-            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 lazy"
-            loading="lazy"
-            @mouseenter="showSecond = true"
-            @mouseleave="showSecond = false">
+@php
+    $fallbackImage = asset('images/product-placeholder.svg');
+    $primaryImage = $product->image_url ?? 'images/product-placeholder.svg';
+    $secondaryImage = $product->secondary_image_url;
 
-        <!-- Secondary Image Hover -->
-        @if($product->secondary_image_url)
-            <img x-show="showSecond" 
-                src="{{ asset($product->secondary_image_url) }}" 
+    $primarySrc = str_starts_with($primaryImage, 'http://') || str_starts_with($primaryImage, 'https://')
+        ? $primaryImage
+        : asset($primaryImage);
+
+    $secondarySrc = null;
+    if ($secondaryImage) {
+        $secondarySrc = str_starts_with($secondaryImage, 'http://') || str_starts_with($secondaryImage, 'https://')
+            ? $secondaryImage
+            : asset($secondaryImage);
+    }
+@endphp
+
+<article class="group h-full overflow-hidden rounded-[1.8rem] border border-[#eadfd5] bg-white shadow-[0_20px_45px_-30px_rgba(92,64,42,0.55)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_30px_60px_-34px_rgba(92,64,42,0.65)] stagger-enter">
+    <div class="relative overflow-hidden bg-[#f6f0e9] aspect-[3/4]" x-data="{ showSecond: false }">
+        <img
+            x-show="!showSecond"
+            src="{{ $primarySrc }}"
+            alt="{{ $product->name }}"
+            class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            loading="lazy"
+            onerror="this.onerror=null;this.src='{{ $fallbackImage }}';"
+            @mouseenter="showSecond = true"
+            @mouseleave="showSecond = false"
+        >
+
+        @if($secondarySrc)
+            <img
+                x-show="showSecond"
+                src="{{ $secondarySrc }}"
                 alt="{{ $product->name }}"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 absolute inset-0"
-                loading="lazy">
+                class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='{{ $fallbackImage }}';"
+            >
         @endif
 
-        <!-- Badges -->
-        <div class="absolute top-4 left-4 flex flex-col gap-2">
-            <!-- NEW Badge (within 7 days) -->
-            @if($product->created_at->diffInDays(now()) <= 7)
-                <span class="badge-success animate-pulse">NEW</span>
-            @endif
-
-            <!-- SALE Badge -->
-            @if($product->sale_price)
-                <span class="badge-warning">SALE</span>
-                <span class="badge bg-red-50 text-red-600 text-xs font-bold">
-                    -{{ round((1 - $product->sale_price / $product->price) * 100) }}%
-                </span>
-            @endif
-
-            <!-- HOT Badge (high views/sales) -->
-            @if($product->view_count > 1000 || $product->sales_count > 100)
-                <span class="badge-primary animate-bounce">🔥 HOT</span>
-            @endif
-        </div>
-
-        <!-- Quick View Button (on hover) -->
-        <button class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-            <a href="{{ route('products.show', $product->slug) }}" 
-                class="bg-white text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-red-500 hover:text-white transition-all">
-                Xem chi tiết
-            </a>
+        <button type="button" aria-label="Yêu thích" class="absolute left-4 top-4 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#d8b294] text-white shadow-md transition-transform duration-300 hover:scale-105">
+            <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.17a4 4 0 115.656 5.656L10 17.657l-6.828-6.828a4 4 0 010-5.657z"></path>
+            </svg>
         </button>
-    </div>
 
-    <!-- Product Info -->
-    <div class="p-4">
-        <!-- Category -->
-        <div class="mb-2">
-            <a href="#" class="text-xs text-gray-500 hover:text-red-500 transition-all">
-                {{ $product->category->name ?? 'Uncategorized' }}
-            </a>
-        </div>
-
-        <!-- Product Name -->
-        <a href="{{ route('products.show', $product->slug) }}" 
-            class="block text-sm font-semibold text-gray-900 line-clamp-2 hover:text-red-500 transition-colors mb-2">
-            {{ $product->name }}
-        </a>
-
-        <!-- Rating (if available) -->
-        @if($product->average_rating)
-            <div class="flex items-center gap-2 mb-2">
-                <div class="flex items-center">
-                    @for($i = 0; $i < 5; $i++)
-                        @if($i < floor($product->average_rating))
-                            <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                            </svg>
-                        @else
-                            <svg class="w-3 h-3 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                            </svg>
-                        @endif
-                    @endfor
-                </div>
-                <span class="text-xs text-gray-500">({{ $product->review_count ?? 0 }})</span>
+        @if($product->sale_price)
+            <div class="absolute right-4 top-4 z-10">
+                <span class="rounded-full bg-rose-500 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">-{{ round((1 - $product->sale_price / $product->price) * 100) }}%</span>
             </div>
         @endif
 
-        <!-- Price -->
-        <div class="flex items-center gap-2 mb-4">
-            @if($product->sale_price)
-                <span class="text-lg font-bold text-red-500">{{ number_format($product->sale_price, 0) }}₫</span>
-                <span class="text-sm text-gray-400 line-through">{{ number_format($product->price, 0) }}₫</span>
-            @else
-                <span class="text-lg font-bold text-gray-900">{{ number_format($product->price, 0) }}₫</span>
-            @endif
-        </div>
+        <div class="absolute inset-x-0 bottom-0 h-52 bg-gradient-to-t from-black/85 via-black/68 to-transparent"></div>
 
-        <!-- Colors (if available) -->
         @if($product->colors->count() > 0)
-            <div class="flex items-center gap-2 mb-4">
-                @foreach($product->colors->take(5) as $color)
-                    <div class="w-6 h-6 rounded-full border-2 border-gray-300 cursor-pointer hover:border-gray-900 transition-all"
-                        style="background-color: {{ $color->hex_code }}"
-                        title="{{ $color->name }}"></div>
+            <div class="absolute left-0 right-0 bottom-[122px] z-10 flex items-center justify-center gap-2">
+                @foreach($product->colors->take(4) as $color)
+                    <span class="h-4 w-4 rounded-full border-2 border-white/90 shadow" style="background-color: {{ $color->hex_code }}" title="{{ $color->name }}"></span>
                 @endforeach
-                @if($product->colors->count() > 5)
-                    <span class="text-xs text-gray-500">+{{ $product->colors->count() - 5 }}</span>
+                @if($product->colors->count() > 4)
+                    <span class="rounded-full bg-white/85 px-2 py-0.5 text-[10px] font-semibold text-slate-700">+{{ $product->colors->count() - 4 }}</span>
                 @endif
             </div>
         @endif
 
-        <!-- Action Buttons -->
-        <div class="flex gap-2">
-            <!-- Add to Cart Button -->
-            <button wire:click="addToCart({{ $product->id }})"
-                class="flex-1 btn-primary text-sm">
-                <span class="flex items-center justify-center gap-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                    Thêm giỏ
-                </span>
-            </button>
+        <div class="absolute inset-x-0 bottom-0 z-10 bg-black/32 px-4 pb-4 pt-3">
+            <h3 class="line-clamp-1 text-[15px] font-bold leading-tight text-[#ffd2a6]" style="font-family: 'Tomato', 'Nunito Sans', sans-serif;">
+                {{ $product->name }}
+            </h3>
 
-            <!-- Wishlist Button -->
-            <button wire:click="toggleWishlist({{ $product->id }})"
-                class="btn-secondary text-sm p-2 flex items-center justify-center"
-                :class="{ 'bg-red-50 border-red-300': isInWishlist }">
-                <svg class="w-4 h-4" :fill="isInWishlist ? 'currentColor' : 'none'" 
-                    stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                </svg>
-            </button>
+            <div class="mt-2 inline-flex items-center rounded-full bg-white px-2.5 py-1 text-[14px] font-extrabold leading-none text-slate-900" style="font-family: 'Tomato', 'Nunito Sans', sans-serif;">
+                @if($product->sale_price)
+                    {{ number_format($product->sale_price, 0) }}₫
+                @else
+                    {{ number_format($product->price, 0) }}₫
+                @endif
+            </div>
+
+            <p class="mt-2 line-clamp-2 text-[12px] leading-snug text-white/92" style="font-family: 'Tomato', 'Nunito Sans', sans-serif;">
+                {{ \Illuminate\Support\Str::limit(strip_tags($product->description ?? ($product->category->name ?? 'Sản phẩm thời trang hiện đại dành cho bạn.')), 88) }}
+            </p>
         </div>
+
+        <a href="{{ route('products.show', $product->slug) }}" class="absolute inset-0"></a>
     </div>
-</div>
+</article>

@@ -1,14 +1,16 @@
-<div class="bg-white min-h-screen">
+<div class="min-h-screen pb-12">
     <!-- Header -->
-    <div class="max-w-7xl mx-auto px-4 py-8 border-b border-gray-200">
-        <h1 class="text-3xl font-bold text-gray-900">Giỏ hàng</h1>
-        <p class="text-gray-500 mt-2">{{ $this->cartItems->count() }} sản phẩm</p>
+    <div class="max-w-7xl mx-auto px-4 pt-8 pb-4">
+        <div class="fashion-section p-6 md:p-7">
+            <h1 class="fashion-title text-3xl md:text-4xl">Giỏ hàng</h1>
+            <p class="fashion-subtitle mt-2">{{ $this->cartItems->count() }} sản phẩm đang chờ bạn thanh toán.</p>
+        </div>
     </div>
 
     <div class="max-w-7xl mx-auto px-4 py-8">
         @if ($this->cartItems->isEmpty())
             <!-- Empty Cart State -->
-            <div class="flex flex-col items-center justify-center py-16">
+            <div class="fashion-section flex flex-col items-center justify-center py-16 px-4 text-center">
                 <svg class="w-24 h-24 text-gray-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
@@ -17,7 +19,7 @@
                 <button
                     wire:click="continueShopping"
                     type="button"
-                    class="px-8 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors">
+                    class="btn-primary px-8 py-3">
                     Tiếp tục mua sắm
                 </button>
             </div>
@@ -27,9 +29,9 @@
                 <!-- Cart Items Section -->
                 <div class="lg:col-span-2">
                     <!-- Cart Table -->
-                    <div class="bg-white rounded-lg border border-gray-200">
+                    <div class="fashion-section overflow-hidden">
                         <!-- Table Header -->
-                        <div class="hidden lg:grid grid-cols-6 gap-4 p-6 border-b border-gray-200 font-semibold text-sm text-gray-900">
+                        <div class="hidden lg:grid grid-cols-6 gap-4 p-6 border-b border-slate-200 font-semibold text-sm text-slate-900 bg-slate-50/80">
                             <div>Sản phẩm</div>
                             <div class="text-center">Size</div>
                             <div class="text-center">Màu</div>
@@ -40,7 +42,7 @@
 
                         <!-- Cart Items -->
                         @foreach ($this->cartItems as $item)
-                            <div class="border-b border-gray-200 last:border-b-0 p-6 grid grid-cols-1 lg:grid-cols-6 gap-4 lg:items-center">
+                            <div class="border-b border-slate-200 last:border-b-0 p-6 grid grid-cols-1 lg:grid-cols-6 gap-4 lg:items-center">
                                 <!-- Product Info -->
                                 <div class="lg:col-span-1 flex gap-4">
                                     @php
@@ -52,10 +54,10 @@
                                     <img
                                         src="{{ $imageUrl }}"
                                         alt="{{ $item['product_name'] }}"
-                                        class="w-20 h-20 object-cover rounded-lg">
+                                        class="w-20 h-20 object-cover rounded-xl border border-slate-200">
                                     <div class="flex-1">
-                                        <h3 class="font-semibold text-gray-900 text-sm">{{ $item['product_name'] }}</h3>
-                                        <p class="text-xs text-gray-500 mt-1">SKU: {{ $item['sku'] ?? 'N/A' }}</p>
+                                        <h3 class="font-semibold text-slate-900 text-sm">{{ $item['product_name'] }}</h3>
+                                        <p class="text-xs text-slate-500 mt-1">SKU: {{ $item['sku'] ?? 'N/A' }}</p>
                                     </div>
                                 </div>
 
@@ -89,7 +91,7 @@
                                 <!-- Quantity (Mobile/Desktop) -->
                                 <div class="lg:col-span-1">
                                     <p class="lg:hidden text-xs text-gray-500 mb-2">Số lượng</p>
-                                    <div class="flex items-center border border-gray-300 rounded-lg w-fit">
+                                    <div class="flex items-center border border-slate-300 rounded-xl w-fit">
                                         <button
                                             wire:click="updateQuantity({{ $item['product_variant_id'] }}, {{ $item['quantity'] - 1 }})"
                                             type="button"
@@ -129,18 +131,18 @@
                     <button
                         wire:click="continueShopping"
                         type="button"
-                        class="w-full lg:hidden mt-6 px-6 py-3 border-2 border-red-600 text-red-600 rounded-lg font-semibold hover:bg-red-50 transition-colors">
+                        class="w-full lg:hidden mt-6 px-6 py-3 rounded-xl border border-red-500 text-red-500 font-semibold hover:bg-red-50 transition-colors">
                         Tiếp tục mua sắm
                     </button>
                 </div>
 
                 <!-- Order Summary Sidebar -->
                 <div class="lg:col-span-1">
-                    <div class="bg-gray-50 rounded-lg p-6 sticky top-24">
-                        <h3 class="text-lg font-bold text-gray-900 mb-6">Tóm tắt đơn hàng</h3>
+                    <div class="fashion-section p-6 sticky top-24">
+                        <h3 class="fashion-title text-xl mb-6">Tóm tắt đơn hàng</h3>
 
                         <!-- Summary Items -->
-                        <div class="space-y-4 border-b border-gray-200 pb-6">
+                        <div class="space-y-4 border-b border-slate-200 pb-6">
                             <!-- Subtotal -->
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Tạm tính:</span>
@@ -221,7 +223,7 @@
                         </div>
 
                         <!-- Total -->
-                        <div class="pt-6 border-b border-gray-200 pb-6">
+                            <div class="pt-6 border-b border-slate-200 pb-6">
                             <div class="flex justify-between items-baseline">
                                 <span class="text-gray-700 font-semibold">Tổng cộng:</span>
                                 <span class="text-3xl font-bold text-red-600">
@@ -235,13 +237,13 @@
                             <button
                                 wire:click="proceedToCheckout"
                                 type="button"
-                                class="w-full px-6 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-colors">
+                                class="w-full btn-primary py-3">
                                 Tiến hành thanh toán
                             </button>
                             <button
                                 wire:click="continueShopping"
                                 type="button"
-                                class="hidden lg:block w-full px-6 py-3 border-2 border-red-600 text-red-600 rounded-lg font-semibold hover:bg-red-50 transition-colors">
+                                class="hidden lg:block w-full px-6 py-3 rounded-xl border border-red-500 text-red-500 font-semibold hover:bg-red-50 transition-colors">
                                 Tiếp tục mua sắm
                             </button>
                         </div>

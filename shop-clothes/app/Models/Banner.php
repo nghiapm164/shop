@@ -27,6 +27,18 @@ class Banner extends Model
      */
     public function getImageUrlAttribute()
     {
+        if (!$this->image) {
+            return asset('images/placeholder.jpg');
+        }
+
+        if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
+            return $this->image;
+        }
+
+        if (str_starts_with($this->image, 'images/')) {
+            return asset($this->image);
+        }
+
         return asset('storage/' . $this->image);
     }
 

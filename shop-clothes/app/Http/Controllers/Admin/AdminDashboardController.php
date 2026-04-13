@@ -162,37 +162,32 @@ class AdminDashboardController extends Controller
     private function getOrdersByStatusData(): array
     {
         $statuses = [
-            'pending' => 'Chờ xử lý',
-            'processing' => 'Đang chuẩn bị',
-            'shipped' => 'Đang giao',
-            'completed' => 'Hoàn thành',
-            'cancelled' => 'Đã hủy',
+            'pending' => ['label' => 'Chờ xử lý', 'color' => '#3B82F6'],
+            'confirmed' => ['label' => 'Đã xác nhận', 'color' => '#0EA5E9'],
+            'processing' => ['label' => 'Đang chuẩn bị', 'color' => '#F59E0B'],
+            'shipped' => ['label' => 'Đang giao', 'color' => '#8B5CF6'],
+            'delivered' => ['label' => 'Đã giao', 'color' => '#10B981'],
+            'cancelled' => ['label' => 'Đã hủy', 'color' => '#EF4444'],
+            'refunded' => ['label' => 'Hoàn tiền', 'color' => '#6B7280'],
         ];
 
         $data = [];
         $labels = [];
-        $colors = [
-            '#3B82F6', // blue - pending
-            '#F59E0B', // amber - processing
-            '#8B5CF6', // purple - shipped
-            '#10B981', // green - completed
-            '#EF4444', // red - cancelled
-        ];
+        $colors = [];
 
-        $colorIndex = 0;
-        foreach ($statuses as $status => $label) {
+        foreach ($statuses as $status => $meta) {
             $count = Order::where('status', $status)->count();
             if ($count > 0) {
-                $labels[] = $label;
+                $labels[] = $meta['label'];
                 $data[] = $count;
+                $colors[] = $meta['color'];
             }
-            $colorIndex++;
         }
 
         return [
             'labels' => $labels,
             'data' => $data,
-            'colors' => array_slice($colors, 0, count($labels)),
+            'colors' => $colors,
         ];
     }
 
@@ -206,15 +201,15 @@ class AdminDashboardController extends Controller
         return OrderItem::join('orders', 'order_items.order_id', '=', 'orders.id')
             ->join('product_variants', 'order_items.product_variant_id', '=', 'product_variants.id')
             ->join('products', 'product_variants.product_id', '=', 'products.id')
-            ->join('product_images', 'products.id', '=', 'product_images.product_id')
+            ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
             ->where('orders.payment_status', 'paid')
+            ->where('orders.status', 'delivered')
             ->whereBetween('orders.created_at', [$thisMonth, Carbon::now()])
-            ->where('product_images.is_primary', true)
-            ->groupBy('products.id')
+            ->groupBy('products.id', 'products.name')
             ->selectRaw('
                 products.id,
                 products.name,
-                product_images.image_path,
+                MAX(CASE WHEN product_images.is_primary = 1 THEN product_images.image_path ELSE NULL END) as image_path,
                 SUM(order_items.quantity) as total_quantity,
                 SUM(order_items.subtotal) as total_revenue
             ')

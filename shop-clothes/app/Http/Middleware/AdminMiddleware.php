@@ -25,6 +25,10 @@ class AdminMiddleware
             abort(403, 'Unauthorized access to admin panel');
         }
 
+        if ($request->user()->is_active === false) {
+            abort(403, 'Tài khoản quản trị đang bị khóa');
+        }
+
         return $next($request);
     }
 }

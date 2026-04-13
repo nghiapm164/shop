@@ -18,6 +18,13 @@ class DatabaseSeeder extends Seeder
             ColorSeeder::class,
             RolePermissionSeeder::class,
             AdminSeeder::class,
+            AccountSeeder::class,
+            CategorySeeder::class,
+            BrandSeeder::class,
+            ProductSeeder::class,
+            CouponSeeder::class,
+            BannerSeeder::class,
+            SettingSeeder::class,
         ]);
     }
 }

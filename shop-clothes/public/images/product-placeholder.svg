@@ -1,0 +1,26 @@
+<svg width="1200" height="1600" viewBox="0 0 1200 1600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F4EFE7"/>
+      <stop offset="1" stop-color="#E7DDD1"/>
+    </linearGradient>
+    <linearGradient id="arc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#CDB79F" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#9F846B" stop-opacity="0.66"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="1600" fill="url(#bg)"/>
+
+  <circle cx="180" cy="220" r="220" fill="#FFFFFF" fill-opacity="0.22"/>
+  <circle cx="1040" cy="1320" r="260" fill="#FFFFFF" fill-opacity="0.18"/>
+
+  <path d="M320 1070C320 870 470 710 660 710C850 710 1000 870 1000 1070V1600H320V1070Z" fill="#F9F4ED" fill-opacity="0.72"/>
+  <path d="M180 510C180 316 337 160 530 160H700C893 160 1050 316 1050 510V940C1050 1134 893 1290 700 1290H530C337 1290 180 1134 180 940V510Z" fill="url(#arc)" fill-opacity="0.42"/>
+
+  <path d="M335 560C335 430 440 325 570 325H665C795 325 900 430 900 560V900C900 1030 795 1135 665 1135H570C440 1135 335 1030 335 900V560Z" fill="#F8F2EA" fill-opacity="0.88"/>
+
+  <rect x="425" y="1230" width="380" height="20" rx="10" fill="#9B7F66" fill-opacity="0.32"/>
+  <rect x="500" y="1270" width="230" height="16" rx="8" fill="#9B7F66" fill-opacity="0.22"/>
+
+</svg>
