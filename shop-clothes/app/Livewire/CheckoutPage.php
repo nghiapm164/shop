@@ -6,7 +6,6 @@ use App\Models\Address;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\ProductVariant;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Validate;
@@ -85,7 +84,20 @@ class CheckoutPage extends Component
         // Load applied coupon
         $couponId = session()->get('coupon_id');
         if ($couponId) {
-            $this->appliedCoupon = Coupon::find($couponId);
+            $coupon = Coupon::find($couponId);
+            if ($coupon) {
+                $validation = $coupon->checkValid($this->subtotal);
+                if ($validation['valid']) {
+                    $this->appliedCoupon = $coupon;
+                } else {
+                    session()->forget('coupon_id');
+                }
+            } else {
+                session()->forget('coupon_id');
+            }
+
+            // Recalculate after coupon is loaded/validated
+            $this->calculateTotals();
         }
     }
 
@@ -105,7 +117,7 @@ class CheckoutPage extends Component
     protected function calculateDiscount()
     {
         $discount = 0;
-        if ($this->appliedCoupon->type === 'percentage') {
+        if ($this->appliedCoupon->type === 'percent') {
             $discount = ($this->subtotal * $this->appliedCoupon->value) / 100;
         } else {
             $discount = $this->appliedCoupon->value;
@@ -205,11 +217,17 @@ class CheckoutPage extends Component
         }
 
         // Create order
+        $paymentMethod = match ($this->paymentMethod) {
+            'bank' => 'bank_transfer',
+            'vnpay' => 'e_wallet',
+            default => 'cod',
+        };
+
         $order = Order::create([
             'user_id' => auth()->id(),
             'order_code' => 'ORD-' . strtoupper(uniqid()),
             'status' => Order::STATUS_PENDING,
-            'payment_method' => $this->paymentMethod,
+            'payment_method' => $paymentMethod,
             'payment_status' => Order::PAYMENT_STATUS_UNPAID,
             'subtotal' => $this->subtotal,
             'discount_amount' => $this->discountAmount,
@@ -241,6 +259,7 @@ class CheckoutPage extends Component
         // Clear cart
         session()->forget('cart');
         session()->forget('coupon_id');
+        $this->dispatch('cart-updated', count: 0);
 
         // Redirect based on payment method
         if ($this->paymentMethod === 'vnpay') {

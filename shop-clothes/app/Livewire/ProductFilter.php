@@ -38,10 +38,24 @@ class ProductFilter extends Component
     public $sort = 'newest';
 
     #[Url]
+    public $collection = '';
+
+    #[Url]
     public $page = 1;
 
     public $view_type = 'grid';
     public $per_page = 12;
+
+    public function mount(): void
+    {
+        $this->applyCollectionPreset();
+    }
+
+    public function updatedCollection(): void
+    {
+        $this->applyCollectionPreset();
+        $this->page = 1;
+    }
 
     public function resetFilters()
     {
@@ -53,7 +67,15 @@ class ProductFilter extends Component
         $this->price_min = 0;
         $this->price_max = 10000000;
         $this->sort = 'newest';
+        $this->collection = '';
         $this->page = 1;
+    }
+
+    private function applyCollectionPreset(): void
+    {
+        if ($this->collection === 'best_sellers' && $this->sort === 'newest') {
+            $this->sort = 'popularity';
+        }
     }
 
     public function toggleBrand($brandId)
@@ -117,7 +139,18 @@ class ProductFilter extends Component
     #[Computed]
     public function sizes()
     {
-        return Size::orderBy('sort_order')
+        return Size::query()
+            ->orderByRaw("CASE UPPER(code)
+                WHEN 'XS' THEN 1
+                WHEN 'S' THEN 2
+                WHEN 'M' THEN 3
+                WHEN 'L' THEN 4
+                WHEN 'XL' THEN 5
+                WHEN 'XXL' THEN 6
+                WHEN 'XXXL' THEN 7
+                ELSE 99
+            END")
+            ->orderBy('name')
             ->get();
     }
 
@@ -131,6 +164,12 @@ class ProductFilter extends Component
     public function products()
     {
         $query = Product::where('is_active', true);
+
+        if ($this->collection === 'flash_sale') {
+            $query->whereHas('flashSales', function ($saleQuery) {
+                $saleQuery->running();
+            });
+        }
 
         // Keyword search
         if ($this->keyword) {
@@ -157,17 +196,17 @@ class ProductFilter extends Component
         // Price filter
         $query->whereBetween('price', [$this->price_min, $this->price_max]);
 
-        // Size filter (many-to-many)
+        // Size filter via variants
         if (!empty($this->size)) {
-            $query->whereHas('sizes', function ($q) {
-                $q->whereIn('sizes.id', $this->size);
+            $query->whereHas('variants', function ($q) {
+                $q->whereIn('size_id', $this->size);
             });
         }
 
-        // Color filter (many-to-many)
+        // Color filter via variants
         if (!empty($this->color)) {
-            $query->whereHas('colors', function ($q) {
-                $q->whereIn('colors.id', $this->color);
+            $query->whereHas('variants', function ($q) {
+                $q->whereIn('color_id', $this->color);
             });
         }
 
@@ -180,8 +219,9 @@ class ProductFilter extends Component
                 $query->orderBy('price', 'desc');
                 break;
             case 'popularity':
-                $query->withCount('reviews')
-                    ->orderByDesc('reviews_count');
+                $query->withSum('orderItems as sold_quantity', 'quantity')
+                    ->orderByDesc('sold_quantity')
+                    ->orderByDesc('created_at');
                 break;
             case 'rating':
                 $query->selectRaw('products.*, (SELECT COALESCE(AVG(rating), 0) FROM reviews WHERE reviews.product_id = products.id) as avg_rating')
@@ -193,7 +233,7 @@ class ProductFilter extends Component
                 break;
         }
 
-        return $query->with('category', 'brand', 'colors', 'sizes', 'reviews')
+        return $query->with('category', 'brand', 'variants.color', 'variants.size', 'reviews')
             ->paginate($this->per_page, page: $this->page);
     }
 
@@ -201,6 +241,11 @@ class ProductFilter extends Component
     public function totalProducts()
     {
         return Product::where('is_active', true)
+            ->when($this->collection === 'flash_sale', function ($q) {
+                $q->whereHas('flashSales', function ($saleQuery) {
+                    $saleQuery->running();
+                });
+            })
             ->when($this->keyword, function ($q) {
                 $q->where(function ($sub) {
                     $sub->where('name', 'like', "%{$this->keyword}%")
@@ -219,13 +264,13 @@ class ProductFilter extends Component
             })
             ->whereBetween('price', [$this->price_min, $this->price_max])
             ->when(!empty($this->size), function ($q) {
-                $q->whereHas('sizes', function ($sub) {
-                    $sub->whereIn('sizes.id', $this->size);
+                $q->whereHas('variants', function ($sub) {
+                    $sub->whereIn('size_id', $this->size);
                 });
             })
             ->when(!empty($this->color), function ($q) {
-                $q->whereHas('colors', function ($sub) {
-                    $sub->whereIn('colors.id', $this->color);
+                $q->whereHas('variants', function ($sub) {
+                    $sub->whereIn('color_id', $this->color);
                 });
             })
             ->count();
@@ -240,6 +285,12 @@ class ProductFilter extends Component
             'sizes' => $this->sizes,
             'colors' => $this->colors,
             'totalProducts' => $this->totalProducts,
+            'collectionLabel' => match ($this->collection) {
+                'flash_sale' => 'Deal nóng trong ngày',
+                'new_arrivals' => 'Hàng mới lên kệ',
+                'best_sellers' => 'Top bán chạy',
+                default => 'Tất cả sản phẩm',
+            },
             'hasActiveFilters' => !empty($this->brand) || !empty($this->size) || 
                                   !empty($this->color) || $this->category || 
                                   $this->keyword || $this->price_min > 0 || 

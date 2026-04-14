@@ -70,7 +70,7 @@ class Coupon extends Model
         if ($orderAmount < $this->min_order_amount) {
             return [
                 'valid' => false,
-                'message' => "Đơn hàng tối thiểu {$this->min_order_amount}đ để sử dụng mã này",
+                'message' => 'Đơn hàng tối thiểu ' . number_format((float) $this->min_order_amount, 0, ',', '.') . 'đ để sử dụng mã này',
                 'discount' => 0
             ];
         }

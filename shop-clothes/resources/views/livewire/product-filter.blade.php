@@ -5,6 +5,9 @@
             <div>
                 <h1 class="fashion-title text-3xl md:text-4xl">Cửa hàng thời trang</h1>
                 <p class="fashion-subtitle mt-2">Chọn theo phong cách, màu sắc và mức giá phù hợp với bạn.</p>
+                <p class="mt-2 inline-flex items-center rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-semibold text-red-700">
+                    Mục đang xem: {{ $collectionLabel }}
+                </p>
             </div>
             <div class="w-full md:w-96">
                 <input
@@ -91,7 +94,7 @@
                                         'border-slate-300 text-slate-600 hover:border-slate-500' => !in_array($s->id, $size),
                                     ])
                                 >
-                                    {{ $s->name }}
+                                    {{ $s->short_label }}
                                 </button>
                             @endforeach
                         </div>

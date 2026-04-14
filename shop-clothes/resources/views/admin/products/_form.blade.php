@@ -170,7 +170,7 @@
                     @foreach ($sizes as $size)
                         <label class="inline-flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-2 text-sm">
                             <input type="checkbox" :value="'{{ $size->id }}'" x-model="selectedSizes" @change="syncVariantsFromSelections()">
-                            {{ $size->name }}
+                            {{ $size->short_label }}
                         </label>
                     @endforeach
                 </div>
@@ -216,7 +216,7 @@
                                 <select :name="`variants[${index}][size_id]`" x-model="variant.size_id" class="w-full border border-gray-300 rounded px-2 py-1.5" required>
                                     <option value="">Chọn size</option>
                                     <template x-for="size in sizes" :key="size.id">
-                                        <option :value="size.id" x-text="size.name"></option>
+                                        <option :value="size.id" x-text="formatSizeLabel(size)"></option>
                                     </template>
                                 </select>
                             </td>
@@ -393,6 +393,16 @@
 
             shortMetaFallback() {
                 return 'Mô tả SEO sẽ hiển thị ở đây.';
+            },
+
+            formatSizeLabel(size) {
+                const code = String(size?.code || '').trim().toUpperCase();
+
+                if (code === 'XS') return 'X';
+                if (code === 'XXL') return '2XL';
+                if (code === 'XXXL') return '3XL';
+
+                return code || size?.name || 'N/A';
             },
         };
     }

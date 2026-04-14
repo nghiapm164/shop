@@ -1,6 +1,18 @@
 @props(['paginator'])
 
 @if ($paginator->hasPages())
+    @php
+        $window = \Illuminate\Pagination\UrlWindow::make($paginator);
+
+        $elements = array_filter([
+            $window['first'],
+            is_array($window['slider']) ? '...' : null,
+            $window['slider'],
+            is_array($window['last']) ? '...' : null,
+            $window['last'],
+        ]);
+    @endphp
+
     <nav class="flex items-center justify-between border-t border-gray-200 px-4 py-6 sm:px-0">
         <div class="flex flex-1 justify-between sm:hidden">
             @if ($paginator->onFirstPage())

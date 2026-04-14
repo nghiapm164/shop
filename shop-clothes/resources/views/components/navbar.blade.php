@@ -21,13 +21,13 @@
 
             <div class="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-700">
                 <a href="{{ route('home') }}" class="hover:text-red-500 transition-colors {{ request()->routeIs('home') ? 'text-red-500' : '' }}">Trang chủ</a>
-                <a href="{{ route('products.index') }}" class="hover:text-red-500 transition-colors {{ request()->routeIs('products.*') ? 'text-red-500' : '' }}">Cửa hàng</a>
-                <a href="{{ route('products.index', ['sort' => 'newest']) }}" class="hover:text-red-500 transition-colors">Mới về</a>
-                <a href="{{ route('products.index', ['sort' => 'price_low']) }}" class="hover:text-red-500 transition-colors">Giá tốt</a>
+                <a href="{{ route('shop.index') }}" class="hover:text-red-500 transition-colors {{ request()->routeIs('shop.*') || request()->routeIs('products.*') ? 'text-red-500' : '' }}">Cửa hàng</a>
+                <a href="{{ route('shop.index', ['collection' => 'new_arrivals', 'sort' => 'newest']) }}" class="hover:text-red-500 transition-colors">Mới về</a>
+                <a href="{{ route('shop.index', ['sort' => 'price_low']) }}" class="hover:text-red-500 transition-colors">Giá tốt</a>
             </div>
 
             <div class="flex items-center gap-2 sm:gap-4">
-                <a href="{{ route('products.index') }}" class="hidden sm:inline-flex items-center rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-400 hover:bg-slate-50 transition-all">
+                <a href="{{ route('shop.index') }}" class="hidden sm:inline-flex items-center rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-400 hover:bg-slate-50 transition-all">
                     Tìm sản phẩm
                 </a>
 
@@ -70,8 +70,8 @@
 
         <div x-show="mobileMenuOpen" x-transition class="lg:hidden mt-4 rounded-2xl border border-slate-200 bg-white p-3 space-y-1">
             <a href="{{ route('home') }}" class="block rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100">Trang chủ</a>
-            <a href="{{ route('products.index') }}" class="block rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100">Cửa hàng</a>
-            <a href="{{ route('products.index', ['sort' => 'newest']) }}" class="block rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100">Hàng mới</a>
+            <a href="{{ route('shop.index') }}" class="block rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100">Cửa hàng</a>
+            <a href="{{ route('shop.index', ['collection' => 'new_arrivals', 'sort' => 'newest']) }}" class="block rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100">Hàng mới</a>
             <a href="{{ route('cart.index') }}" class="block rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100">Giỏ hàng</a>
         </div>
     </nav>

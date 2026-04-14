@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -108,6 +109,14 @@ class Product extends Model
     }
 
     /**
+     * Get flash sale records related to this product.
+     */
+    public function flashSales(): HasMany
+    {
+        return $this->hasMany(FlashSale::class);
+    }
+
+    /**
      * Scope query to active products only
      */
     public function scopeActive($query)
@@ -191,9 +200,13 @@ class Product extends Model
     {
         $primary = $this->images->firstWhere('is_primary', true) ?? $this->images->first();
 
+        if ($primary?->image_path && Str::startsWith($primary->image_path, ['http://', 'https://'])) {
+            return $primary->image_path;
+        }
+
         return $primary?->image_path
             ? 'storage/' . $primary->image_path
-            : 'images/placeholder.jpg';
+            : 'images/product-placeholder.svg';
     }
 
     /**
@@ -202,6 +215,10 @@ class Product extends Model
     public function getSecondaryImageUrlAttribute(): ?string
     {
         $secondary = $this->images->where('is_primary', false)->first();
+
+        if ($secondary?->image_path && Str::startsWith($secondary->image_path, ['http://', 'https://'])) {
+            return $secondary->image_path;
+        }
 
         return $secondary?->image_path
             ? 'storage/' . $secondary->image_path

@@ -40,7 +40,7 @@
                         <tr class="border-t border-gray-100 hover:bg-gray-50">
                             <td class="px-4 py-3">
                                 <img
-                                    src="{{ $brand->logo ? asset('storage/' . $brand->logo) : asset('images/placeholder.jpg') }}"
+                                    src="{{ $brand->logo_url }}"
                                     alt="{{ $brand->name }}"
                                     class="w-12 h-12 rounded-md object-cover border border-gray-200"
                                 >

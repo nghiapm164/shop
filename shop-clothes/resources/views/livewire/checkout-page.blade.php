@@ -257,14 +257,8 @@
                     <div class="space-y-3 mb-6 pb-6 border-b border-slate-200 max-h-96 overflow-y-auto">
                         @foreach ($this->cartItems as $item)
                             <div class="flex gap-3">
-                                @php
-                                    $product = \App\Models\Product::find($item['product_id']);
-                                    $imageUrl = $product?->images->first()?->image_path 
-                                        ? asset('storage/' . $product->images->first()->image_path)
-                                        : asset('images/placeholder.jpg');
-                                @endphp
                                 <img
-                                    src="{{ $imageUrl }}"
+                                    src="{{ str_starts_with($item['image_url'] ?? '', 'http://') || str_starts_with($item['image_url'] ?? '', 'https://') ? ($item['image_url'] ?? asset('images/product-placeholder.svg')) : asset($item['image_url'] ?? 'images/product-placeholder.svg') }}"
                                     alt="{{ $item['product_name'] }}"
                                     class="w-12 h-12 object-cover rounded-xl border border-slate-200">
                                 <div class="flex-1 text-sm">

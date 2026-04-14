@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ShopController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminProductController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminAuditLogController;
 use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Admin\AdminBannerController;
+use App\Http\Controllers\Admin\AdminFlashSaleController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -32,7 +34,10 @@ use Illuminate\Support\Facades\Route;
 
 // Public Routes
 Route::get('/', HomeController::class)->name('home');
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+Route::get('/products', function () {
+    return redirect()->route('shop.index', request()->query());
+})->name('products.index');
 Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('products.show');
 
 // Auth portals
@@ -68,6 +73,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('products', AdminProductController::class);
     Route::resource('categories', AdminCategoryController::class);
     Route::resource('brands', AdminBrandController::class);
+    Route::resource('flash-sales', AdminFlashSaleController::class)->except(['show']);
     Route::resource('coupons', AdminCouponController::class)->except(['show']);
     Route::resource('banners', AdminBannerController::class)->except(['show']);
     Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');

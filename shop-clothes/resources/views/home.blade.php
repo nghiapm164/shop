@@ -14,7 +14,7 @@
                 <h1 class="fashion-title text-4xl md:text-6xl mt-4 leading-tight">Tập chất. Mặc chất.</h1>
                 <p class="mt-4 text-base md:text-lg text-slate-800/85">Phong cách athleisure hiện đại cho nam giới: khỏe khoắn, tinh gọn và sẵn sàng cho mọi nhịp sống.</p>
                 <div class="mt-8 flex flex-wrap gap-3">
-                    <a href="{{ route('products.index') }}" class="btn-primary">Mua bộ sưu tập</a>
+                    <a href="{{ route('shop.index') }}" class="btn-primary">Mua bộ sưu tập</a>
                     <a href="#new-products" class="btn-secondary">Xem hàng mới</a>
                 </div>
             </div>
@@ -41,6 +41,65 @@
     </div>
 </section>
 
+@if(($flashSales ?? collect())->isNotEmpty())
+<section class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="rounded-[2rem] overflow-hidden border border-red-200 bg-gradient-to-br from-red-50 via-orange-50 to-amber-50 p-6 md:p-8">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-8">
+                <div>
+                    <p class="chip bg-red-100 border-red-200 text-red-700">Flash Sale Live</p>
+                    <h2 class="fashion-title text-3xl mt-3">Deal nóng trong ngày</h2>
+                    <p class="fashion-subtitle mt-2">Giá cực tốt, số lượng có hạn. Chốt đơn ngay trước khi hết giờ.</p>
+                </div>
+                <a href="{{ route('shop.index', ['collection' => 'flash_sale']) }}" class="btn-secondary">Xem tất cả deal nóng</a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                @foreach($flashSales as $flashSale)
+                    @php
+                        $product = $flashSale->product;
+                        $originalPrice = $product->sale_price ?? $product->price;
+                        $discountPercent = $flashSale->discount_percent;
+                        $flashImage = $product->image_url;
+                        $flashImageSrc = str_starts_with($flashImage, 'http://') || str_starts_with($flashImage, 'https://')
+                            ? $flashImage
+                            : asset($flashImage);
+                    @endphp
+
+                    <article class="group relative overflow-hidden rounded-3xl border border-red-100 bg-white shadow-[0_15px_40px_-28px_rgba(220,38,38,0.6)]">
+                        <a href="{{ route('products.show', $product->slug) }}" class="absolute inset-0 z-10" aria-label="{{ $product->name }}"></a>
+
+                        <div class="relative aspect-[3/4] overflow-hidden bg-slate-100">
+                            <img
+                                src="{{ $flashImageSrc }}"
+                                alt="{{ $product->name }}"
+                                class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                loading="lazy"
+                            >
+                            <div class="absolute top-3 left-3 z-20 rounded-full bg-red-600 px-3 py-1 text-xs font-bold text-white">
+                                -{{ $discountPercent }}%
+                            </div>
+                            <div class="absolute top-3 right-3 z-20 rounded-full bg-black/75 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur" data-flash-countdown data-end="{{ $flashSale->end_at->toIso8601String() }}">
+                                Đang cập nhật...
+                            </div>
+                        </div>
+
+                        <div class="p-4">
+                            <h3 class="line-clamp-1 text-base font-bold text-slate-900">{{ $product->name }}</h3>
+
+                            <div class="mt-3 flex items-end gap-2">
+                                <span class="text-xl font-extrabold text-red-600">{{ number_format($flashSale->flash_price, 0) }}đ</span>
+                                <span class="text-sm text-slate-500 line-through">{{ number_format($originalPrice, 0) }}đ</span>
+                            </div>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</section>
+@endif
+
 <section class="py-12" id="new-products">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-end justify-between mb-8">
@@ -48,7 +107,7 @@
                 <h2 class="fashion-title text-3xl">Hàng mới lên kệ</h2>
                 <p class="fashion-subtitle mt-2">Tinh thần trẻ, phối nhanh, mặc đẹp mỗi ngày.</p>
             </div>
-            <a href="{{ route('products.index') }}" class="btn-secondary">Xem tất cả</a>
+            <a href="{{ route('shop.index', ['collection' => 'new_arrivals', 'sort' => 'newest']) }}" class="btn-secondary">Xem tất cả</a>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -69,7 +128,7 @@
                     <h2 class="fashion-title text-3xl">Top bán chạy</h2>
                     <p class="fashion-subtitle mt-2">Sản phẩm được khách hàng chọn mua nhiều nhất tuần này.</p>
                 </div>
-                <a href="{{ route('products.index') }}" class="btn-secondary">Xem thêm</a>
+                <a href="{{ route('shop.index', ['collection' => 'best_sellers', 'sort' => 'popularity']) }}" class="btn-secondary">Xem tất cả</a>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -90,7 +149,7 @@
             @forelse($brands ?? [] as $brand)
                 <div class="fashion-card h-24 bg-white flex items-center justify-center p-3">
                     <img
-                        src="{{ $brand->logo ? asset('storage/' . $brand->logo) : asset('images/placeholder.jpg') }}"
+                        src="{{ $brand->logo_url }}"
                         alt="{{ $brand->name }}"
                         class="max-h-full max-w-full object-contain"
                     >
@@ -128,3 +187,38 @@
     </div>
 </section>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const formatTime = (value) => String(value).padStart(2, '0');
+        const countdownElements = document.querySelectorAll('[data-flash-countdown]');
+
+        const tick = () => {
+            countdownElements.forEach((element) => {
+                const endAt = new Date(element.dataset.end || '').getTime();
+                const now = Date.now();
+                const diff = endAt - now;
+
+                if (Number.isNaN(endAt) || diff <= 0) {
+                    element.textContent = 'Đã kết thúc';
+                    return;
+                }
+
+                const totalSeconds = Math.floor(diff / 1000);
+                const days = Math.floor(totalSeconds / 86400);
+                const hours = Math.floor((totalSeconds % 86400) / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+
+                element.textContent = days > 0
+                    ? `Còn ${days}d ${formatTime(hours)}h`
+                    : `Còn ${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
+            });
+        };
+
+        tick();
+        setInterval(tick, 1000);
+    });
+</script>
+@endpush

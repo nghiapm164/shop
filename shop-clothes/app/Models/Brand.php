@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Brand extends Model
 {
@@ -44,6 +45,22 @@ class Brand extends Model
     public function getActiveProductsCountAttribute()
     {
         return $this->products()->where('is_active', true)->count();
+    }
+
+    /**
+     * Get brand logo URL (supports external URLs and local storage paths).
+     */
+    public function getLogoUrlAttribute(): string
+    {
+        if ($this->logo && Str::startsWith($this->logo, ['http://', 'https://'])) {
+            return $this->logo;
+        }
+
+        if (!empty($this->logo)) {
+            return asset('storage/' . $this->logo);
+        }
+
+        return asset('images/product-placeholder.svg');
     }
 }
 

@@ -79,7 +79,7 @@
                 @endif
             </div>
 
-            <p class="mt-2 line-clamp-2 text-[12px] leading-snug text-white/92" style="font-family: 'Tomato', 'Nunito Sans', sans-serif;">
+            <p class="mt-2 line-clamp-2 text-[12px] leading-snug text-white/50" style="font-family: 'Tomato', 'Nunito Sans', sans-serif;">
                 {{ \Illuminate\Support\Str::limit(strip_tags($product->description ?? ($product->category->name ?? 'Sản phẩm thời trang hiện đại dành cho bạn.')), 88) }}
             </p>
         </div>

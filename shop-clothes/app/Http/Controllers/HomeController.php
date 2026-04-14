@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Banner;
 use App\Models\Brand;
+use App\Models\FlashSale;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -23,8 +24,9 @@ class HomeController extends Controller
 
         // Best sellers (8 items) - ordered by sales count
         $bestSellers = Product::where('is_active', true)
-            ->withCount('orderItems as orders_count')
-            ->orderByDesc('orders_count')
+            ->withSum('orderItems as sold_quantity', 'quantity')
+            ->orderByDesc('sold_quantity')
+            ->orderByDesc('created_at')
             ->with(['category', 'images', 'variants.color', 'reviews'])
             ->limit(8)
             ->get();
@@ -34,6 +36,22 @@ class HomeController extends Controller
             ->where('position', 'middle')
             ->orderBy('sort_order')
             ->first();
+
+        // Running flash sale products for homepage
+        $flashSales = FlashSale::query()
+            ->running()
+            ->with([
+                'product' => function ($query) {
+                    $query->where('is_active', true)
+                        ->with(['category', 'images', 'variants.color', 'reviews']);
+                },
+            ])
+            ->orderBy('sort_order')
+            ->orderBy('start_at')
+            ->limit(8)
+            ->get()
+            ->filter(fn ($item) => $item->product !== null)
+            ->values();
 
         // Featured brands (6 items)
         $brands = Brand::where('is_active', true)
@@ -48,6 +66,7 @@ class HomeController extends Controller
             'newProducts' => $newProducts,
             'bestSellers' => $bestSellers,
             'adBanner' => $adBanner,
+            'flashSales' => $flashSales,
             'brands' => $brands,
             'testimonials' => $testimonials,
         ]);

@@ -1,14 +1,50 @@
-<div class="space-y-6">
-    <!-- Brand & Name -->
-    <div>
-        <div class="text-sm text-gray-500 mb-2">
-            <a href="{{ $product->brand ? route('products.index', ['brand' => [$product->brand->id]]) : '#' }}" 
-               class="hover:text-red-600">
-                {{ $product->brand?->name ?? 'Không xác định' }}
-            </a>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900">{{ $product->name }}</h1>
-        <div class="text-sm text-gray-500 mt-2">SKU: {{ $product->sku }}</div>
+@php
+    $variantPayload = $this->variantCollection->map(fn ($variant) => [
+        'id' => (int) $variant->id,
+        'color_id' => (int) $variant->color_id,
+        'size_id' => (int) $variant->size_id,
+        'stock' => (int) $variant->stock_quantity,
+        'additional_price' => (float) ($variant->additional_price ?? 0),
+        'color_name' => $variant->color?->name,
+        'color_hex' => $variant->color?->hex_code,
+        'size_label' => $variant->size?->short_label,
+    ])->values();
+
+    $colorPayload = $this->variantCollection->pluck('color')->filter()->unique('id')->sortBy('name')->map(fn ($color) => [
+        'id' => (int) $color->id,
+        'name' => $color->name,
+        'hex' => $color->hex_code,
+    ])->values();
+
+    $sizePayload = $this->variantCollection->pluck('size')->filter()->unique('id')->sortBy('id')->map(fn ($size) => [
+        'id' => (int) $size->id,
+        'label' => $size->short_label,
+    ])->values();
+
+    $baseProductPrice = (float) ($product->sale_price ?? $product->price);
+@endphp
+
+<div
+    class="space-y-6"
+    x-data="variantPicker({
+        basePrice: {{ $baseProductPrice }},
+        initialColorId: {{ $selectedColorId ?? 'null' }},
+        initialSizeId: {{ $selectedSizeId ?? 'null' }},
+        initialQuantity: {{ $quantity }},
+        variants: @js($variantPayload),
+        colors: @js($colorPayload),
+        sizes: @js($sizePayload),
+    })"
+>
+    <input type="hidden" x-model="selectedColorId" wire:model.defer="selectedColorId">
+    <input type="hidden" x-model="selectedSizeId" wire:model.defer="selectedSizeId">
+    <input type="hidden" x-model="quantity" wire:model.defer="quantity">
+
+    <div class="flex items-center justify-between gap-3 text-sm text-gray-500">
+        <span>SKU: {{ $product->sku }}</span>
+        <a href="{{ $product->brand ? route('shop.index', ['brand' => [$product->brand->id]]) : '#' }}" class="hover:text-red-600">
+            {{ $product->brand?->name ?? 'Không xác định' }}
+        </a>
     </div>
 
     <!-- Rating -->
@@ -28,8 +64,7 @@
     <!-- Price -->
     <div class="space-y-2">
         <div class="flex items-baseline gap-3">
-            <span class="text-4xl font-bold text-red-600">
-                {{ number_format($product->sale_price ?? $product->price, 0, ',', '.') }}₫
+            <span class="text-4xl font-bold text-red-600" x-text="formatVnd(displayPrice()) + '₫'">
             </span>
             @if ($product->sale_price && $product->sale_price < $product->price)
                 <span class="text-lg text-gray-400 line-through">
@@ -40,13 +75,15 @@
                 </span>
             @endif
         </div>
-        @if ($this->maxQuantity > 0 && $this->selectedColorId && $this->selectedSizeId)
-            @if ($this->variantPrice && $this->variantPrice > ($product->sale_price ?? $product->price))
-                <div class="text-sm text-gray-600">
-                    Giá cho variant này: <strong>{{ number_format($this->variantPrice, 0, ',', '.') }}₫</strong>
-                </div>
-            @endif
-        @endif
+        <div class="text-sm text-gray-600" x-show="selectedVariant()">
+            Biến thể đã chọn:
+            <strong x-text="selectedVariant()?.size_label"></strong>
+            /
+            <strong x-text="selectedVariant()?.color_name"></strong>
+            <span class="text-slate-500" x-show="(selectedVariant()?.additional_price || 0) > 0">
+                (+<span x-text="formatVnd(selectedVariant()?.additional_price || 0)"></span>₫)
+            </span>
+        </div>
     </div>
 
     <!-- Color Selection -->
@@ -54,25 +91,22 @@
         <div class="flex items-center justify-between mb-3">
             <label class="text-sm font-semibold text-gray-900">Chọn màu sắc</label>
         </div>
-        <div class="flex gap-3 flex-wrap">
-            @forelse ($this->availableColors as $color)
+        <div class="flex gap-3 flex-wrap" x-show="colors.length > 0">
+            <template x-for="color in colors" :key="color.id">
                 <button
-                    wire:click="selectColor({{ $color->id }})"
+                    @click="selectColor(color.id)"
                     type="button"
-                    class="w-10 h-10 rounded-full border-2 transition-all relative group"
-                    style="background-color: {{ $color->hex_code }}; border-color: {{ $this->selectedColorId === $color->id ? '#E11D48' : '#D1D5DB' }}"
-                    title="{{ $color->name }}">
-                    @if ($this->selectedColorId === $color->id)
-                        <div class="absolute inset-0 rounded-full ring-2 ring-red-600 ring-offset-2"></div>
-                    @endif
-                    <span class="invisible group-hover:visible absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-2 py-1 rounded text-xs whitespace-nowrap">
-                        {{ $color->name }}
-                    </span>
+                    class="w-10 h-10 rounded-full border-2 transition-colors duration-75 relative group"
+                    :style="`background-color:${isColorOut(color.id) ? '#d1d5db' : (color.hex || '#d1d5db')}; border-color:${selectedColorId === color.id ? '#E11D48' : '#D1D5DB'}`"
+                    :title="color.name"
+                >
+                    <div class="absolute inset-0 rounded-full ring-2 ring-red-600 ring-offset-2" x-show="selectedColorId === color.id"></div>
+                    <div class="absolute inset-0 rounded-full bg-white/30" x-show="isColorOut(color.id)"></div>
+                    <span class="invisible group-hover:visible absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-2 py-1 rounded text-xs whitespace-nowrap" x-text="isColorOut(color.id) ? `${color.name} (hết hàng)` : color.name"></span>
                 </button>
-            @empty
-                <p class="text-gray-500">Không có màu sắc nào</p>
-            @endforelse
+            </template>
         </div>
+        <p class="text-gray-500" x-show="colors.length === 0">Không có màu sắc nào</p>
     </div>
 
     <!-- Size Selection -->
@@ -86,18 +120,22 @@
                 Hướng dẫn chọn size
             </button>
         </div>
-        <div class="flex gap-2 flex-wrap">
-            @forelse ($this->availableSizes as $size)
+        <div class="flex gap-2 flex-wrap" x-show="sizesForCurrentColor().length > 0">
+            <template x-for="size in sizesForCurrentColor()" :key="size.id">
                 <button
-                    wire:click="selectSize({{ $size->id }})"
+                    @click="selectSize(size.id)"
                     type="button"
-                    class="px-4 py-2 border-2 rounded-lg font-semibold transition-all {{ $this->selectedSizeId === $size->id ? 'border-red-600 bg-red-50 text-red-600' : 'border-gray-300 text-gray-900 hover:border-gray-400' }}">
-                    {{ $size->name }}
-                </button>
-            @empty
-                <p class="text-gray-500">Vui lòng chọn màu sắc trước</p>
-            @endforelse
+                    class="px-4 py-2 border-2 rounded-lg font-semibold transition-colors duration-75"
+                    :class="isSizeOut(size.id)
+                        ? 'border-gray-300 bg-gray-100 text-gray-500 hover:border-gray-400'
+                        : (selectedSizeId === size.id
+                            ? 'border-red-600 bg-red-50 text-red-600'
+                            : 'border-gray-300 text-gray-900 hover:border-gray-400')"
+                    x-text="size.label"
+                ></button>
+            </template>
         </div>
+        <p class="text-gray-500" x-show="sizesForCurrentColor().length === 0">Vui lòng chọn màu sắc trước</p>
 
         <!-- Size Guide Modal -->
         @if ($this->showSizeGuide)
@@ -180,63 +218,50 @@
 
     <!-- Stock Status -->
     <div>
-        @if ($this->maxQuantity > 0)
-            <div class="text-lg font-semibold text-green-600">
-                ✓ Còn {{ $this->maxQuantity }} sản phẩm
-            </div>
-        @else
-            <div class="text-lg font-semibold text-red-600">
-                Hết hàng
-            </div>
-        @endif
+        <div class="text-lg font-semibold text-green-600" x-show="maxQuantity() > 0">
+            ✓ Còn <span x-text="maxQuantity()"></span> sản phẩm
+        </div>
+        <div class="text-lg font-semibold text-red-600" x-show="maxQuantity() <= 0">
+            Hết hàng
+        </div>
     </div>
 
     <!-- Quantity Selection -->
-    @if ($this->maxQuantity > 0)
-        <div>
-            <label class="text-sm font-semibold text-gray-900 block mb-3">Số lượng</label>
-            <div class="flex items-center border border-gray-300 rounded-lg w-fit">
-                <button
-                    wire:click="decreaseQuantity"
-                    type="button"
-                    class="px-4 py-2 text-gray-600 hover:text-gray-900 font-bold">
-                    −
-                </button>
-                <input
-                    type="number"
-                    value="{{ $this->quantity }}"
-                    readonly
-                    class="w-16 text-center border-0 py-2 font-semibold focus:ring-0">
-                <button
-                    wire:click="increaseQuantity"
-                    type="button"
-                    class="px-4 py-2 text-gray-600 hover:text-gray-900 font-bold">
-                    +
-                </button>
-            </div>
+    <div x-show="maxQuantity() > 0">
+        <label class="text-sm font-semibold text-gray-900 block mb-3">Số lượng</label>
+        <div class="flex items-center border border-gray-300 rounded-lg w-fit">
+            <button @click="decreaseQty()" type="button" class="px-4 py-2 text-gray-600 hover:text-gray-900 font-bold">−</button>
+            <input type="number" x-model="quantity" readonly class="w-16 text-center border-0 py-2 font-semibold focus:ring-0">
+            <button @click="increaseQty()" type="button" class="px-4 py-2 text-gray-600 hover:text-gray-900 font-bold">+</button>
         </div>
-    @endif
+    </div>
 
     <!-- Action Buttons -->
     <div class="flex gap-3 pt-4">
         <button
-            wire:click="addToCart"
+            @click.prevent="$wire.addToCartFromState(selectedColorId, selectedSizeId, quantity)"
             type="button"
-            {{ $this->maxQuantity <= 0 ? 'disabled' : '' }}
+            wire:loading.attr="disabled"
+            wire:target="addToCartFromState,buyNowFromState"
+            :disabled="maxQuantity() <= 0"
             class="flex-1 bg-white border-2 border-red-600 text-red-600 py-3 px-6 rounded-lg font-bold hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
             <span class="inline-flex items-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                <span>Thêm vào giỏ</span>
+                <span wire:loading.remove wire:target="addToCartFromState">Thêm vào giỏ</span>
+                <span wire:loading wire:target="addToCartFromState">Đang thêm...</span>
             </span>
         </button>
         <button
-            wire:click="buyNow"
+            @click.prevent="$wire.buyNowFromState(selectedColorId, selectedSizeId, quantity)"
             type="button"
-            {{ $this->maxQuantity <= 0 ? 'disabled' : '' }}
+            wire:loading.attr="disabled"
+            wire:target="buyNowFromState"
+            :disabled="maxQuantity() <= 0"
             class="flex-1 bg-red-600 text-white py-3 px-6 rounded-lg font-bold hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-            Mua ngay
+            <span wire:loading.remove wire:target="buyNowFromState">Mua ngay</span>
+            <span wire:loading wire:target="buyNowFromState">Đang xử lý...</span>
         </button>
     </div>
 
@@ -274,4 +299,136 @@
             </button>
         </div>
     </div>
+<script>
+        function variantPicker(config) {
+            return {
+                basePrice: Number(config.basePrice || 0),
+                variants: config.variants || [],
+                colors: config.colors || [],
+                sizes: config.sizes || [],
+                selectedColorId: config.initialColorId ? Number(config.initialColorId) : null,
+                selectedSizeId: config.initialSizeId ? Number(config.initialSizeId) : null,
+                quantity: Math.max(1, Number(config.initialQuantity || 1)),
+
+                init() {
+                    if (!this.selectedColorId || !this.selectedSizeId) {
+                        this.pickDefault();
+                    }
+                },
+
+                pickDefault() {
+                    const sorted = [...this.variants].sort((a, b) => {
+                        const aOut = a.stock <= 0 ? 1 : 0;
+                        const bOut = b.stock <= 0 ? 1 : 0;
+                        if (aOut !== bOut) return aOut - bOut;
+                        if (a.color_id !== b.color_id) return a.color_id - b.color_id;
+                        return a.size_id - b.size_id;
+                    });
+
+                    const first = sorted[0] || null;
+                    if (!first) return;
+
+                    this.selectedColorId = first.color_id;
+                    this.selectedSizeId = first.size_id;
+                    this.quantity = 1;
+                },
+
+                selectedVariant() {
+                    return this.variants.find(v => v.color_id === this.selectedColorId && v.size_id === this.selectedSizeId) || null;
+                },
+
+                displayPrice() {
+                    const variant = this.selectedVariant();
+                    return this.basePrice + Number(variant?.additional_price || 0);
+                },
+
+                maxQuantity() {
+                    return Number(this.selectedVariant()?.stock || 0);
+                },
+
+                colorStock(colorId) {
+                    return this.variants
+                        .filter(v => v.color_id === colorId)
+                        .reduce((sum, v) => sum + Number(v.stock || 0), 0);
+                },
+
+                isColorOut(colorId) {
+                    return this.colorStock(colorId) <= 0;
+                },
+
+                sizesForCurrentColor() {
+                    const base = this.selectedColorId
+                        ? this.variants.filter(v => v.color_id === this.selectedColorId)
+                        : this.variants;
+
+                    const byId = new Map();
+                    base.forEach(v => {
+                        if (!byId.has(v.size_id)) {
+                            const item = this.sizes.find(s => s.id === v.size_id);
+                            byId.set(v.size_id, {
+                                id: v.size_id,
+                                label: item?.label || v.size_label || String(v.size_id),
+                            });
+                        }
+                    });
+
+                    return [...byId.values()].sort((a, b) => a.id - b.id);
+                },
+
+                sizeStock(sizeId) {
+                    const base = this.selectedColorId
+                        ? this.variants.filter(v => v.color_id === this.selectedColorId)
+                        : this.variants;
+
+                    return base
+                        .filter(v => v.size_id === sizeId)
+                        .reduce((sum, v) => sum + Number(v.stock || 0), 0);
+                },
+
+                isSizeOut(sizeId) {
+                    return this.sizeStock(sizeId) <= 0;
+                },
+
+                selectColor(colorId) {
+                    this.selectedColorId = Number(colorId);
+
+                    const firstSize = this.variants
+                        .filter(v => v.color_id === this.selectedColorId)
+                        .sort((a, b) => {
+                            const aOut = a.stock <= 0 ? 1 : 0;
+                            const bOut = b.stock <= 0 ? 1 : 0;
+                            if (aOut !== bOut) return aOut - bOut;
+                            return a.size_id - b.size_id;
+                        })[0] || null;
+
+                    if (firstSize) {
+                        this.selectedSizeId = firstSize.size_id;
+                    }
+
+                    this.quantity = 1;
+                },
+
+                selectSize(sizeId) {
+                    this.selectedSizeId = Number(sizeId);
+                    this.quantity = 1;
+                },
+
+                increaseQty() {
+                    if (this.quantity < this.maxQuantity()) {
+                        this.quantity += 1;
+                    }
+                },
+
+                decreaseQty() {
+                    if (this.quantity > 1) {
+                        this.quantity -= 1;
+                    }
+                },
+
+                formatVnd(value) {
+                    return new Intl.NumberFormat('vi-VN').format(Number(value || 0));
+                },
+            };
+        }
+    </script>
 </div>

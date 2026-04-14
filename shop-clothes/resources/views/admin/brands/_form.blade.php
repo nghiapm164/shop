@@ -19,7 +19,7 @@
             <input type="file" name="logo" accept="image/*" class="w-full border border-gray-300 rounded-lg px-3 py-2.5">
             @error('logo')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
             @if (!empty($brand?->logo))
-                <img src="{{ asset('storage/' . $brand->logo) }}" class="mt-2 w-24 h-24 object-cover rounded border border-gray-200" alt="current-logo">
+                <img src="{{ $brand->logo_url }}" class="mt-2 w-24 h-24 object-cover rounded border border-gray-200" alt="current-logo">
             @endif
         </div>
 

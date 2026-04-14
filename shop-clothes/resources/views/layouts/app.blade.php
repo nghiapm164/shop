@@ -49,7 +49,21 @@
         @yield('styles')
     </style>
 </head>
-<body class="antialiased text-gray-900 store-shell">
+<body class="antialiased text-gray-900 store-shell" x-data="{
+    toasts: [],
+    pushToast(detail) {
+        if (!detail || !detail.message) return;
+        const id = Date.now() + Math.floor(Math.random() * 1000);
+        const type = detail.type || 'info';
+        this.toasts.push({ id, type, message: detail.message });
+        setTimeout(() => {
+            this.toasts = this.toasts.filter(t => t.id !== id);
+        }, 2600);
+    },
+    removeToast(id) {
+        this.toasts = this.toasts.filter(t => t.id !== id);
+    }
+}" x-on:notify.window="pushToast($event.detail)">
     <!-- Navigation -->
     <x-navbar />
     
@@ -61,6 +75,33 @@
     
     <!-- Footer -->
     <x-footer />
+
+    <!-- Toast Notifications -->
+    <div class="fixed z-[9999] right-4 top-4 space-y-2 w-[min(92vw,360px)] pointer-events-none">
+        <template x-for="toast in toasts" :key="toast.id">
+            <div
+                x-transition:enter="transition ease-out duration-250"
+                x-transition:enter-start="opacity-0 translate-y-2"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-180"
+                x-transition:leave-start="opacity-100 translate-y-0"
+                x-transition:leave-end="opacity-0 translate-y-1"
+                class="pointer-events-auto rounded-xl border px-4 py-3 shadow-lg backdrop-blur text-sm"
+                :class="{
+                    'bg-green-50 border-green-200 text-green-800': toast.type === 'success',
+                    'bg-red-50 border-red-200 text-red-800': toast.type === 'error',
+                    'bg-yellow-50 border-yellow-200 text-yellow-800': toast.type === 'warning',
+                    'bg-slate-50 border-slate-200 text-slate-800': !['success', 'error', 'warning'].includes(toast.type),
+                }"
+            >
+                <div class="flex items-start gap-3">
+                    <span class="mt-0.5" x-text="toast.type === 'success' ? '✓' : (toast.type === 'error' ? '!' : (toast.type === 'warning' ? '⚠' : 'i'))"></span>
+                    <p class="flex-1 font-medium" x-text="toast.message"></p>
+                    <button type="button" class="text-xs opacity-70 hover:opacity-100" @click="removeToast(toast.id)">Đóng</button>
+                </div>
+            </div>
+        </template>
+    </div>
     
     <!-- Livewire Scripts -->
     @livewireScripts

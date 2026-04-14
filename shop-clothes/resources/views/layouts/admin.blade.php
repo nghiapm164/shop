@@ -95,6 +95,15 @@
                         </a>
                     </li>
 
+                    <!-- Flash Sale -->
+                    <li>
+                        <a href="{{ Route::has('admin.flash-sales.index') ? route('admin.flash-sales.index') : 'javascript:void(0)' }}"
+                           class="flex items-center gap-3 px-4 py-3 rounded-lg {{ request()->routeIs('admin.flash-sales.*') ? 'bg-red-600 text-white' : 'text-gray-300 hover:bg-gray-800' }}">
+                            <i class="fas fa-bolt w-5"></i>
+                            <span>Flash Sale</span>
+                        </a>
+                    </li>
+
                     <!-- Orders -->
                     <li>
                                 <a href="{{ Route::has('admin.orders.index') ? route('admin.orders.index') : 'javascript:void(0)' }}"

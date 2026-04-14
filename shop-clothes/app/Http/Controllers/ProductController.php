@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class ProductController extends Controller
@@ -22,11 +23,18 @@ class ProductController extends Controller
      */
     public function show(Product $product): View
     {
-        // Load product relationships
-        $product->load(['category', 'colors', 'sizes', 'reviews.user', 'images']);
+        // Load product relationships needed for detail page
+        $product->load([
+            'category',
+            'brand',
+            'images',
+            'variants.color',
+            'variants.size',
+            'reviews.user',
+        ])->loadCount('reviews');
         
         // Increment view count for popularity tracking
-        if ($product->exists) {
+        if ($product->exists && Schema::hasColumn('products', 'view_count')) {
             $product->increment('view_count');
         }
 
@@ -34,7 +42,8 @@ class ProductController extends Controller
         $related = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->where('is_active', true)
-            ->with('colors', 'reviews')
+            ->with(['category', 'images', 'variants.color'])
+            ->withCount('reviews')
             ->limit(4)
             ->get();
 

@@ -11,7 +11,7 @@ class CartBadge extends Component
 
     public function mount()
     {
-        $this->cartCount = auth()->user()?->cart?->items?->count() ?? 0;
+        $this->refreshCount();
     }
 
     #[On('cart-updated')]
@@ -20,8 +20,20 @@ class CartBadge extends Component
         if ($count !== null) {
             $this->cartCount = $count;
         } else {
-            $this->cartCount = auth()->user()?->cart?->items?->count() ?? 0;
+            $this->refreshCount();
         }
+    }
+
+    #[On('update-cart-badge')]
+    public function refreshFromLegacyEvent()
+    {
+        $this->refreshCount();
+    }
+
+    private function refreshCount(): void
+    {
+        $this->cartCount = collect(session()->get('cart', []))
+            ->sum(fn ($item) => (int) ($item['quantity'] ?? 0));
     }
 
     public function render()
