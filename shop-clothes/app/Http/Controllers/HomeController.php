@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Banner;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Models\FlashSale;
 use Illuminate\View\View;
 
@@ -53,6 +54,14 @@ class HomeController extends Controller
             ->filter(fn ($item) => $item->product !== null)
             ->values();
 
+        // Featured categories (6 items)
+        $categories = Category::where('is_active', true)
+            ->whereNull('parent_id')
+            ->withCount('products')
+            ->orderByDesc('products_count')
+            ->limit(6)
+            ->get();
+
         // Featured brands (6 items)
         $brands = Brand::where('is_active', true)
             ->limit(6)
@@ -62,12 +71,13 @@ class HomeController extends Controller
         // Testimonials from product reviews (4 items)
         $testimonials = $this->getTestimonials();
 
-        return view('home', [
+        return view('home-ndstyle', [
             'newProducts' => $newProducts,
             'bestSellers' => $bestSellers,
             'adBanner' => $adBanner,
             'flashSales' => $flashSales,
             'brands' => $brands,
+            'categories' => $categories,
             'testimonials' => $testimonials,
         ]);
     }

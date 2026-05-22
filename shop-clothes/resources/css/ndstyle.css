@@ -1,0 +1,1188 @@
+/* ══════════════════════════════════════════════ */
+/* ND STYLE CLONE - Custom Styles               */
+/* Overrides Tailwind within .ndstyle wrapper    */
+/* ══════════════════════════════════════════════ */
+
+:root {
+    --nd-main: #ff6347;
+    --nd-main-hover: #e5563c;
+    --nd-price: #ff6347;
+    --nd-topbar-bg: #ffc700;
+    --nd-topbar-text: #000000;
+    --nd-old-price: #ffc700;
+    --nd-flashsale-bg: #152755;
+    --nd-flashsale-dark: #000f36;
+    --nd-flashsale-accent: #fcdb10;
+    --nd-flashsale-bg2: #152755;
+    --nd-service-bg: #152755;
+    --nd-voucher-bg: #305a9b;
+    --nd-review-bg: #152755;
+    --nd-header-bg: #ffffff;
+    --nd-header-text: #000000;
+}
+
+/* ── ND Container ── */
+.nd-container {
+    max-width: 1200px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+}
+
+/* ── Topbar ── */
+.nd-topbar {
+    background: var(--nd-topbar-bg) !important;
+    color: var(--nd-topbar-text) !important;
+    overflow: hidden !important;
+    position: relative !important;
+    font-family: 'Inter', 'Be Vietnam Pro', sans-serif !important;
+}
+
+.nd-topbar__inner {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 36px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+}
+
+.nd-topbar__slider {
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+    overflow: hidden !important;
+    width: 100% !important;
+}
+
+.nd-topbar__item {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
+.nd-topbar__item a {
+    color: var(--nd-topbar-text) !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    font-size: 13px !important;
+}
+
+/* ── Header ── */
+.nd-header {
+    background: var(--nd-header-bg) !important;
+    border-bottom: 1px solid #eee !important;
+    font-family: 'Inter', 'Be Vietnam Pro', sans-serif !important;
+}
+
+.nd-header__middle {
+    padding: 12px 0 !important;
+}
+
+.nd-header__row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 20px !important;
+}
+
+.nd-header__logo {
+    flex-shrink: 0 !important;
+    text-decoration: none !important;
+}
+
+.nd-header__logo-text {
+    font-size: 24px !important;
+    font-weight: 900 !important;
+    color: var(--nd-header-text) !important;
+    letter-spacing: -0.02em !important;
+    font-family: 'Inter', 'Be Vietnam Pro', sans-serif !important;
+}
+
+.nd-header__logo-text span {
+    color: var(--nd-main) !important;
+}
+
+.nd-header__search {
+    flex: 1 !important;
+    max-width: 480px !important;
+    position: relative !important;
+}
+
+.nd-header__search input {
+    width: 100% !important;
+    height: 42px !important;
+    padding: 0 48px 0 16px !important;
+    border: 2px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    outline: none !important;
+    transition: border-color 0.2s !important;
+    font-family: 'Inter', 'Be Vietnam Pro', sans-serif !important;
+    background: white !important;
+}
+
+.nd-header__search input:focus {
+    border-color: var(--nd-main) !important;
+}
+
+.nd-header__search button {
+    position: absolute !important;
+    right: 4px !important;
+    top: 4px !important;
+    height: 34px !important;
+    width: 40px !important;
+    border: none !important;
+    background: var(--nd-main) !important;
+    color: white !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background 0.2s !important;
+}
+
+.nd-header__search button:hover {
+    background: var(--nd-main-hover) !important;
+}
+
+.nd-header__actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    flex-shrink: 0 !important;
+}
+
+.nd-header__action {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 2px !important;
+    padding: 6px 12px !important;
+    border-radius: 8px !important;
+    font-size: 12px !important;
+    color: #666 !important;
+    transition: all 0.2s !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+}
+
+.nd-header__action:hover {
+    color: var(--nd-main) !important;
+}
+
+.nd-header__action svg {
+    width: 22px !important;
+    height: 22px !important;
+}
+
+.nd-header__action--cart {
+    position: relative !important;
+}
+
+.nd-header__action--cart .count-badge {
+    position: absolute !important;
+    top: -2px !important;
+    right: -2px !important;
+    background: var(--nd-main) !important;
+    color: white !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    min-width: 18px !important;
+    height: 18px !important;
+    border-radius: 9px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 4px !important;
+}
+
+/* ── Navigation Menu ── */
+.nd-nav {
+    background: white !important;
+    border-bottom: 1px solid #eee !important;
+    font-family: 'Inter', 'Be Vietnam Pro', sans-serif !important;
+}
+
+.nd-nav__list {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.nd-nav__item {
+    position: relative !important;
+}
+
+.nd-nav__link {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding: 12px 20px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.02em !important;
+    transition: color 0.2s !important;
+    white-space: nowrap !important;
+    text-decoration: none !important;
+}
+
+.nd-nav__link:hover,
+.nd-nav__item.active .nd-nav__link {
+    color: var(--nd-main) !important;
+}
+
+.nd-nav__link::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 0 !important;
+    height: 2px !important;
+    background: var(--nd-main) !important;
+    transition: width 0.3s !important;
+}
+
+.nd-nav__item:hover .nd-nav__link::after,
+.nd-nav__item.active .nd-nav__link::after {
+    width: 100% !important;
+}
+
+/* ── Home Slider ── */
+.nd-home-slider {
+    position: relative !important;
+    overflow: hidden !important;
+    width: 100% !important;
+    background: #f5f5f5 !important;
+}
+
+.nd-home-slider .swiper {
+    width: 100% !important;
+}
+
+.nd-home-slider .swiper-slide {
+    width: 100% !important;
+}
+
+.nd-home-slider .swiper-slide a {
+    display: block !important;
+    text-decoration: none !important;
+}
+
+.nd-home-slider .swiper-button-next,
+.nd-home-slider .swiper-button-prev {
+    color: white !important;
+    background: rgba(0,0,0,0.3) !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+}
+
+.nd-home-slider .swiper-button-next::after,
+.nd-home-slider .swiper-button-prev::after {
+    font-size: 16px !important;
+}
+
+.nd-home-slider .swiper-pagination-bullet {
+    background: white !important;
+    opacity: 0.6 !important;
+}
+
+.nd-home-slider .swiper-pagination-bullet-active {
+    opacity: 1 !important;
+    background: var(--nd-main) !important;
+}
+
+/* ── Policy Bar ── */
+.nd-policy {
+    background: #f8f9fa !important;
+    padding: 20px 0 !important;
+    border-top: 1px solid #eee !important;
+    border-bottom: 1px solid #eee !important;
+    font-family: 'Inter', 'Be Vietnam Pro', sans-serif !important;
+}
+
+.nd-policy__grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px !important;
+}
+
+.nd-policy__item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 8px 0 !important;
+}
+
+.nd-policy__icon {
+    flex-shrink: 0 !important;
+    width: 48px !important;
+    height: 48px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.nd-policy__icon svg {
+    width: 32px !important;
+    height: 32px !important;
+}
+
+.nd-policy__title {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: #333 !important;
+    margin-bottom: 2px !important;
+}
+
+.nd-policy__desc {
+    font-size: 12px !important;
+    color: #888 !important;
+}
+
+/* ── Category Grid ── */
+.nd-categories {
+    padding: 40px 0 !important;
+    font-family: 'Inter', 'Be Vietnam Pro', sans-serif !important;
+}
+
+.nd-categories__title {
+    text-align: center !important;
+    font-size: 24px !important;
+    font-weight: 800 !important;
+    color: #333 !important;
+    margin-bottom: 28px !important;
+}
+
+.nd-categories__grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px !important;
+}
+
+.nd-categories__item {
+    text-align: center !important;
+    cursor: pointer !important;
+    transition: transform 0.3s !important;
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+.nd-categories__item:hover {
+    transform: translateY(-4px) !important;
+}
+
+.nd-categories__thumb {
+    width: 100% !important;
+    aspect-ratio: 1 !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    margin-bottom: 10px !important;
+    background: #f5f5f5 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.nd-categories__thumb img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    transition: transform 0.4s !important;
+    display: block !important;
+}
+
+.nd-categories__item:hover .nd-categories__thumb img {
+    transform: scale(1.08) !important;
+}
+
+.nd-categories__name {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    transition: color 0.2s !important;
+}
+
+.nd-categories__item:hover .nd-categories__name {
+    color: var(--nd-main) !important;
+}
+
+/* ── Voucher Section ── */
+.nd-voucher {
+    padding: 40px 0 20px !important;
+    font-family: 'Inter', 'Be Vietnam Pro', sans-serif !important;
+}
+
+.nd-voucher__title {
+    text-align: center !important;
+    margin-bottom: 24px !important;
+}
+
+.nd-voucher__title h2 {
+    font-size: 24px !important;
+    font-weight: 800 !important;
+    color: #333 !important;
+    display: inline-block !important;
+    position: relative !important;
+    margin: 0 !important;
+}
+
+.nd-voucher__title h2::before,
+.nd-voucher__title h2::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 50% !important;
+    width: 60px !important;
+    height: 1px !important;
+    background: #ddd !important;
+}
+
+.nd-voucher__title h2::before { right: calc(100% + 16px) !important; }
+.nd-voucher__title h2::after { left: calc(100% + 16px) !important; }
+
+.nd-voucher__grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 16px !important;
+}
+
+.nd-voucher__card {
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    cursor: pointer !important;
+    transition: transform 0.3s, box-shadow 0.3s !important;
+    border: 2px dashed var(--nd-voucher-bg) !important;
+    background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%) !important;
+    padding: 20px !important;
+    text-align: center !important;
+}
+
+.nd-voucher__card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 8px 24px rgba(48, 90, 155, 0.2) !important;
+}
+
+.nd-voucher__card-title {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: var(--nd-voucher-bg) !important;
+    margin-top: 8px !important;
+}
+
+.nd-voucher__card-desc {
+    font-size: 12px !important;
+    color: #666 !important;
+    margin-top: 4px !important;
+}
+
+.nd-voucher__card-code {
+    display: inline-block !important;
+    margin-top: 10px !important;
+    padding: 6px 16px !important;
+    background: var(--nd-voucher-bg) !important;
+    color: white !important;
+    border-radius: 6px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+}
+
+/* ── Flash Sale ── */
+.nd-flashsale {
+    background: linear-gradient(135deg, var(--nd-flashsale-dark) 0%, var(--nd-flashsale-bg) 50%, var(--nd-flashsale-bg2) 100%) !important;
+    padding: 40px 0 !important;
+    position: relative !important;
+    overflow: hidden !important;
+    font-family: 'Inter', 'Be Vietnam Pro', sans-serif !important;
+}
+
+.nd-flashsale__header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 24px !important;
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+}
+
+.nd-flashsale__title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    flex-wrap: wrap !important;
+}
+
+.nd-flashsale__title h2 {
+    font-size: 24px !important;
+    font-weight: 800 !important;
+    color: white !important;
+    margin: 0 !important;
+}
+
+.nd-flashsale__title h2 a {
+    color: white !important;
+    text-decoration: none !important;
+}
+
+.nd-flashsale__badge {
+    background: var(--nd-flashsale-accent) !important;
+    color: var(--nd-flashsale-dark) !important;
+    padding: 4px 12px !important;
+    border-radius: 4px !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    animation: nd-pulse 1.5s infinite !important;
+}
+
+@keyframes nd-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.nd-flashsale__countdown {
+    display: flex !important;
+    gap: 4px !important;
+    align-items: center !important;
+}
+
+.nd-flashsale__countdown-item {
+    background: var(--nd-flashsale-accent) !important;
+    color: var(--nd-flashsale-dark) !important;
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    min-width: 32px !important;
+    text-align: center !important;
+}
+
+.nd-flashsale__countdown-sep {
+    color: white !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+}
+
+.nd-flashsale__viewall {
+    color: var(--nd-flashsale-accent) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    text-decoration: none !important;
+}
+
+/* ── Product Card (ND Style) ── */
+.nd-product-card {
+    background: white !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    transition: all 0.3s !important;
+    border: 1px solid #f0f0f0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.nd-product-card:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+    transform: translateY(-2px) !important;
+}
+
+.nd-product-card a {
+    text-decoration: none !important;
+    color: inherit !important;
+    display: block !important;
+    width: 100% !important;
+}
+
+.nd-product-card__thumb {
+    position: relative !important;
+    overflow: hidden !important;
+    width: 100% !important;
+    padding-bottom: 133% !important; /* 3:4 ratio */
+    background: #f8f8f8 !important;
+    height: 0 !important;
+}
+
+.nd-product-card__thumb img {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    transition: transform 0.5s !important;
+    display: block !important;
+}
+
+.nd-product-card:hover .nd-product-card__thumb img {
+    transform: scale(1.06) !important;
+}
+
+.nd-product-card__discount {
+    position: absolute !important;
+    top: 8px !important;
+    left: 8px !important;
+    background: var(--nd-main) !important;
+    color: white !important;
+    padding: 2px 8px !important;
+    border-radius: 4px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    z-index: 2 !important;
+}
+
+.nd-product-card__actions-right {
+    position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    z-index: 2 !important;
+    opacity: 0 !important;
+    transform: translateX(8px) !important;
+    transition: all 0.3s !important;
+}
+
+.nd-product-card:hover .nd-product-card__actions-right {
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+}
+
+.nd-product-card__action-btn {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    background: rgba(255,255,255,0.9) !important;
+    border: none !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s !important;
+    color: #333 !important;
+    padding: 0 !important;
+}
+
+.nd-product-card__action-btn:hover {
+    background: var(--nd-main) !important;
+    color: white !important;
+}
+
+.nd-product-card__action-btn svg {
+    width: 16px !important;
+    height: 16px !important;
+}
+
+.nd-product-card__info {
+    padding: 12px !important;
+    font-family: 'Inter', 'Be Vietnam Pro', sans-serif !important;
+    width: 100% !important;
+}
+
+.nd-product-card__name {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    line-height: 1.4 !important;
+    margin-bottom: 6px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    transition: color 0.2s !important;
+    width: 100% !important;
+}
+
+.nd-product-card__name:hover {
+    color: var(--nd-main) !important;
+}
+
+.nd-product-card__price {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    color: var(--nd-price) !important;
+}
+
+.nd-product-card__compare-price {
+    font-size: 12px !important;
+    color: #999 !important;
+    text-decoration: line-through !important;
+    margin-left: 6px !important;
+    font-weight: 400 !important;
+}
+
+/* ── Collection Section ── */
+.nd-collection {
+    padding: 40px 0 !important;
+    font-family: 'Inter', 'Be Vietnam Pro', sans-serif !important;
+}
+
+.nd-collection__row {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px !important;
+    align-items: start !important;
+}
+
+.nd-collection__banner {
+    border-radius: 12px !important;
+    overflow: hidden !important;
+}
+
+.nd-collection__banner a {
+    display: block !important;
+    text-decoration: none !important;
+}
+
+.nd-collection__banner img,
+.nd-collection__banner div {
+    width: 100% !important;
+    display: block !important;
+    border-radius: 12px !important;
+}
+
+.nd-collection__products {
+    position: relative !important;
+}
+
+.nd-collection__viewmore {
+    text-align: center !important;
+    margin-top: 20px !important;
+}
+
+.nd-collection__viewmore a {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    color: var(--nd-main) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+}
+
+/* ── Promo Section ── */
+.nd-promo {
+    padding: 40px 0 !important;
+    background: #f8f9fa !important;
+    font-family: 'Inter', 'Be Vietnam Pro', sans-serif !important;
+}
+
+.nd-promo__row {
+    display: grid !important;
+    grid-template-columns: 5fr 7fr !important;
+    gap: 24px !important;
+    align-items: center !important;
+}
+
+.nd-promo__text {
+    padding: 20px !important;
+}
+
+.nd-promo__text h2 {
+    font-size: 28px !important;
+    font-weight: 800 !important;
+    color: #333 !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
+}
+
+.nd-promo__text h2 span {
+    color: var(--nd-main) !important;
+}
+
+.nd-promo__text a {
+    text-decoration: none !important;
+}
+
+.nd-promo__grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+}
+
+.nd-promo__card {
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    cursor: pointer !important;
+    transition: transform 0.3s !important;
+    text-decoration: none !important;
+    display: block !important;
+    color: inherit !important;
+}
+
+.nd-promo__card:hover {
+    transform: translateY(-4px) !important;
+}
+
+.nd-promo__card div {
+    width: 100% !important;
+    border-radius: 12px !important;
+}
+
+/* ── Brand Logos ── */
+.nd-brands {
+    padding: 40px 0 !important;
+    border-top: 1px solid #eee !important;
+}
+
+.nd-brands__grid {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 32px !important;
+    flex-wrap: wrap !important;
+}
+
+.nd-brands__item {
+    opacity: 0.4 !important;
+    transition: opacity 0.3s !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+}
+
+.nd-brands__item:hover {
+    opacity: 1 !important;
+}
+
+.nd-brands__item img {
+    height: 40px !important;
+    width: auto !important;
+    filter: grayscale(100%) !important;
+    transition: filter 0.3s !important;
+}
+
+.nd-brands__item:hover img {
+    filter: grayscale(0%) !important;
+}
+
+/* ── Newsletter ── */
+.nd-newsletter {
+    padding: 40px 0 !important;
+    background: #f8f9fa !important;
+    font-family: 'Inter', 'Be Vietnam Pro', sans-serif !important;
+}
+
+.nd-newsletter__box {
+    background: white !important;
+    border-radius: 16px !important;
+    border: 1px solid #eee !important;
+    padding: 40px !important;
+    text-align: center !important;
+}
+
+.nd-newsletter__box h2 {
+    font-size: 24px !important;
+    font-weight: 800 !important;
+    color: #333 !important;
+    margin-bottom: 8px !important;
+}
+
+.nd-newsletter__box p {
+    font-size: 14px !important;
+    color: #888 !important;
+    max-width: 400px !important;
+    margin: 0 auto 20px !important;
+}
+
+.nd-newsletter__form {
+    display: flex !important;
+    gap: 8px !important;
+    max-width: 400px !important;
+    margin: 0 auto !important;
+}
+
+.nd-newsletter__input {
+    flex: 1 !important;
+    height: 44px !important;
+    padding: 0 16px !important;
+    border: 2px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    outline: none !important;
+    font-family: 'Inter', 'Be Vietnam Pro', sans-serif !important;
+    background: white !important;
+}
+
+.nd-newsletter__input:focus {
+    border-color: var(--nd-main) !important;
+}
+
+.nd-newsletter__btn {
+    background: var(--nd-main) !important;
+    color: white !important;
+    border: none !important;
+    padding: 0 24px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    transition: background 0.2s !important;
+    font-family: 'Inter', 'Be Vietnam Pro', sans-serif !important;
+}
+
+.nd-newsletter__btn:hover {
+    background: var(--nd-main-hover) !important;
+}
+
+.nd-newsletter__note {
+    margin-top: 12px !important;
+    font-size: 12px !important;
+    color: #ccc !important;
+}
+
+/* ── Footer (ND Style) ── */
+.nd-footer {
+    background: #1a1a2e !important;
+    color: #ccc !important;
+    padding-top: 48px !important;
+    font-family: 'Inter', 'Be Vietnam Pro', sans-serif !important;
+}
+
+.nd-footer__grid {
+    display: grid !important;
+    grid-template-columns: 2fr 1fr 1fr 2fr !important;
+    gap: 32px !important;
+}
+
+.nd-footer__title {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: white !important;
+    margin-bottom: 16px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.02em !important;
+}
+
+.nd-footer__text {
+    font-size: 13px !important;
+    line-height: 1.8 !important;
+    color: #999 !important;
+}
+
+.nd-footer__links {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.nd-footer__links li {
+    margin-bottom: 8px !important;
+}
+
+.nd-footer__links a {
+    font-size: 13px !important;
+    color: #999 !important;
+    transition: color 0.2s !important;
+    text-decoration: none !important;
+}
+
+.nd-footer__links a:hover {
+    color: white !important;
+}
+
+.nd-footer__social {
+    display: flex !important;
+    gap: 10px !important;
+    margin-top: 16px !important;
+}
+
+.nd-footer__social a {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    background: rgba(255,255,255,0.1) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s !important;
+    color: #ccc !important;
+    text-decoration: none !important;
+}
+
+.nd-footer__social a:hover {
+    background: var(--nd-main) !important;
+    color: white !important;
+}
+
+.nd-footer__bottom {
+    border-top: 1px solid rgba(255,255,255,0.1) !important;
+    margin-top: 32px !important;
+    padding: 16px 0 !important;
+    text-align: center !important;
+    font-size: 12px !important;
+    color: #666 !important;
+}
+
+/* ── ND Product Swiper ── */
+.nd-product-swiper {
+    overflow: hidden !important;
+    position: relative !important;
+    width: 100% !important;
+}
+
+.nd-product-swiper .swiper-wrapper {
+    display: flex !important;
+    align-items: stretch !important;
+}
+
+.nd-product-swiper .swiper-slide {
+    width: auto !important;
+    flex-shrink: 0 !important;
+    height: auto !important;
+}
+
+.nd-product-swiper .swiper-button-next,
+.nd-product-swiper .swiper-button-prev {
+    background: white !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    color: #333 !important;
+    margin-top: -18px !important;
+}
+
+.nd-product-swiper .swiper-button-next::after,
+.nd-product-swiper .swiper-button-prev::after {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+}
+
+.nd-product-swiper .swiper-button-disabled {
+    opacity: 0.3 !important;
+}
+
+.nd-swiper-voucher .swiper-pagination-bullet {
+    background: #ccc !important;
+}
+
+.nd-swiper-voucher .swiper-pagination-bullet-active {
+    background: var(--nd-main) !important;
+}
+
+.nd-swiper-voucher .swiper-slide {
+    width: auto !important;
+    flex-shrink: 0 !important;
+}
+
+/* ── Voucher Popup ── */
+.nd-voucher-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(0,0,0,0.5) !important;
+    z-index: 1000 !important;
+    display: none !important;
+    align-items: center !important;
+    justify-content: center !important;
+    backdrop-filter: blur(2px) !important;
+}
+
+.nd-voucher-overlay.active {
+    display: flex !important;
+}
+
+.nd-voucher-popup {
+    background: white !important;
+    border-radius: 16px !important;
+    padding: 32px !important;
+    max-width: 400px !important;
+    width: 90% !important;
+    text-align: center !important;
+    position: relative !important;
+}
+
+.nd-voucher-popup__title {
+    font-size: 20px !important;
+    font-weight: 800 !important;
+    color: #333 !important;
+    margin-bottom: 16px !important;
+}
+
+.nd-voucher-popup__code {
+    display: inline-block !important;
+    padding: 8px 24px !important;
+    background: #f0f0f0 !important;
+    border: 2px dashed #ccc !important;
+    border-radius: 8px !important;
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    color: var(--nd-main) !important;
+    margin-bottom: 16px !important;
+    letter-spacing: 0.05em !important;
+}
+
+.nd-voucher-popup__desc {
+    font-size: 13px !important;
+    color: #666 !important;
+    margin-bottom: 20px !important;
+}
+
+.nd-voucher-popup__copy {
+    background: var(--nd-main) !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 24px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    font-family: 'Inter', 'Be Vietnam Pro', sans-serif !important;
+}
+
+.nd-voucher-popup__copy:hover {
+    background: var(--nd-main-hover) !important;
+}
+
+.nd-voucher-popup__close {
+    position: absolute !important;
+    top: 12px !important;
+    right: 12px !important;
+    background: none !important;
+    border: none !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    color: #999 !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+    .nd-categories__grid { grid-template-columns: repeat(4, 1fr) !important; }
+    .nd-voucher__grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .nd-collection__row { grid-template-columns: 1fr !important; }
+    .nd-promo__row { grid-template-columns: 1fr !important; }
+    .nd-footer__grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+@media (max-width: 768px) {
+    .nd-header__row { flex-wrap: wrap !important; }
+    .nd-header__search { order: 3 !important; max-width: 100% !important; width: 100% !important; }
+    .nd-policy__grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .nd-categories__grid { grid-template-columns: repeat(4, 1fr) !important; gap: 10px !important; }
+    .nd-nav__list { overflow-x: auto !important; justify-content: flex-start !important; }
+    .nd-nav__link { padding: 10px 14px !important; font-size: 13px !important; }
+    .nd-flashsale__header { flex-wrap: wrap !important; gap: 12px !important; }
+    .nd-footer__grid { grid-template-columns: 1fr !important; }
+    .nd-newsletter__form { flex-direction: column !important; }
+}
+
+@media (max-width: 480px) {
+    .nd-categories__grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .nd-promo__grid { grid-template-columns: 1fr !important; }
+}

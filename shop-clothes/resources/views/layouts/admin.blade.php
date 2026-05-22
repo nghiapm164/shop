@@ -140,6 +140,15 @@
                         </a>
                     </li>
 
+                    <!-- Reviews -->
+                    <li>
+                        <a href="{{ Route::has('admin.reviews.index') ? route('admin.reviews.index') : 'javascript:void(0)' }}"
+                           class="flex items-center gap-3 px-4 py-3 rounded-lg {{ request()->routeIs('admin.reviews.*') ? 'bg-red-600 text-white' : 'text-gray-300 hover:bg-gray-800' }}">
+                            <i class="fas fa-star w-5"></i>
+                            <span>Đánh giá</span>
+                        </a>
+                    </li>
+
                     <!-- Coupons -->
                     <li>
                                 <a href="{{ Route::has('admin.coupons.index') ? route('admin.coupons.index') : 'javascript:void(0)' }}"

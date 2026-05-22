@@ -67,8 +67,8 @@
                                     type="text"
                                     id="recipientName"
                                     wire:model.lazy="recipientName"
-                                    placeholder="Nhập họ và tên"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent @error('recipientName') border-red-500 @enderror">
+                                    placeholder="Nhập họ và tên người nhận"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent @error('recipientName') border-red-500 @enderror">
                                 @error('recipientName')
                                     <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                                 @enderror
@@ -84,84 +84,23 @@
                                     id="phone"
                                     wire:model.lazy="phone"
                                     placeholder="0xxxxxxxxx"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent @error('phone') border-red-500 @enderror">
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent @error('phone') border-red-500 @enderror">
                                 @error('phone')
                                     <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <!-- Province -->
-                            <div>
-                                <label for="province" class="block text-sm font-semibold text-gray-900 mb-2">
-                                    Tỉnh/Thành phố *
-                                </label>
-                                <select
-                                    id="province"
-                                    wire:model.live="province"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent @error('province') border-red-500 @enderror">
-                                    <option value="">Chọn tỉnh/thành phố</option>
-                                    @foreach (array_keys($this->provinces) as $prov)
-                                        <option value="{{ $prov }}">{{ $prov }}</option>
-                                    @endforeach
-                                </select>
-                                @error('province')
-                                    <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- District -->
-                            @if ($this->districts)
-                                <div>
-                                    <label for="district" class="block text-sm font-semibold text-gray-900 mb-2">
-                                        Quận/Huyện *
-                                    </label>
-                                    <select
-                                        id="district"
-                                        wire:model.live="district"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent @error('district') border-red-500 @enderror">
-                                        <option value="">Chọn quận/huyện</option>
-                                        @foreach ($this->districts as $dist)
-                                            <option value="{{ $dist }}">{{ $dist }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('district')
-                                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            @endif
-
-                            <!-- Ward -->
-                            @if ($this->wards)
-                                <div>
-                                    <label for="ward" class="block text-sm font-semibold text-gray-900 mb-2">
-                                        Phường/Xã *
-                                    </label>
-                                    <select
-                                        id="ward"
-                                        wire:model.lazy="ward"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent @error('ward') border-red-500 @enderror">
-                                        <option value="">Chọn phường/xã</option>
-                                        @foreach ($this->wards as $w)
-                                            <option value="{{ $w }}">{{ $w }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('ward')
-                                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            @endif
-
-                            <!-- Address Detail -->
+                            <!-- Address (simple text) -->
                             <div>
                                 <label for="addressDetail" class="block text-sm font-semibold text-gray-900 mb-2">
-                                    Địa chỉ cụ thể *
+                                    Địa chỉ giao hàng *
                                 </label>
-                                <input
-                                    type="text"
+                                <textarea
                                     id="addressDetail"
                                     wire:model.lazy="addressDetail"
-                                    placeholder="Nhập số nhà, tên đường..."
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent @error('addressDetail') border-red-500 @enderror">
+                                    placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố"
+                                    rows="3"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent @error('addressDetail') border-red-500 @enderror"></textarea>
                                 @error('addressDetail')
                                     <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                                 @enderror

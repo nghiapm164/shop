@@ -4,11 +4,12 @@ namespace App\Livewire;
 
 use App\Models\Address;
 use App\Models\Coupon;
+use App\Mail\OrderPlacedMail;
 use App\Models\Order;
 use App\Models\OrderItem;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class CheckoutPage extends Component
@@ -25,45 +26,16 @@ class CheckoutPage extends Component
     public ?int $selectedAddressId = null;
     public bool $useNewAddress = false;
 
-    // New address form
-    #[Validate('required|min:3|max:100')]
+    // New address form (simple text inputs)
     public string $recipientName = '';
-    
-    #[Validate('required|regex:/^(\+84|0)[0-9]{9,10}$/')]
     public string $phone = '';
-    
-    #[Validate('required')]
-    public string $province = '';
-    
-    #[Validate('required')]
-    public string $district = '';
-    
-    #[Validate('required')]
-    public string $ward = '';
-    
-    #[Validate('required')]
     public string $addressDetail = '';
 
     // Payment method
-    #[Validate('required|in:cod,bank,vnpay')]
     public string $paymentMethod = 'cod';
 
     // Order notes
-    #[Validate('nullable|max:500')]
     public string $notes = '';
-
-    // Districts and wards (for dependent dropdowns)
-    public array $districts = [];
-    public array $wards = [];
-
-    // Vietnam provinces
-    private $provinces = [
-        'Hà Nội' => ['Hà Đông', 'Thanh Xuân', 'Hoàn Kiếm', 'Cầu Giấy'],
-        'TP. Hồ Chí Minh' => ['Quận 1', 'Quận 2', 'Quận 3', 'Quận 4'],
-        'Đà Nẵng' => ['Hải Châu', 'Thanh Khê', 'Sơn Trà', 'Ngũ Hành Sơn'],
-        'Hải Phòng' => ['Hồng Bàng', 'Ngô Quyền', 'Lê Chân', 'Kiến An'],
-        'Cần Thơ' => ['Ninh Kiều', 'Bình Thủy', 'Cái Răng', 'Ô Môn'],
-    ];
 
     public function mount()
     {
@@ -76,6 +48,11 @@ class CheckoutPage extends Component
         
         if ($this->cartItems->isEmpty()) {
             $this->redirect('/cart');
+        }
+
+        // Auto-detect new address mode if no saved addresses
+        if ($this->savedAddresses->count() == 0) {
+            $this->useNewAddress = true;
         }
 
         // Calculate totals from cart
@@ -136,31 +113,6 @@ class CheckoutPage extends Component
         return auth()->user()->addresses ?? collect([]);
     }
 
-    public function updatedProvince($value)
-    {
-        $this->district = '';
-        $this->wards = [];
-        $this->districts = $this->provinces[$value] ?? [];
-    }
-
-    public function updatedDistrict($value)
-    {
-        $this->ward = '';
-        // In a real app, you'd fetch this from a ward table
-        // For demo, we'll use mock data
-        $wardList = [
-            'Hà Đông' => ['Phúc La', 'Dương Nội', 'Lĩnh Nam'],
-            'Thanh Xuân' => ['Khương Mai', 'Khuất Duy Tiến', 'Thanh Xuân Trung'],
-            'Hoàn Kiếm' => ['Hoàn Kiếm', 'Tràng Tiền', 'Cửa Đông'],
-            'Cầu Giấy' => ['Dịch Vọng', 'Yên Hòa', 'Trung Hòa'],
-            'Quận 1' => ['Tân Định', 'Bến Nghé', 'Nguyễn Huệ'],
-            'Quận 2' => ['Thảo Điền', 'An Phú', 'Bình An'],
-            'Quận 3' => ['Phường 1', 'Phường 2', 'Phường 3'],
-            'Quận 4' => ['Phường 1', 'Phường 2', 'Phường 3'],
-        ];
-        $this->wards = $wardList[$value] ?? [];
-    }
-
     public function selectAddress($addressId)
     {
         $this->selectedAddressId = $addressId;
@@ -175,6 +127,16 @@ class CheckoutPage extends Component
 
     public function placeOrder()
     {
+        // Auto-detect new address mode if no saved addresses exist or fields are filled
+        if (!$this->selectedAddressId && $this->savedAddresses->count() == 0) {
+            $this->useNewAddress = true;
+        }
+
+        // Also detect if user filled in address fields without selecting saved address
+        if (!$this->selectedAddressId && !$this->useNewAddress && !empty($this->recipientName)) {
+            $this->useNewAddress = true;
+        }
+
         // Validate address selection
         if (!$this->selectedAddressId && !$this->useNewAddress) {
             $this->dispatch('notify', message: 'Vui lòng chọn địa chỉ giao hàng', type: 'warning');
@@ -183,7 +145,20 @@ class CheckoutPage extends Component
 
         // Validate new address if using new address
         if ($this->useNewAddress) {
-            $this->validate();
+            $this->validate([
+                'recipientName' => 'required|min:2|max:100',
+                'phone' => ['required', 'regex:/^(\+84|0)[0-9]{9,10}$/'],
+                'addressDetail' => 'required|min:5|max:500',
+                'paymentMethod' => 'required|in:cod,bank,vnpay',
+                'notes' => 'nullable|max:500',
+            ], [
+                'recipientName.required' => 'Vui lòng nhập tên người nhận',
+                'recipientName.min' => 'Tên phải có ít nhất 2 ký tự',
+                'phone.required' => 'Vui lòng nhập số điện thoại',
+                'phone.regex' => 'Số điện thoại không hợp lệ',
+                'addressDetail.required' => 'Vui lòng nhập địa chỉ giao hàng',
+                'addressDetail.min' => 'Địa chỉ phải có ít nhất 5 ký tự',
+            ]);
         }
 
         // Prepare shipping address
@@ -200,17 +175,14 @@ class CheckoutPage extends Component
             $shippingAddress = [
                 'recipient_name' => $this->recipientName,
                 'phone' => $this->phone,
-                'address' => "{$this->addressDetail}, {$this->ward}, {$this->district}, {$this->province}",
+                'address' => $this->addressDetail,
             ];
 
-            // Save new address if checkbox is checked
+            // Save new address
             Address::create([
                 'user_id' => auth()->id(),
                 'recipient_name' => $this->recipientName,
                 'phone' => $this->phone,
-                'province' => $this->province,
-                'district' => $this->district,
-                'ward' => $this->ward,
                 'address_detail' => $this->addressDetail,
                 'is_default' => false,
             ]);
@@ -237,7 +209,7 @@ class CheckoutPage extends Component
             'notes' => $this->notes,
         ]);
 
-        // Add order items
+        // Add order items and deduct stock
         foreach ($this->cartItems as $item) {
             OrderItem::create([
                 'order_id' => $order->id,
@@ -249,11 +221,25 @@ class CheckoutPage extends Component
                 'quantity' => $item['quantity'],
                 'subtotal' => $item['price'] * $item['quantity'],
             ]);
+
+            // Deduct stock from product variant
+            $variant = \App\Models\ProductVariant::find($item['product_variant_id']);
+            if ($variant) {
+                $variant->decrement('stock_quantity', $item['quantity']);
+            }
         }
 
         // Increment coupon used count
         if ($this->appliedCoupon) {
             $this->appliedCoupon->increment('used_count');
+        }
+
+        // Send order confirmation email
+        try {
+            Mail::to($order->user->email)->send(new OrderPlacedMail($order));
+        } catch (\Exception $e) {
+            // Don't fail the order if email fails
+            \Illuminate\Support\Facades\Log::warning('Failed to send order confirmation email: ' . $e->getMessage());
         }
 
         // Clear cart
@@ -263,8 +249,7 @@ class CheckoutPage extends Component
 
         // Redirect based on payment method
         if ($this->paymentMethod === 'vnpay') {
-            // TODO: Implement VNPay integration
-            $this->redirect(route('order.success', ['code' => $order->order_code]));
+            $this->redirect(route('payment.vnpay', ['order_code' => $order->order_code]));
         } else {
             $this->redirect(route('order.success', ['code' => $order->order_code]));
         }

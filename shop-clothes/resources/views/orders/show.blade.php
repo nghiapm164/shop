@@ -82,9 +82,13 @@
 
                     <div class="space-y-4">
                         @foreach ($order->items as $item)
+                            @php
+                                $product = $item->productVariant?->product;
+                                $imageUrl = $product?->image_url ?? asset('images/product-placeholder.svg');
+                            @endphp
                             <div class="flex gap-4 pb-4 border-b border-gray-200 last:border-0">
                                 <img
-                                    src="{{ asset('storage/' . $item->productVariant->product->images->first()?->image_path ?? 'images/placeholder.jpg') }}"
+                                    src="{{ $imageUrl }}"
                                     alt="{{ $item->product_name }}"
                                     class="w-20 h-20 object-cover rounded">
                                 <div class="flex-1">
@@ -111,7 +115,7 @@
                 <div class="bg-white rounded-lg border border-gray-200 p-6">
                     <h2 class="text-lg font-bold text-gray-900 mb-4">Địa chỉ giao hàng</h2>
                     @php
-                        $shippingAddress = json_decode($order->shipping_address, true);
+                        $shippingAddress = is_array($order->shipping_address) ? $order->shipping_address : json_decode($order->shipping_address, true);
                     @endphp
                     <div class="space-y-3">
                         <div>
