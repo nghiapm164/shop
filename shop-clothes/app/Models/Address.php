@@ -14,10 +14,10 @@ class Address extends Model
         'user_id',
         'recipient_name',
         'phone',
-        'province',
-        'district',
-        'ward',
         'address_detail',
+        'ward',
+        'district',
+        'province',
         'is_default',
     ];
 
@@ -26,7 +26,7 @@ class Address extends Model
     ];
 
     /**
-     * Get the user this address belongs to
+     * Get the user that owns the address
      */
     public function user(): BelongsTo
     {
@@ -34,39 +34,16 @@ class Address extends Model
     }
 
     /**
-     * Get full address string
+     * Get the full address string
      */
-    public function getFullAddressAttribute()
+    public function getFullAddressAttribute(): string
     {
-        return "{$this->address_detail}, {$this->ward}, {$this->district}, {$this->province}";
-    }
-
-    /**
-     * Set this address as default
-     */
-    public function makeDefault()
-    {
-        // Remove default from all other addresses of this user
-        Address::where('user_id', $this->user_id)->update(['is_default' => false]);
-        
-        // Set this as default
-        $this->update(['is_default' => true]);
-    }
-
-    /**
-     * Scope for default addresses
-     */
-    public function scopeDefault($query)
-    {
-        return $query->where('is_default', true);
-    }
-
-    /**
-     * Scope for addresses of a specific user
-     */
-    public function scopeForUser($query, $userId)
-    {
-        return $query->where('user_id', $userId);
+        $parts = array_filter([
+            $this->address_detail,
+            $this->ward,
+            $this->district,
+            $this->province,
+        ]);
+        return implode(', ', $parts);
     }
 }
-

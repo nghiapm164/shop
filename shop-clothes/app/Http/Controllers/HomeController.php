@@ -71,7 +71,7 @@ class HomeController extends Controller
         // Testimonials from product reviews (4 items)
         $testimonials = $this->getTestimonials();
 
-        return view('home-ndstyle', [
+        return view('home', [
             'newProducts' => $newProducts,
             'bestSellers' => $bestSellers,
             'adBanner' => $adBanner,

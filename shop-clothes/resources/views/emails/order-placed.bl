@@ -1,0 +1,45 @@
+<x-mail::message>
+# Đơn hàng #{{ $order->order_code }} đã được đặt thành công!
+
+Cảm ơn bạn đã mua sắm tại MODESPORT. Dưới đây là thông tin đơn hàng của bạn:
+
+## Chi tiết đơn hàng
+
+<x-mail::table>
+| Sản phẩm | Size | Màu | SL | Thành tiền |
+| -------- | ---- | --- | -- | ---------- |
+@foreach($items as $item)
+| {{ $item->product_name }} | {{ $item->size }} | {{ $item->color }} | {{ $item->quantity }} | {{ number_format($item->subtotal, 0, ',', '.') }}₫ |
+@endforeach
+</x-mail::table>
+
+## Tổng kết
+
+- **Tạm tính:** {{ number_format($order->subtotal, 0, ',', '.') }}₫
+@if($order->discount_amount > 0)
+- **Giảm giá:** -{{ number_format($order->discount_amount, 0, ',', '.') }}₫
+@endif
+- **Phí vận chuyển:** {{ $order->shipping_fee > 0 ? number_format($order->shipping_fee, 0, ',', '.') . '₫' : 'Miễn phí' }}
+- **Tổng cộng:** {{ number_format($order->total, 0, ',', '.') }}₫
+
+## Thông tin giao hàng
+
+@if(is_array($order->shipping_address))
+- **Người nhận:** {{ $order->shipping_address['recipient_name'] ?? '' }}
+- **Điện thoại:** {{ $order->shipping_address['phone'] ?? '' }}
+- **Địa chỉ:** {{ $order->shipping_address['address'] ?? '' }}
+@endif
+
+- **Phương thức thanh toán:** {{ match($order->payment_method) { 'cod' => 'Thanh toán khi nhận hàng', 'bank_transfer' => 'Chuyển khoản ngân hàng', 'e_wallet' => 'VNPay', default => $order->payment_method } }}
+- **Trạng thái thanh toán:** {{ \App\Models\Order::getPaymentStatusLabel($order->payment_status) }}
+
+@if($order->notes)
+## Ghi chú
+{{ $order->notes }}
+@endif
+
+Cảm ơn bạn đã tin tưởng mua sắm tại MODESPORT!
+
+Trân trọng,<br>
+{{ config('app.name', 'MODESPORT') }}
+</x-mail::message>

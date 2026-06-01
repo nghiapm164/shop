@@ -36,20 +36,20 @@
 
             {{-- Desktop Nav Links --}}
             <div class="hidden lg:flex items-center gap-1">
-                <a href="{{ route('home') }}" 
+                <a href="{{ route('home') }}"
                    class="relative px-4 py-2 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg hover:bg-gray-50 {{ request()->routeIs('home') ? 'text-red-500' : '' }}">
                     Trang chủ
                 </a>
-                <a href="{{ route('shop.index') }}" 
+                <a href="{{ route('shop.index') }}"
                    class="relative px-4 py-2 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg hover:bg-gray-50 {{ request()->routeIs('shop.*') || request()->routeIs('products.*') ? 'text-red-500' : '' }}">
                     Cửa hàng
                 </a>
-                <a href="{{ route('shop.index', ['collection' => 'new_arrivals', 'sort' => 'newest']) }}" 
-                   class="relative px-4 py-2 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg hover:bg-gray-50">
+                <a href="{{ route('shop.new-arrivals') }}"
+                   class="relative px-4 py-2 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg hover:bg-gray-50 {{ request()->routeIs('shop.new-arrivals') ? 'text-red-500' : '' }}">
                     Mới về
                 </a>
-                <a href="{{ route('shop.index', ['sort' => 'price_low']) }}" 
-                   class="relative px-4 py-2 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg hover:bg-gray-50">
+                <a href="{{ route('shop.best-prices') }}"
+                   class="relative px-4 py-2 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg hover:bg-gray-50 {{ request()->routeIs('shop.best-prices') ? 'text-red-500' : '' }}">
                     Giá tốt
                 </a>
             </div>
@@ -57,7 +57,7 @@
             {{-- Right Actions --}}
             <div class="flex items-center gap-2">
                 {{-- Search Button (Desktop) --}}
-                <a href="{{ route('shop.index') }}" 
+                <a href="{{ route('shop.index') }}"
                    class="hidden sm:inline-flex items-center gap-2 h-10 px-4 rounded-full border border-gray-200 text-gray-500 text-sm font-medium hover:border-gray-300 hover:text-gray-700 hover:bg-gray-50 transition-all">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35" stroke-linecap="round"/>
@@ -67,7 +67,7 @@
 
                 {{-- Wishlist (Desktop) --}}
                 @auth
-                <a href="{{ route('wishlist.index') }}" 
+                <a href="{{ route('wishlist.index') }}"
                    class="hidden md:inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-500 hover:text-red-500 hover:bg-red-50 transition-all"
                    title="Yêu thích">
                     <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -77,7 +77,7 @@
                 @endauth
 
                 {{-- Cart --}}
-                <a href="{{ route('cart.index') }}" 
+                <a href="{{ route('cart.index') }}"
                    class="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-500 hover:text-red-500 hover:bg-red-50 transition-all"
                    title="Giỏ hàng">
                     <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -88,14 +88,14 @@
 
                 {{-- User Menu --}}
                 <div class="relative" @click.outside="openUser = false">
-                    <button @click="openUser = !openUser" 
+                    <button @click="openUser = !openUser"
                             class="inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-all">
                         <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
                         </svg>
                     </button>
 
-                    <div x-show="openUser" 
+                    <div x-show="openUser"
                          x-transition:enter="transition ease-out duration-200"
                          x-transition:enter-start="opacity-0 translate-y-1 scale-95"
                          x-transition:enter-end="opacity-100 translate-y-0 scale-100"
@@ -142,7 +142,7 @@
                 </div>
 
                 {{-- Mobile Menu Toggle --}}
-                <button @click="mobileMenuOpen = !mobileMenuOpen" 
+                <button @click="mobileMenuOpen = !mobileMenuOpen"
                         class="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-full text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-all">
                     <svg x-show="!mobileMenuOpen" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
@@ -155,7 +155,7 @@
         </div>
 
         {{-- Mobile Menu --}}
-        <div x-show="mobileMenuOpen" 
+        <div x-show="mobileMenuOpen"
              x-transition:enter="transition ease-out duration-200"
              x-transition:enter-start="opacity-0 -translate-y-2"
              x-transition:enter-end="opacity-100 translate-y-0"
@@ -170,7 +170,7 @@
                 </svg>
                 Tìm kiếm sản phẩm...
             </a>
-            
+
             <a href="{{ route('home') }}" class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                 Trang chủ
@@ -179,9 +179,13 @@
                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                 Cửa hàng
             </a>
-            <a href="{{ route('shop.index', ['collection' => 'new_arrivals', 'sort' => 'newest']) }}" class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
+            <a href="{{ route('shop.new-arrivals') }}" class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
                 Hàng mới
+            </a>
+            <a href="{{ route('shop.best-prices') }}" class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Giá tốt
             </a>
             <a href="{{ route('cart.index') }}" class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 0 0-8 0v4M5 9h14l1 12H4L5 9z"/></svg>

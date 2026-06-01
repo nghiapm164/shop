@@ -46,8 +46,14 @@ class ProductFilter extends Component
     public $view_type = 'grid';
     public $per_page = 12;
 
-    public function mount(): void
+    public function mount(string $collection = '', string $sort = ''): void
     {
+        if ($collection) {
+            $this->collection = $collection;
+        }
+        if ($sort) {
+            $this->sort = $sort;
+        }
         $this->applyCollectionPreset();
     }
 
@@ -291,9 +297,9 @@ class ProductFilter extends Component
                 'best_sellers' => 'Top bán chạy',
                 default => 'Tất cả sản phẩm',
             },
-            'hasActiveFilters' => !empty($this->brand) || !empty($this->size) || 
-                                  !empty($this->color) || $this->category || 
-                                  $this->keyword || $this->price_min > 0 || 
+            'hasActiveFilters' => !empty($this->brand) || !empty($this->size) ||
+                                  !empty($this->color) || $this->category ||
+                                  $this->keyword || $this->price_min > 0 ||
                                   $this->price_max < 10000000,
         ]);
     }

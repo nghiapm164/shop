@@ -5,10 +5,11 @@
 @section('content')
 <div class="max-w-6xl mx-auto px-4 py-8">
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">
-            <i class="fas fa-shopping-bag mr-3 text-red-600"></i>Đơn hàng của tôi
-        </h1>
-        <p class="text-gray-500 mt-2">Theo dõi trạng thái đơn hàng của bạn</p>
+            <h1 class="text-2xl font-bold text-gray-900">
+                <svg class="w-7 h-7 inline mr-2 text-red-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+                Đơn hàng của tôi
+            </h1>
+            <p class="text-gray-500 mt-1 text-sm">Theo dõi trạng thái đơn hàng của bạn</p>
     </div>
 
     {{-- Status Tabs --}}
@@ -56,12 +57,14 @@
                    class="flex-1 rounded-lg border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-sm">
             <button type="submit"
                     class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-semibold">
-                <i class="fas fa-search mr-1"></i> Tìm
+                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35" stroke-linecap="round"/></svg>
+                Tìm
             </button>
             @if(request('search'))
                 <a href="{{ route('client.orders.index', request('status') ? ['status' => request('status')] : []) }}"
                    class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm font-semibold">
-                    <i class="fas fa-times mr-1"></i> Xóa
+                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                    Xóa
                 </a>
             @endif
         </form>
@@ -70,12 +73,14 @@
     {{-- Flash Messages --}}
     @if(session('success'))
         <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6">
-            <i class="fas fa-check-circle mr-2"></i>{{ session('success') }}
+            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            {{ session('success') }}
         </div>
     @endif
     @if(session('error'))
         <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-            <i class="fas fa-exclamation-circle mr-2"></i>{{ session('error') }}
+            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+            {{ session('error') }}
         </div>
     @endif
 
@@ -120,9 +125,10 @@
 
                     {{-- Payment Badge --}}
                     @if($order->payment_status === 'paid')
-                        <span class="px-3 py-1 text-xs font-semibold text-green-600 bg-green-100 rounded-full">
-                            <i class="fas fa-check mr-1"></i>Đã thanh toán
-                        </span>
+                            <span class="px-3 py-1 text-xs font-semibold text-green-600 bg-green-100 rounded-full">
+                                <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                Đã thanh toán
+                            </span>
                     @elseif($order->payment_status === 'unpaid')
                         <span class="px-3 py-1 text-xs font-semibold text-orange-600 bg-orange-100 rounded-full">
                             Chưa thanh toán
@@ -167,11 +173,11 @@
                 <p class="text-sm text-gray-600">
                     {{ $order->items->count() }} sản phẩm
                     @if($order->payment_method === 'cod')
-                        &middot; <i class="fas fa-money-bill-wave text-green-600"></i> COD
+                        &middot; <svg class="w-3.5 h-3.5 inline text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25"/></svg> COD
                     @elseif($order->payment_method === 'bank_transfer')
-                        &middot; <i class="fas fa-university text-blue-600"></i> Chuyển khoản
+                        &middot; <svg class="w-3.5 h-3.5 inline text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18"/></svg> Chuyển khoản
                     @elseif($order->payment_method === 'e_wallet')
-                        &middot; <i class="fas fa-wallet text-purple-600"></i> Ví điện tử
+                        &middot; <svg class="w-3.5 h-3.5 inline text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9"/></svg> Ví điện tử
                     @endif
                 </p>
                 <div class="flex gap-2">
@@ -194,12 +200,13 @@
         </div>
     @empty
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-            <i class="fas fa-shopping-bag text-5xl text-gray-300 mb-4"></i>
+            <svg class="w-14 h-14 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Chưa có đơn hàng nào</h3>
             <p class="text-gray-500 mb-6">Bạn chưa đặt đơn hàng nào. Hãy bắt đầu mua sắm ngay!</p>
             <a href="{{ route('shop.index') }}"
                class="inline-flex items-center px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition-colors">
-                <i class="fas fa-shopping-bag mr-2"></i> Mua sắm ngay
+                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12"/></svg>
+                Mua sắm ngay
             </a>
         </div>
     @endforelse

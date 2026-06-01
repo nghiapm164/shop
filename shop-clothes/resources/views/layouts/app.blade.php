@@ -4,37 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     <!-- SEO Meta Tags -->
     <title>@yield('meta_title', config('app.name', 'SportWear Shop'))</title>
     <meta name="description" content="@yield('meta_description', 'Cửa hàng quần áo thể thao nam chất lượng cao')">
     <meta name="keywords" content="@yield('meta_keywords', 'quần áo thể thao, quần lót nam, áo thun')">
     <meta name="author" content="SportWear Shop">
-    
+
     <!-- Open Graph -->
     <meta property="og:title" content="@yield('meta_title', config('app.name'))">
     <meta property="og:description" content="@yield('meta_description', 'Cửa hàng quần áo thể thao nam')">
     <meta property="og:type" content="@yield('og_type', 'website')">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:image" content="@yield('og_image', asset('images/logo.png'))">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    
+
     <!-- Fonts: Inter + Be Vietnam Pro (Premium Vietnamese font) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
+
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    
+
     <!-- Vite Assets -->
-    @vite(['resources/css/app.css', 'resources/css/ndstyle.css', 'resources/js/app.js'])
-    
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <!-- Livewire Styles -->
     @livewireStyles
-    
+
     <!-- Additional Styles -->
     <style>
         [x-cloak] { display: none !important; }
@@ -57,17 +57,15 @@
         this.toasts = this.toasts.filter(t => t.id !== id);
     }
 }" x-on:notify.window="pushToast($event.detail)">
-    <!-- Navigation (hidden on homepage which has its own header) -->
-    @if(!request()->routeIs('home'))
-        <x-navbar />
-    @endif
-    
+    <!-- Navigation -->
+    <x-navbar />
+
     <!-- Main Content -->
     <main class="min-h-screen relative z-10">
         @yield('content')
         {{ $slot ?? '' }}
     </main>
-    
+
     <!-- Footer -->
     <x-footer />
 
@@ -99,10 +97,10 @@
             </div>
         </template>
     </div>
-    
+
     <!-- Livewire Scripts -->
     @livewireScripts
-    
+
     <!-- Scroll to Top -->
     <div x-data="{ show: false }" x-on:scroll.window="show = (window.scrollY > 400)">
         <button
@@ -120,10 +118,10 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
         </button>
     </div>
-    
+
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    
+
     @stack('scripts')
 </body>
 </html>

@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Livewire\CartPage;
 use App\Livewire\CheckoutPage;
 use Illuminate\Support\Facades\Route;
@@ -44,14 +45,23 @@ Route::get('/products', function () {
     return redirect()->route('shop.index', request()->query());
 })->name('products.index');
 Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('products.show');
+Route::get('/new-arrivals', function () {
+    return view('shop.new-arrivals');
+})->name('shop.new-arrivals');
+Route::get('/best-prices', function () {
+    return view('shop.best-prices');
+})->name('shop.best-prices');
 
-// Auth portals
+// Auth portals - redirect to unified login
 Route::middleware('guest')->group(function () {
-    Route::get('/client/login', [AuthenticatedSessionController::class, 'create'])->name('client.login');
-    Route::post('/client/login', [AuthenticatedSessionController::class, 'storeClient'])->name('client.login.submit');
+    Route::get('/client/login', fn () => redirect()->route('login'))->name('client.login');
+    Route::post('/client/login', [AuthenticatedSessionController::class, 'store'])->name('client.login.submit');
 
-    Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
-    Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
+    Route::get('/admin/login', fn () => redirect()->route('login'))->name('admin.login');
+    Route::post('/admin/login', [AuthenticatedSessionController::class, 'store'])->name('admin.login.submit');
+
+    Route::get('/client/register', fn () => redirect()->route('register'))->name('client.register');
+    Route::post('/client/register', [RegisteredUserController::class, 'store'])->name('client.register.submit');
 });
 
 // Shopping Cart & Checkout (Protected)

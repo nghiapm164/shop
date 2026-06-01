@@ -45,13 +45,14 @@ class CheckoutPage extends Component
 
         // Load cart from session
         $this->cartItems = collect(session()->get('cart', []));
-        
+
         if ($this->cartItems->isEmpty()) {
             $this->redirect('/cart');
         }
 
-        // Auto-detect new address mode if no saved addresses
-        if ($this->savedAddresses->count() == 0) {
+        // Auto-detect new address mode if no saved addresses (avoid accessing Computed in mount)
+        $hasAddresses = auth()->user()->addresses()->exists();
+        if (!$hasAddresses) {
             $this->useNewAddress = true;
         }
 
@@ -81,7 +82,7 @@ class CheckoutPage extends Component
     public function calculateTotals()
     {
         $this->subtotal = $this->cartItems->sum(fn($item) => $item['price'] * $item['quantity']);
-        
+
         if ($this->appliedCoupon) {
             $this->discountAmount = $this->calculateDiscount();
         }
