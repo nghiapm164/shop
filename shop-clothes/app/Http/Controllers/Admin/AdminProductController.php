@@ -68,8 +68,9 @@ class AdminProductController extends Controller
             $this->syncVariants($product, $data['variants']);
 
             $uploadedImages = $request->file('images', []);
+            $imageColors = $request->input('image_colors', []);
             if (!empty($uploadedImages)) {
-                $this->storeProductImages($product, $uploadedImages);
+                $this->storeProductImages($product, $uploadedImages, $imageColors);
             }
         });
 
@@ -78,7 +79,7 @@ class AdminProductController extends Controller
 
     public function edit(Product $product): View
     {
-        $product->load(['images', 'variants']);
+        $product->load(['images.color', 'variants']);
 
         $initialVariants = $product->variants->map(function ($variant) {
             return [
@@ -134,8 +135,18 @@ class AdminProductController extends Controller
             }
 
             $uploadedImages = $request->file('images', []);
+            $imageColors = $request->input('image_colors', []);
             if (!empty($uploadedImages)) {
-                $this->storeProductImages($product, $uploadedImages);
+                $this->storeProductImages($product, $uploadedImages, $imageColors);
+            }
+
+            // Update existing image colors
+            $existingImageColors = $request->input('existing_image_colors', []);
+            foreach ($existingImageColors as $imageId => $colorId) {
+                $img = $product->images()->find($imageId);
+                if ($img) {
+                    $img->update(['color_id' => $colorId ?: null]);
+                }
             }
 
             if (!empty($data['primary_image_id'])) {
@@ -189,13 +200,13 @@ class AdminProductController extends Controller
     /**
      * @param array<int, UploadedFile> $files
      */
-    private function storeProductImages(Product $product, array $files): void
+    private function storeProductImages(Product $product, array $files, array $imageColors = []): void
     {
         $manager = $this->resolveImageManager();
         $hasPrimary = $product->images()->where('is_primary', true)->exists();
         $sortOrder = (int) $product->images()->max('sort_order') + 1;
 
-        foreach ($files as $file) {
+        foreach ($files as $idx => $file) {
             $baseName = Str::uuid()->toString();
             if ($manager) {
                 $imagePath = "products/{$baseName}.jpg";
@@ -223,6 +234,7 @@ class AdminProductController extends Controller
 
             ProductImage::create([
                 'product_id' => $product->id,
+                'color_id' => !empty($imageColors[$idx]) ? (int) $imageColors[$idx] : null,
                 'image_path' => $imagePath,
                 'sort_order' => $sortOrder++,
                 'is_primary' => !$hasPrimary,

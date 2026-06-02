@@ -52,27 +52,66 @@
                    class="relative px-4 py-2 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg hover:bg-gray-50 {{ request()->routeIs('shop.best-prices') ? 'text-red-500' : '' }}">
                     Giá tốt
                 </a>
+                <div class="relative" x-data="{ aboutOpen: false }" @click.outside="aboutOpen = false">
+                    <button @click="aboutOpen = !aboutOpen"
+                       class="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg hover:bg-gray-50 flex items-center gap-1 {{ request()->routeIs('pages.*') ? 'text-red-500' : '' }}">
+                        Về MODESPORT
+                        <svg class="w-3 h-3 transition-transform" :class="aboutOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div x-show="aboutOpen"
+                         x-transition:enter="transition ease-out duration-150"
+                         x-transition:enter-start="opacity-0 -translate-y-1"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-100"
+                         x-transition:leave-start="opacity-100"
+                         x-transition:leave-end="opacity-0"
+                         class="absolute left-0 mt-1 w-52 bg-white rounded-xl border border-gray-200 shadow-lg py-1.5 z-50">
+                        <a href="{{ route('pages.about') }}" class="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Giới thiệu
+                        </a>
+                        <a href="{{ route('pages.contact') }}" class="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            Liên hệ
+                        </a>
+                        <div class="my-1 border-t border-gray-100"></div>
+                        <a href="{{ route('pages.return-policy') }}" class="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            Chính sách đổi trả
+                        </a>
+                        <a href="{{ route('pages.privacy-policy') }}" class="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            Chính sách bảo mật
+                        </a>
+                        <a href="{{ route('pages.terms') }}" class="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            Điều khoản sử dụng
+                        </a>
+                    </div>
+                </div>
             </div>
 
             {{-- Right Actions --}}
             <div class="flex items-center gap-2">
                 {{-- Search Button (Desktop) --}}
-                <a href="{{ route('shop.index') }}"
-                   class="hidden sm:inline-flex items-center gap-2 h-10 px-4 rounded-full border border-gray-200 text-gray-500 text-sm font-medium hover:border-gray-300 hover:text-gray-700 hover:bg-gray-50 transition-all">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <form action="{{ route('shop.index') }}" method="GET" class="hidden sm:inline-flex items-center relative">
+                    <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm..."
+                           value="{{ request('keyword') }}"
+                           class="h-10 pl-10 pr-4 w-40 md:w-56 rounded-full border border-gray-200 text-sm text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-red-500/20 focus:border-red-400 focus:w-64 md:focus:w-72 transition-all outline-none">
+                    <svg class="w-4 h-4 absolute left-3.5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35" stroke-linecap="round"/>
                     </svg>
-                    <span class="hidden md:inline">Tìm kiếm</span>
-                </a>
+                </form>
 
                 {{-- Wishlist (Desktop) --}}
                 @auth
                 <a href="{{ route('wishlist.index') }}"
-                   class="hidden md:inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-500 hover:text-red-500 hover:bg-red-50 transition-all"
+                   class="relative hidden md:inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-500 hover:text-red-500 hover:bg-red-50 transition-all"
                    title="Yêu thích">
                     <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                     </svg>
+                    <livewire:wishlist-badge />
                 </a>
                 @endauth
 
@@ -119,6 +158,10 @@
                             <a href="{{ route('wishlist.index') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
                                 <svg class="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.17a4 4 0 115.656 5.656L10 17.657l-6.828-6.828a4 4 0 010-5.657z"/></svg>
                                 Yêu thích
+                            </a>
+                            <a href="{{ route('addresses.index') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                Địa chỉ
                             </a>
                             <div class="my-1 border-t border-slate-100"></div>
                             <form method="POST" action="{{ route('logout') }}">

@@ -6,14 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
-use Illuminate\View\View;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class PasswordResetLinkController extends Controller
 {
     /**
      * Display the password reset link request view.
      */
-    public function create(): View
+    public function create()
     {
         return view('auth.forgot-password');
     }
@@ -21,7 +22,7 @@ class PasswordResetLinkController extends Controller
     /**
      * Handle an incoming password reset link request.
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function store(Request $request): RedirectResponse
     {
@@ -29,9 +30,29 @@ class PasswordResetLinkController extends Controller
             'email' => ['required', 'email'],
         ]);
 
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
+        // Check if user exists
+        $user = \App\Models\User::where('email', $request->email)->first();
+
+        if (!$user) {
+            throw ValidationException::withMessages([
+                'email' => [__('We could not find an account with that email address.')],
+            ]);
+        }
+
+        // Generate reset token
+        $token = Password::createToken($user);
+
+        // Build reset URL
+        $resetUrl = route('password.reset', ['token' => $token]);
+
+        // If mailer is log, show the link directly
+        if (config('mail.default') === 'log') {
+            return back()->with('status', 'Link đặt lại mật khẩu:')
+                ->with('reset_url', $resetUrl)
+                ->with('reset_email', $request->email);
+        }
+
+        // Otherwise send via email normally
         $status = Password::sendResetLink(
             $request->only('email')
         );

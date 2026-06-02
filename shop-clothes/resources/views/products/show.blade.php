@@ -4,22 +4,35 @@
 @php
     $placeholder = asset('images/product-placeholder.svg');
 
-    $gallery = $product->images
-        ->map(function ($image) {
-            if (\Illuminate\Support\Str::startsWith($image->image_path, ['http://', 'https://'])) {
-                return $image->image_path;
-            }
+    // Load images with color relationship
+    $allImages = $product->images->load('color');
 
-            return asset('storage/' . ltrim($image->image_path, '/'));
-        })
-        ->values();
+    // Build gallery data with color info
+    $galleryData = $allImages->map(function ($image) use ($placeholder) {
+        $url = \Illuminate\Support\Str::startsWith($image->image_path, ['http://', 'https://'])
+            ? $image->image_path
+            : asset('storage/' . ltrim($image->image_path, '/'));
 
-    if ($gallery->isEmpty()) {
-        $gallery = collect([$placeholder]);
+        return [
+            'url' => $url,
+            'color_id' => $image->color_id ? (int) $image->color_id : null,
+            'color_name' => $image->color?->name,
+            'color_hex' => $image->color?->hex_code,
+        ];
+    })->values();
+
+    if ($galleryData->isEmpty()) {
+        $galleryData = collect([['url' => $placeholder, 'color_id' => null, 'color_name' => null, 'color_hex' => null]]);
     }
+
+    // Simple URL list for backward compatibility
+    $gallery = $galleryData->pluck('url')->values();
 
     $colorOptions = $product->variants->pluck('color')->filter()->unique('id')->values();
     $sizeOptions = $product->variants->pluck('size')->filter()->unique('id')->values();
+
+    // Colors that have images
+    $colorsWithImages = $allImages->whereNotNull('color_id')->pluck('color')->filter()->unique('id')->values();
 @endphp
 
 <div class="pb-14">
@@ -39,9 +52,32 @@
 
     <div class="max-w-7xl mx-auto px-4 py-6">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
-            <div x-data="{ current: 0, open: false, images: @js($gallery) }" class="space-y-4">
+            <div x-data="{
+                current: 0,
+                open: false,
+                selectedGalleryColor: null,
+                allImages: @js($galleryData),
+                images: @js($gallery),
+                get filteredImages() {
+                    if (!this.selectedGalleryColor) return this.allImages;
+                    return this.allImages.filter(img => img.color_id === this.selectedGalleryColor);
+                },
+                get currentImage() {
+                    const imgs = this.filteredImages;
+                    return imgs[this.current]?.url || imgs[0]?.url || '{{ $placeholder }}';
+                },
+                selectGalleryColor(colorId) {
+                    this.selectedGalleryColor = colorId;
+                    this.current = 0;
+                },
+                init() {
+                    window.addEventListener('gallery-color-change', (e) => {
+                        this.selectGalleryColor(e.detail.colorId);
+                    });
+                }
+            }" x-init="init()" class="space-y-4">
                 <div class="relative fashion-section overflow-hidden aspect-square cursor-zoom-in" @click="open = true">
-                    <img :src="images[current]" alt="{{ $product->name }}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='{{ $placeholder }}';">
+                    <img :src="currentImage" alt="{{ $product->name }}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='{{ $placeholder }}';">
 
                     @if ($product->sale_price && $product->sale_price < $product->price)
                         <div class="absolute top-3 left-3 chip border-red-200 bg-red-50 text-red-600">
@@ -50,22 +86,45 @@
                     @endif
                 </div>
 
+                <!-- Color filter for gallery -->
+                @if($colorsWithImages->count() > 0)
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button type="button" @click="selectGalleryColor(null)"
+                            :class="selectedGalleryColor === null ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'"
+                            class="px-3 py-1.5 rounded-full text-xs font-semibold transition-all">
+                            Tất cả
+                        </button>
+                        @foreach($colorsWithImages as $color)
+                            <button type="button" @click="selectGalleryColor({{ $color->id }})"
+                                :class="selectedGalleryColor === {{ $color->id }} ? 'ring-2 ring-red-500' : 'ring-1 ring-slate-200'"
+                                class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all bg-white hover:bg-slate-50">
+                                <span class="w-3 h-3 rounded-full border border-slate-200" style="background-color: {{ $color->hex_code }}"></span>
+                                {{ $color->name }}
+                            </button>
+                        @endforeach
+                    </div>
+                @endif
+
                 <div class="grid grid-cols-5 gap-2 md:gap-3">
-                    <template x-for="(img, index) in images" :key="index">
+                    <template x-for="(img, index) in filteredImages" :key="index">
                         <button
                             type="button"
                             @click="current = index"
                             :class="current === index ? 'ring-2 ring-red-600' : 'ring-1 ring-slate-200'"
-                            class="aspect-square overflow-hidden rounded-xl bg-slate-100 transition-all"
+                            class="relative aspect-square overflow-hidden rounded-xl bg-slate-100 transition-all"
                         >
-                            <img :src="img" class="w-full h-full object-cover" alt="Thumbnail" onerror="this.onerror=null;this.src='{{ $placeholder }}';">
+                            <img :src="img.url" class="w-full h-full object-cover" alt="Thumbnail" onerror="this.onerror=null;this.src='{{ $placeholder }}';">
+                            <!-- Color tag -->
+                            <span x-show="img.color_name" class="absolute bottom-0.5 left-0.5 right-0.5 text-center text-[8px] font-bold text-white bg-black/60 backdrop-blur-sm rounded-sm py-0.5 truncate px-1" x-text="img.color_name"></span>
                         </button>
                     </template>
                 </div>
 
                 <div x-show="open" x-transition.opacity class="fixed inset-0 z-50 bg-black/90 p-4 flex items-center justify-center" @click.self="open = false">
                     <button type="button" class="absolute top-6 right-6 text-white text-3xl" @click="open = false">&times;</button>
-                    <img :src="images[current]" class="max-h-[90vh] max-w-[90vw] object-contain" alt="{{ $product->name }}" onerror="this.onerror=null;this.src='{{ $placeholder }}';">
+                    <img :src="currentImage" class="max-h-[90vh] max-w-[90vw] object-contain" alt="{{ $product->name }}" onerror="this.onerror=null;this.src='{{ $placeholder }}';">
+                    <!-- Color label on zoomed image -->
+                    <div x-show="filteredImages[current]?.color_name" class="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-2 rounded-full text-sm font-medium backdrop-blur" x-text="filteredImages[current]?.color_name"></div>
                 </div>
             </div>
 

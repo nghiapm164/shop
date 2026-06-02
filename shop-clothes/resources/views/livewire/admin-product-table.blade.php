@@ -91,6 +91,8 @@
                     @forelse ($products as $product)
                         @php
                             $image = $product->images->firstWhere('is_primary', true) ?? $product->images->first();
+                            $colorImageCount = $product->images->whereNotNull('color_id')->unique('color_id')->count();
+                            $totalImageCount = $product->images->count();
                         @endphp
                         <tr class="hover:bg-gray-50/50 transition-colors">
                             <td class="py-3 px-4">
@@ -98,21 +100,40 @@
                             </td>
                             <td class="py-3 px-4">
                                 <div class="flex items-center gap-3">
+                                    @php
+                                        $imgSrc = asset('images/placeholder.jpg');
+                                        if ($image) {
+                                            $imgSrc = \Illuminate\Support\Str::startsWith($image->image_path, ['http://', 'https://'])
+                                                ? $image->image_path
+                                                : asset('storage/' . $image->image_path);
+                                        }
+                                    @endphp
                                     <img
-                                        src="{{ $image ? asset('storage/' . $image->image_path) : asset('images/placeholder.jpg') }}"
+                                        src="{{ $imgSrc }}"
                                         alt="{{ $product->name }}"
                                         class="w-12 h-12 rounded-xl object-cover border border-gray-100 shadow-sm"
+                                        onerror="this.onerror=null;this.src='{{ asset('images/product-placeholder.svg') }}';"
                                     >
                                     <div class="min-w-0">
                                         <p class="font-semibold text-gray-900 truncate max-w-[200px]">{{ $product->name }}</p>
                                         <p class="text-xs text-gray-400 mt-0.5">
                                             <i class="fas fa-barcode mr-1"></i>{{ $product->sku }}
                                         </p>
-                                        @if($product->is_featured)
-                                            <span class="inline-flex items-center gap-0.5 mt-1 px-1.5 py-0.5 bg-amber-50 text-amber-600 rounded text-[10px] font-semibold">
-                                                <i class="fas fa-star"></i> Nổi bật
+                                        <div class="flex items-center gap-2 mt-1">
+                                            @if($product->is_featured)
+                                                <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-amber-50 text-amber-600 rounded text-[10px] font-semibold">
+                                                    <i class="fas fa-star"></i> Nổi bật
+                                                </span>
+                                            @endif
+                                            <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded text-[10px] font-semibold">
+                                                <i class="fas fa-image"></i> {{ $totalImageCount }} ảnh
                                             </span>
-                                        @endif
+                                            @if($colorImageCount > 0)
+                                                <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-purple-50 text-purple-600 rounded text-[10px] font-semibold">
+                                                    <i class="fas fa-palette"></i> {{ $colorImageCount }} màu
+                                                </span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </td>
@@ -144,23 +165,15 @@
                                     </span>
                                 @endif
                             </td>
-                            <td class="py-3 px-4">
-                                <label class="inline-flex items-center cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        class="sr-only peer"
-                                        @checked($product->is_active)
-                                        wire:change="toggleStatus({{ $product->id }})"
-                                    >
-                                    <div class="relative w-10 h-5 bg-gray-200 rounded-full peer-checked:bg-green-500 transition-colors">
-                                        <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow-sm peer-checked:translate-x-5 transition-transform"></div>
-                                    </div>
-                                </label>
+                            <td class="py-3 px-4" x-data="{ active: {{ $product->is_active ? 'true' : 'false' }} }">
+                                <button type="button" @click="$wire.toggleStatus({{ $product->id }}).then(() => active = !active)" class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors" :class="active ? 'bg-green-500' : 'bg-gray-300'">
+                                    <span class="inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform" :class="active ? 'translate-x-6' : 'translate-x-1'"></span>
+                                </button>
                             </td>
                             <td class="py-3 px-4 text-xs text-gray-500">{{ $product->created_at?->format('d/m/Y') }}</td>
                             <td class="py-3 px-4">
                                 <div class="flex items-center justify-end gap-1.5">
-                                    <a href="{{ route('admin.products.edit', $product) }}" 
+                                    <a href="{{ route('admin.products.edit', $product) }}"
                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Chỉnh sửa">
                                         <i class="fas fa-pen text-xs"></i>
                                     </a>
@@ -218,11 +231,11 @@
                     @endif
                 </p>
                 <div class="mt-6 flex justify-end gap-3">
-                    <button type="button" wire:click="closeModal" 
+                    <button type="button" wire:click="closeModal"
                             class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
                         Hủy
                     </button>
-                    <button type="button" wire:click="executeBulkAction" 
+                    <button type="button" wire:click="executeBulkAction"
                             class="px-4 py-2.5 {{ $bulkAction === 'delete' ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-900 hover:bg-black' }} text-white rounded-xl text-sm font-medium transition-colors">
                         Xác nhận
                     </button>

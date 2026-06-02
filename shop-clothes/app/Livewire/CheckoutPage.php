@@ -26,10 +26,18 @@ class CheckoutPage extends Component
     public ?int $selectedAddressId = null;
     public bool $useNewAddress = false;
 
-    // New address form (simple text inputs)
+    // New/Edit address form
     public string $recipientName = '';
     public string $phone = '';
     public string $addressDetail = '';
+
+    // Edit address
+    public ?int $editingAddressId = null;
+
+    // Coupon
+    public string $couponCode = '';
+    public string $couponError = '';
+    public string $couponSuccess = '';
 
     // Payment method
     public string $paymentMethod = 'cod';
@@ -50,10 +58,16 @@ class CheckoutPage extends Component
             $this->redirect('/cart');
         }
 
-        // Auto-detect new address mode if no saved addresses (avoid accessing Computed in mount)
+        // Auto-detect new address mode if no saved addresses
         $hasAddresses = auth()->user()->addresses()->exists();
         if (!$hasAddresses) {
             $this->useNewAddress = true;
+        } else {
+            // Auto-select default address
+            $defaultAddr = auth()->user()->addresses()->where('is_default', true)->first();
+            if ($defaultAddr) {
+                $this->selectedAddressId = $defaultAddr->id;
+            }
         }
 
         // Calculate totals from cart
@@ -67,6 +81,7 @@ class CheckoutPage extends Component
                 $validation = $coupon->checkValid($this->subtotal);
                 if ($validation['valid']) {
                     $this->appliedCoupon = $coupon;
+                    $this->couponCode = $coupon->code;
                 } else {
                     session()->forget('coupon_id');
                 }
@@ -85,11 +100,13 @@ class CheckoutPage extends Component
 
         if ($this->appliedCoupon) {
             $this->discountAmount = $this->calculateDiscount();
+        } else {
+            $this->discountAmount = 0;
         }
 
         $shippingThreshold = 500000;
         $this->shippingFee = ($this->subtotal - $this->discountAmount) >= $shippingThreshold ? 0 : 30000;
-        $this->total = $this->subtotal - $this->discountAmount + $this->shippingFee;
+        $this->total = max(0, $this->subtotal - $this->discountAmount + $this->shippingFee);
     }
 
     protected function calculateDiscount()
@@ -114,37 +131,227 @@ class CheckoutPage extends Component
         return auth()->user()->addresses ?? collect([]);
     }
 
+    #[Computed]
+    public function availableCoupons()
+    {
+        return Coupon::valid()
+            ->where(function ($query) {
+                $query->whereNull('usage_limit')
+                    ->orWhereColumn('used_count', '<', 'usage_limit');
+            })
+            ->orderByDesc('value')
+            ->limit(8)
+            ->get();
+    }
+
     public function selectAddress($addressId)
     {
         $this->selectedAddressId = $addressId;
         $this->useNewAddress = false;
+        $this->editingAddressId = null;
     }
 
     public function useNewAddress()
     {
         $this->selectedAddressId = null;
         $this->useNewAddress = true;
+        $this->editingAddressId = null;
+        $this->recipientName = '';
+        $this->phone = '';
+        $this->addressDetail = '';
+    }
+
+    public function editAddress($addressId)
+    {
+        $address = Address::where('user_id', auth()->id())->find($addressId);
+        if (!$address) {
+            $this->dispatch('notify', message: 'Địa chỉ không tồn tại', type: 'error');
+            return;
+        }
+
+        $this->editingAddressId = $addressId;
+        $this->useNewAddress = true;
+        $this->selectedAddressId = null;
+        $this->recipientName = $address->recipient_name;
+        $this->phone = $address->phone;
+        $this->addressDetail = $address->address_detail;
+    }
+
+    public function saveAddress()
+    {
+        $this->validate([
+            'recipientName' => 'required|min:2|max:100',
+            'phone' => ['required', 'regex:/^(\+84|0)[0-9]{9,10}$/'],
+            'addressDetail' => 'required|min:5|max:500',
+        ], [
+            'recipientName.required' => 'Vui lòng nhập tên người nhận',
+            'recipientName.min' => 'Tên phải có ít nhất 2 ký tự',
+            'phone.required' => 'Vui lòng nhập số điện thoại',
+            'phone.regex' => 'Số điện thoại không hợp lệ',
+            'addressDetail.required' => 'Vui lòng nhập địa chỉ giao hàng',
+            'addressDetail.min' => 'Địa chỉ phải có ít nhất 5 ký tự',
+        ]);
+
+        if ($this->editingAddressId) {
+            // Update existing address
+            $address = Address::where('user_id', auth()->id())->find($this->editingAddressId);
+            if ($address) {
+                $address->update([
+                    'recipient_name' => $this->recipientName,
+                    'phone' => $this->phone,
+                    'address_detail' => $this->addressDetail,
+                ]);
+                $this->selectedAddressId = $address->id;
+                $this->dispatch('notify', message: 'Đã cập nhật địa chỉ', type: 'success');
+            }
+        } else {
+            // Create new address
+            $address = Address::create([
+                'user_id' => auth()->id(),
+                'recipient_name' => $this->recipientName,
+                'phone' => $this->phone,
+                'address_detail' => $this->addressDetail,
+                'is_default' => false,
+            ]);
+            $this->selectedAddressId = $address->id;
+            $this->dispatch('notify', message: 'Đã thêm địa chỉ mới', type: 'success');
+        }
+
+        // Reset form
+        $this->useNewAddress = false;
+        $this->editingAddressId = null;
+        $this->recipientName = '';
+        $this->phone = '';
+        $this->addressDetail = '';
+    }
+
+    public function cancelEditAddress()
+    {
+        $this->useNewAddress = false;
+        $this->editingAddressId = null;
+        $this->recipientName = '';
+        $this->phone = '';
+        $this->addressDetail = '';
+
+        // Re-select default if no address is selected
+        if (!$this->selectedAddressId) {
+            $defaultAddr = auth()->user()->addresses()->where('is_default', true)->first();
+            if ($defaultAddr) {
+                $this->selectedAddressId = $defaultAddr->id;
+            }
+        }
+    }
+
+    public function deleteAddress($addressId)
+    {
+        $address = Address::where('user_id', auth()->id())->find($addressId);
+        if (!$address) {
+            $this->dispatch('notify', message: 'Địa chỉ không tồn tại', type: 'error');
+            return;
+        }
+
+        $wasDefault = $address->is_default;
+        $address->delete();
+
+        if ($this->selectedAddressId == $addressId) {
+            $this->selectedAddressId = null;
+            $next = auth()->user()->addresses()->first();
+            if ($next) {
+                $this->selectedAddressId = $next->id;
+                if ($wasDefault) {
+                    $next->update(['is_default' => true]);
+                }
+            }
+        }
+
+        if (auth()->user()->addresses()->count() === 0) {
+            $this->useNewAddress = true;
+        }
+
+        $this->dispatch('notify', message: 'Đã xóa địa chỉ', type: 'success');
+    }
+
+    public function setDefaultAddress($addressId)
+    {
+        $address = Address::where('user_id', auth()->id())->find($addressId);
+        if (!$address) {
+            return;
+        }
+
+        Address::where('user_id', auth()->id())->update(['is_default' => false]);
+        $address->update(['is_default' => true]);
+
+        $this->selectedAddressId = $addressId;
+        $this->dispatch('notify', message: 'Đã đặt làm địa chỉ mặc định', type: 'success');
+    }
+
+    // Coupon methods
+    public function applyCoupon()
+    {
+        $this->couponError = '';
+        $this->couponSuccess = '';
+
+        $this->couponCode = strtoupper(trim($this->couponCode));
+
+        if (empty($this->couponCode)) {
+            $this->couponError = 'Vui lòng nhập mã giảm giá';
+            return;
+        }
+
+        $coupon = Coupon::where('code', $this->couponCode)->first();
+
+        if (!$coupon) {
+            $this->couponError = 'Mã giảm giá không tồn tại';
+            return;
+        }
+
+        $validation = $coupon->checkValid($this->subtotal);
+
+        if (!$validation['valid']) {
+            $this->couponError = $validation['message'];
+            return;
+        }
+
+        $this->appliedCoupon = $coupon;
+        session()->put('coupon_id', $coupon->id);
+        $this->calculateTotals();
+        $this->couponSuccess = "Áp dụng mã {$coupon->code} thành công! Giảm " .
+            number_format($this->discountAmount, 0, ',', '.') . '₫';
+
+        $this->dispatch('notify', message: "Đã áp dụng mã {$coupon->code}", type: 'success');
+    }
+
+    public function applyCouponCode(string $code): void
+    {
+        $this->couponCode = strtoupper(trim($code));
+        $this->applyCoupon();
+    }
+
+    public function removeCoupon()
+    {
+        $this->appliedCoupon = null;
+        $this->couponCode = '';
+        $this->couponError = '';
+        $this->couponSuccess = '';
+        session()->forget('coupon_id');
+        $this->calculateTotals();
     }
 
     public function placeOrder()
     {
-        // Auto-detect new address mode if no saved addresses exist or fields are filled
         if (!$this->selectedAddressId && $this->savedAddresses->count() == 0) {
             $this->useNewAddress = true;
         }
 
-        // Also detect if user filled in address fields without selecting saved address
         if (!$this->selectedAddressId && !$this->useNewAddress && !empty($this->recipientName)) {
             $this->useNewAddress = true;
         }
 
-        // Validate address selection
         if (!$this->selectedAddressId && !$this->useNewAddress) {
             $this->dispatch('notify', message: 'Vui lòng chọn địa chỉ giao hàng', type: 'warning');
             return;
         }
 
-        // Validate new address if using new address
         if ($this->useNewAddress) {
             $this->validate([
                 'recipientName' => 'required|min:2|max:100',
@@ -162,7 +369,6 @@ class CheckoutPage extends Component
             ]);
         }
 
-        // Prepare shipping address
         $shippingAddress = [];
 
         if ($this->selectedAddressId) {
@@ -179,7 +385,6 @@ class CheckoutPage extends Component
                 'address' => $this->addressDetail,
             ];
 
-            // Save new address
             Address::create([
                 'user_id' => auth()->id(),
                 'recipient_name' => $this->recipientName,
@@ -189,7 +394,6 @@ class CheckoutPage extends Component
             ]);
         }
 
-        // Create order
         $paymentMethod = match ($this->paymentMethod) {
             'bank' => 'bank_transfer',
             'vnpay' => 'e_wallet',
@@ -210,7 +414,6 @@ class CheckoutPage extends Component
             'notes' => $this->notes,
         ]);
 
-        // Add order items and deduct stock
         foreach ($this->cartItems as $item) {
             OrderItem::create([
                 'order_id' => $order->id,
@@ -223,32 +426,26 @@ class CheckoutPage extends Component
                 'subtotal' => $item['price'] * $item['quantity'],
             ]);
 
-            // Deduct stock from product variant
             $variant = \App\Models\ProductVariant::find($item['product_variant_id']);
             if ($variant) {
                 $variant->decrement('stock_quantity', $item['quantity']);
             }
         }
 
-        // Increment coupon used count
         if ($this->appliedCoupon) {
             $this->appliedCoupon->increment('used_count');
         }
 
-        // Send order confirmation email
         try {
             Mail::to($order->user->email)->send(new OrderPlacedMail($order));
         } catch (\Exception $e) {
-            // Don't fail the order if email fails
             \Illuminate\Support\Facades\Log::warning('Failed to send order confirmation email: ' . $e->getMessage());
         }
 
-        // Clear cart
         session()->forget('cart');
         session()->forget('coupon_id');
         $this->dispatch('cart-updated', count: 0);
 
-        // Redirect based on payment method
         if ($this->paymentMethod === 'vnpay') {
             $this->redirect(route('payment.vnpay', ['order_code' => $order->order_code]));
         } else {

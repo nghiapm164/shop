@@ -10,7 +10,7 @@
             <h2 class="text-xl font-bold text-gray-900">Danh mục sản phẩm</h2>
             <p class="text-sm text-gray-400 mt-0.5">Tạo và quản lý cấu trúc danh mục.</p>
         </div>
-        <a href="{{ route('admin.categories.create') }}" 
+        <a href="{{ route('admin.categories.create') }}"
            class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 text-white rounded-xl hover:bg-red-700 text-sm font-semibold shadow-sm transition-all">
             <i class="fas fa-plus text-xs"></i> Thêm danh mục
         </a>
@@ -34,9 +34,20 @@
                     @forelse ($categories as $category)
                         <tr class="hover:bg-gray-50/50 transition-colors">
                             <td class="py-3 px-5">
-                                <img src="{{ $category->image ? asset('storage/' . $category->image) : asset('images/placeholder.jpg') }}"
-                                    alt="{{ $category->name }}"
-                                    class="w-12 h-12 rounded-xl object-cover border border-gray-100 shadow-sm">
+                                @if($category->image)
+                                    @php
+                                        $catImg = \Illuminate\Support\Str::startsWith($category->image, ['http://', 'https://'])
+                                            ? $category->image
+                                            : asset('storage/' . $category->image);
+                                    @endphp
+                                    <img src="{{ $catImg }}" alt="{{ $category->name }}"
+                                        class="w-12 h-12 rounded-xl object-cover border border-gray-100 shadow-sm"
+                                        onerror="this.onerror=null;this.src='{{ asset('images/product-placeholder.svg') }}';">
+                                @else
+                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-red-100 to-red-200 border border-gray-100 flex items-center justify-center">
+                                        <i class="fas fa-folder text-red-400 text-lg"></i>
+                                    </div>
+                                @endif
                             </td>
                             <td class="py-3 px-5 font-semibold text-gray-900">{{ $category->name }}</td>
                             <td class="py-3 px-5 text-xs text-gray-400 font-mono">{{ $category->slug }}</td>
@@ -59,7 +70,7 @@
                             </td>
                             <td class="py-3 px-5">
                                 <div class="flex items-center justify-end gap-1">
-                                    <a href="{{ route('admin.categories.edit', $category) }}" 
+                                    <a href="{{ route('admin.categories.edit', $category) }}"
                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Chỉnh sửa">
                                         <i class="fas fa-pen text-xs"></i>
                                     </a>

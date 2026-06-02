@@ -406,6 +406,9 @@
                     }
 
                     this.quantity = 1;
+
+                    // Dispatch event for gallery color filter
+                    window.dispatchEvent(new CustomEvent('gallery-color-change', { detail: { colorId: colorId } }));
                 },
 
                 selectSize(sizeId) {

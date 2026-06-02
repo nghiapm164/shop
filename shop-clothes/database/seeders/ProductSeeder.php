@@ -105,26 +105,29 @@ class ProductSeeder extends Seeder
 
             ProductVariant::insert($variantRows);
 
-            ProductImage::insert([
-                [
-                    'product_id' => $product->id,
-                    'image_path' => $this->buildImageUrl($profile['image_keywords'], ($index * 2) + 1, false),
-                    'alt_text' => $name,
-                    'sort_order' => 1,
-                    'is_primary' => true,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
-                [
-                    'product_id' => $product->id,
-                    'image_path' => $this->buildImageUrl($profile['image_keywords'], ($index * 2) + 2, true),
-                    'alt_text' => $name . ' góc chụp thứ hai',
-                    'sort_order' => 2,
-                    'is_primary' => false,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
-            ]);
+            $imageRows = [];
+            $sortOrder = 1;
+            $firstImage = true;
+
+            // Create images per color - each color gets at least 1 image
+            foreach ($colorSelection as $color) {
+                $imageCount = random_int(1, 2);
+                for ($imgIdx = 0; $imgIdx < $imageCount; $imgIdx++) {
+                    $imageRows[] = [
+                        'product_id' => $product->id,
+                        'color_id' => $color->id,
+                        'image_path' => $this->buildImageUrl($profile['image_keywords'], ($index * 10) + $sortOrder, $imgIdx > 0),
+                        'alt_text' => $name . ' - ' . $color->name . ($imgIdx > 0 ? ' góc ' . ($imgIdx + 1) : ''),
+                        'sort_order' => $sortOrder++,
+                        'is_primary' => $firstImage,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                    $firstImage = false;
+                }
+            }
+
+            ProductImage::insert($imageRows);
         }
     }
 

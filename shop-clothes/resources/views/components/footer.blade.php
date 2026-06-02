@@ -44,11 +44,11 @@
             <div>
                 <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Hỗ trợ</h3>
                 <ul class="space-y-2.5">
-                    <li><a href="#" class="text-sm text-slate-400 hover:text-white transition-colors">Về chúng tôi</a></li>
-                    <li><a href="#" class="text-sm text-slate-400 hover:text-white transition-colors">Chính sách đổi trả</a></li>
-                    <li><a href="#" class="text-sm text-slate-400 hover:text-white transition-colors">Hướng dẫn chọn size</a></li>
-                    <li><a href="#" class="text-sm text-slate-400 hover:text-white transition-colors">Hướng dẫn mua hàng</a></li>
-                    <li><a href="#" class="text-sm text-slate-400 hover:text-white transition-colors">Liên hệ</a></li>
+                    <li><a href="{{ route('pages.about') }}" class="text-sm text-slate-400 hover:text-white transition-colors">Về chúng tôi</a></li>
+                    <li><a href="{{ route('pages.return-policy') }}" class="text-sm text-slate-400 hover:text-white transition-colors">Chính sách đổi trả</a></li>
+                    <li><a href="{{ route('pages.privacy-policy') }}" class="text-sm text-slate-400 hover:text-white transition-colors">Chính sách bảo mật</a></li>
+                    <li><a href="{{ route('pages.terms') }}" class="text-sm text-slate-400 hover:text-white transition-colors">Điều khoản sử dụng</a></li>
+                    <li><a href="{{ route('pages.contact') }}" class="text-sm text-slate-400 hover:text-white transition-colors">Liên hệ</a></li>
                 </ul>
             </div>
 

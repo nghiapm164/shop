@@ -186,6 +186,40 @@ class AdminUserController extends Controller
         return back()->with('success', 'Đã gửi email đặt lại mật khẩu.');
     }
 
+    /**
+     * Verify admin password and generate a temporary password for the target user.
+     */
+    public function revealPassword(Request $request, User $user): RedirectResponse
+    {
+        $request->validate([
+            'admin_password' => 'required|string',
+        ]);
+
+        // Verify admin's own password
+        if (!\Illuminate\Support\Facades\Hash::check($request->admin_password, auth()->user()->password)) {
+            return back()->with('error', 'Mật khẩu admin không chính xác.');
+        }
+
+        // Generate temporary password
+        $tempPassword = \Illuminate\Support\Str::random(12);
+
+        // Update user's password
+        $user->update([
+            'password' => \Illuminate\Support\Facades\Hash::make($tempPassword),
+        ]);
+
+        // Audit log
+        $this->writeAudit(
+            request: $request,
+            action: 'user.password_revealed',
+            target: $user,
+            oldValues: null,
+            newValues: ['message' => 'Admin generated temporary password']
+        );
+
+        return back()->with('temp_password', $tempPassword)->with('temp_password_user', $user->email);
+    }
+
     public function destroy(User $user): RedirectResponse
     {
         $actor = auth()->user();

@@ -4,283 +4,6 @@
     $oldColorIds = old('selected_color_ids', $selectedColors ?? []);
 @endphp
 
-<div
-    class="space-y-6"
-    x-data="productForm({
-        isEdit: @js($isEdit ?? false),
-        initialName: @js(old('name', $product->name)),
-        initialSlug: @js(old('slug', $product->slug)),
-        initialSku: @js(old('sku', $product->sku)),
-        sizes: @js($sizes->map(fn($s) => ['id' => (string) $s->id, 'name' => $s->name])->values()->all()),
-        colors: @js($colors->map(fn($c) => ['id' => (string) $c->id, 'name' => $c->name, 'hex_code' => $c->hex_code])->values()->all()),
-        selectedSizes: @js(array_map('strval', $oldSizeIds)),
-        selectedColors: @js(array_map('strval', $oldColorIds)),
-        initialVariants: @js($oldVariants),
-        metaTitle: @js(old('meta_title', $product->meta_title)),
-        metaDescription: @js(old('meta_description', $product->meta_description)),
-    })"
-    x-init="init()"
->
-    <div class="bg-white border border-gray-200 rounded-xl p-6 space-y-4">
-        <h2 class="text-lg font-semibold text-gray-900">Thông tin cơ bản</h2>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div class="lg:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Tên sản phẩm *</label>
-                <input type="text" name="name" x-model="name" @input="generateSlug()" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
-                @error('name')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Slug</label>
-                <input type="text" name="slug" x-model="slug" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                @error('slug')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">SKU</label>
-                <div class="flex gap-2">
-                    <input type="text" name="sku" x-model="sku" class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Để trống để auto suggest">
-                    <button type="button" @click="suggestSku()" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">Suggest</button>
-                </div>
-                @error('sku')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Danh mục *</label>
-                <select name="category_id" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
-                    <option value="">Chọn danh mục</option>
-                    @foreach ($categoryOptions as $categoryOption)
-                        <option value="{{ $categoryOption['id'] }}" @selected((string) old('category_id', $product->category_id) === (string) $categoryOption['id'])>
-                            {{ $categoryOption['name'] }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('category_id')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Thương hiệu *</label>
-                <select name="brand_id" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
-                    <option value="">Chọn thương hiệu</option>
-                    @foreach ($brands as $brand)
-                        <option value="{{ $brand->id }}" @selected((string) old('brand_id', $product->brand_id) === (string) $brand->id)>{{ $brand->name }}</option>
-                    @endforeach
-                </select>
-                @error('brand_id')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Giá bán *</label>
-                <input type="number" min="0" step="1000" name="price" value="{{ old('price', $product->price) }}" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
-                @error('price')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Giá gốc</label>
-                <input type="number" min="0" step="1000" name="sale_price" value="{{ old('sale_price', $product->sale_price) }}" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                @error('sale_price')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
-            </div>
-
-            <div class="lg:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Mô tả ngắn</label>
-                <textarea name="short_description" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2">{{ old('short_description', $product->short_description) }}</textarea>
-                @error('short_description')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
-            </div>
-
-            <div class="lg:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Mô tả chi tiết</label>
-                <textarea name="description" rows="6" class="w-full border border-gray-300 rounded-lg px-3 py-2">{{ old('description', $product->description) }}</textarea>
-                @error('description')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
-            </div>
-
-            <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <label class="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3 cursor-pointer">
-                    <div>
-                        <p class="font-medium text-gray-900">Kích hoạt</p>
-                        <p class="text-xs text-gray-500">Hiển thị sản phẩm trên website</p>
-                    </div>
-                    <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $product->is_active ?? false))>
-                </label>
-
-                <label class="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3 cursor-pointer">
-                    <div>
-                        <p class="font-medium text-gray-900">Nổi bật</p>
-                        <p class="text-xs text-gray-500">Ưu tiên hiển thị ngoài trang chủ</p>
-                    </div>
-                    <input type="checkbox" name="is_featured" value="1" @checked(old('is_featured', $product->is_featured ?? false))>
-                </label>
-            </div>
-        </div>
-    </div>
-
-    <div class="bg-white border border-gray-200 rounded-xl p-6 space-y-4">
-        <h2 class="text-lg font-semibold text-gray-900">Ảnh sản phẩm</h2>
-
-        <label class="block border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-red-400 transition">
-            <input type="file" name="images[]" multiple class="hidden" @change="previewImages($event)">
-            <p class="text-sm text-gray-600">Kéo thả hoặc bấm để chọn nhiều ảnh (jpeg/png/webp)</p>
-            <p class="text-xs text-gray-400 mt-1">Ảnh sẽ được resize 800x800 và tạo thumbnail 400x400</p>
-        </label>
-
-        @error('images.*')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
-
-        <template x-if="previewUrls.length > 0">
-            <div>
-                <p class="text-sm font-medium text-gray-700 mb-2">Ảnh mới sẽ upload</p>
-                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-                    <template x-for="url in previewUrls" :key="url">
-                        <img :src="url" class="w-full aspect-square object-cover rounded-lg border border-gray-200">
-                    </template>
-                </div>
-            </div>
-        </template>
-
-        @if ($isEdit && $product->images->count() > 0)
-            <div>
-                <p class="text-sm font-medium text-gray-700 mb-2">Ảnh đã có</p>
-                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-                    @foreach ($product->images as $image)
-                        <div class="relative border border-gray-200 rounded-lg p-2">
-                            <img src="{{ asset('storage/' . $image->image_path) }}" class="w-full aspect-square object-cover rounded">
-
-                            <label class="mt-2 flex items-center gap-2 text-xs text-gray-600">
-                                <input type="radio" name="primary_image_id" value="{{ $image->id }}" @checked(old('primary_image_id', optional($product->images->firstWhere('is_primary', true))->id) == $image->id)>
-                                Ảnh chính
-                            </label>
-
-                            <label class="mt-1 flex items-center gap-2 text-xs text-red-600">
-                                <input type="checkbox" name="delete_existing_images[]" value="{{ $image->id }}">
-                                Xóa ảnh
-                            </label>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        @endif
-    </div>
-
-    <div class="bg-white border border-gray-200 rounded-xl p-6 space-y-4">
-        <h2 class="text-lg font-semibold text-gray-900">Biến thể sản phẩm</h2>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div>
-                <p class="text-sm font-medium text-gray-700 mb-2">Sizes</p>
-                <div class="flex flex-wrap gap-2">
-                    @foreach ($sizes as $size)
-                        <label class="inline-flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-2 text-sm">
-                            <input type="checkbox" :value="'{{ $size->id }}'" x-model="selectedSizes" @change="syncVariantsFromSelections()">
-                            {{ $size->short_label }}
-                        </label>
-                    @endforeach
-                </div>
-            </div>
-
-            <div>
-                <p class="text-sm font-medium text-gray-700 mb-2">Colors</p>
-                <div class="flex flex-wrap gap-2">
-                    @foreach ($colors as $color)
-                        <label class="inline-flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-2 text-sm">
-                            <input type="checkbox" :value="'{{ $color->id }}'" x-model="selectedColors" @change="syncVariantsFromSelections()">
-                            <input type="color" value="{{ $color->hex_code }}" class="w-5 h-5 p-0 border-0 bg-transparent" disabled>
-                            {{ $color->name }}
-                        </label>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-
-        <template x-for="(id, idx) in selectedSizes" :key="'size-'+idx">
-            <input type="hidden" :name="`selected_size_ids[${idx}]`" :value="id">
-        </template>
-
-        <template x-for="(id, idx) in selectedColors" :key="'color-'+idx">
-            <input type="hidden" :name="`selected_color_ids[${idx}]`" :value="id">
-        </template>
-
-        <div class="overflow-x-auto border border-gray-200 rounded-lg">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="p-3 text-left">Size</th>
-                        <th class="p-3 text-left">Màu</th>
-                        <th class="p-3 text-left">Tồn kho</th>
-                        <th class="p-3 text-left">Giá cộng thêm</th>
-                        <th class="p-3 text-right">Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <template x-for="(variant, index) in variants" :key="variant.uid">
-                        <tr class="border-t border-gray-100">
-                            <td class="p-3">
-                                <select :name="`variants[${index}][size_id]`" x-model="variant.size_id" class="w-full border border-gray-300 rounded px-2 py-1.5" required>
-                                    <option value="">Chọn size</option>
-                                    <template x-for="size in sizes" :key="size.id">
-                                        <option :value="size.id" x-text="formatSizeLabel(size)"></option>
-                                    </template>
-                                </select>
-                            </td>
-                            <td class="p-3">
-                                <select :name="`variants[${index}][color_id]`" x-model="variant.color_id" class="w-full border border-gray-300 rounded px-2 py-1.5" required>
-                                    <option value="">Chọn màu</option>
-                                    <template x-for="color in colors" :key="color.id">
-                                        <option :value="color.id" x-text="color.name"></option>
-                                    </template>
-                                </select>
-                            </td>
-                            <td class="p-3">
-                                <input type="number" min="0" :name="`variants[${index}][stock_quantity]`" x-model="variant.stock_quantity" class="w-full border border-gray-300 rounded px-2 py-1.5" required>
-                            </td>
-                            <td class="p-3">
-                                <input type="number" min="0" step="1000" :name="`variants[${index}][additional_price]`" x-model="variant.additional_price" class="w-full border border-gray-300 rounded px-2 py-1.5">
-                            </td>
-                            <td class="p-3 text-right">
-                                <button type="button" @click="removeVariant(index)" class="text-xs text-red-600 hover:text-red-700">Xóa</button>
-                            </td>
-                        </tr>
-                    </template>
-
-                    <tr x-show="variants.length === 0">
-                        <td colspan="5" class="p-4 text-center text-gray-500">Chưa có biến thể. Hãy chọn size và màu hoặc thêm dòng thủ công.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <button type="button" @click="addVariantRow()" class="px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">+ Thêm row thủ công</button>
-
-        @error('variants')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
-        @error('variants.*.size_id')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
-        @error('variants.*.color_id')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
-        @error('variants.*.stock_quantity')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
-        @error('variants.*.additional_price')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
-    </div>
-
-    <div class="bg-white border border-gray-200 rounded-xl p-6 space-y-4">
-        <h2 class="text-lg font-semibold text-gray-900">SEO</h2>
-
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Meta title</label>
-            <input type="text" name="meta_title" x-model="metaTitle" maxlength="60" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-            <p class="text-xs text-gray-500 mt-1"><span x-text="metaTitle.length"></span>/60</p>
-            @error('meta_title')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
-        </div>
-
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Meta description</label>
-            <textarea name="meta_description" rows="3" x-model="metaDescription" maxlength="160" class="w-full border border-gray-300 rounded-lg px-3 py-2"></textarea>
-            <p class="text-xs text-gray-500 mt-1"><span x-text="metaDescription.length"></span>/160</p>
-            @error('meta_description')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
-        </div>
-
-        <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-            <p class="text-blue-700 text-lg font-medium" x-text="metaTitle || name || 'Tiêu đề sản phẩm'"></p>
-            <p class="text-green-700 text-xs" x-text="'https://shop.local/san-pham/' + (slug || 'san-pham')"></p>
-            <p class="text-gray-600 text-sm mt-1" x-text="metaDescription || shortMetaFallback()"></p>
-        </div>
-    </div>
-</div>
-
 <script>
     function productForm(config) {
         return {
@@ -333,7 +56,6 @@
                     .trim()
                     .replace(/\s+/g, '-')
                     .replace(/-+/g, '-');
-
                 this.slug = normalized;
             },
 
@@ -343,7 +65,6 @@
                     .replace(/[^A-Z0-9]/g, '')
                     .slice(0, 6)
                     .padEnd(6, 'X');
-
                 const suffix = Math.random().toString(36).slice(2, 8).toUpperCase();
                 this.sku = `${seed}-${suffix}`;
             },
@@ -394,16 +115,353 @@
             shortMetaFallback() {
                 return 'Mô tả SEO sẽ hiển thị ở đây.';
             },
-
-            formatSizeLabel(size) {
-                const code = String(size?.code || '').trim().toUpperCase();
-
-                if (code === 'XS') return 'X';
-                if (code === 'XXL') return '2XL';
-                if (code === 'XXXL') return '3XL';
-
-                return code || size?.name || 'N/A';
-            },
         };
     }
 </script>
+
+<div
+    class="space-y-6"
+    x-data="productForm({
+        isEdit: @js($isEdit ?? false),
+        initialName: @js(old('name', $product->name)),
+        initialSlug: @js(old('slug', $product->slug)),
+        initialSku: @js(old('sku', $product->sku)),
+        sizes: @js($sizes->map(fn($s) => ['id' => (string) $s->id, 'name' => $s->short_label, 'full_name' => $s->name])->values()->all()),
+        colors: @js($colors->map(fn($c) => ['id' => (string) $c->id, 'name' => $c->name, 'hex_code' => $c->hex_code])->values()->all()),
+        selectedSizes: @js(array_map('strval', $oldSizeIds)),
+        selectedColors: @js(array_map('strval', $oldColorIds)),
+        initialVariants: @js($oldVariants),
+        metaTitle: @js(old('meta_title', $product->meta_title)),
+        metaDescription: @js(old('meta_description', $product->meta_description)),
+    })"
+    x-init="init()"
+>
+    {{-- ═══════════════ TABS ═══════════════ --}}
+    <div x-data="{ tab: 'basic' }" class="space-y-6">
+        {{-- Tab Navigation --}}
+        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+            <div class="flex border-b border-gray-200 overflow-x-auto">
+                <button type="button" @click="tab = 'basic'" :class="tab === 'basic' ? 'text-red-600 border-red-600 bg-red-50/50' : 'text-gray-500 border-transparent hover:text-gray-700 hover:bg-gray-50'" class="flex items-center gap-2 px-5 py-3.5 text-sm font-semibold border-b-2 transition-all whitespace-nowrap">
+                    <i class="fas fa-info-circle text-xs"></i> Thông tin cơ bản
+                </button>
+                <button type="button" @click="tab = 'images'" :class="tab === 'images' ? 'text-red-600 border-red-600 bg-red-50/50' : 'text-gray-500 border-transparent hover:text-gray-700 hover:bg-gray-50'" class="flex items-center gap-2 px-5 py-3.5 text-sm font-semibold border-b-2 transition-all whitespace-nowrap">
+                    <i class="fas fa-images text-xs"></i> Ảnh sản phẩm
+                </button>
+                <button type="button" @click="tab = 'variants'" :class="tab === 'variants' ? 'text-red-600 border-red-600 bg-red-50/50' : 'text-gray-500 border-transparent hover:text-gray-700 hover:bg-gray-50'" class="flex items-center gap-2 px-5 py-3.5 text-sm font-semibold border-b-2 transition-all whitespace-nowrap">
+                    <i class="fas fa-layer-group text-xs"></i> Biến thể
+                </button>
+                <button type="button" @click="tab = 'seo'" :class="tab === 'seo' ? 'text-red-600 border-red-600 bg-red-50/50' : 'text-gray-500 border-transparent hover:text-gray-700 hover:bg-gray-50'" class="flex items-center gap-2 px-5 py-3.5 text-sm font-semibold border-b-2 transition-all whitespace-nowrap">
+                    <i class="fas fa-search text-xs"></i> SEO
+                </button>
+            </div>
+        </div>
+
+        {{-- ═══════════════ TAB: BASIC INFO ═══════════════ --}}
+        <div x-show="tab === 'basic'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+            <div class="bg-white border border-gray-200 rounded-xl p-6 space-y-5">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    <div class="lg:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Tên sản phẩm <span class="text-red-500">*</span></label>
+                        <input type="text" name="name" x-model="name" @input="generateSlug()" class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400 transition" required>
+                        @error('name')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Slug</label>
+                        <input type="text" name="slug" x-model="slug" class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400 transition">
+                        @error('slug')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">SKU</label>
+                        <div class="flex gap-2">
+                            <input type="text" name="sku" x-model="sku" class="flex-1 border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400 transition" placeholder="Để trống để tự tạo">
+                            <button type="button" @click="suggestSku()" class="px-3 py-2.5 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition"><i class="fas fa-magic text-xs"></i></button>
+                        </div>
+                        @error('sku')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Danh mục <span class="text-red-500">*</span></label>
+                        <select name="category_id" class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400 transition" required>
+                            <option value="">Chọn danh mục</option>
+                            @foreach ($categoryOptions as $categoryOption)
+                                <option value="{{ $categoryOption['id'] }}" @selected((string) old('category_id', $product->category_id) === (string) $categoryOption['id'])>{{ $categoryOption['name'] }}</option>
+                            @endforeach
+                        </select>
+                        @error('category_id')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Thương hiệu <span class="text-red-500">*</span></label>
+                        <select name="brand_id" class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400 transition" required>
+                            <option value="">Chọn thương hiệu</option>
+                            @foreach ($brands as $brand)
+                                <option value="{{ $brand->id }}" @selected((string) old('brand_id', $product->brand_id) === (string) $brand->id)>{{ $brand->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('brand_id')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Giá bán <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <input type="number" min="0" step="1000" name="price" value="{{ old('price', $product->price) }}" class="w-full border border-gray-300 rounded-lg pl-3.5 pr-10 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400 transition" required>
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">₫</span>
+                        </div>
+                        @error('price')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Giá khuyến mãi</label>
+                        <div class="relative">
+                            <input type="number" min="0" step="1000" name="sale_price" value="{{ old('sale_price', $product->sale_price) }}" class="w-full border border-gray-300 rounded-lg pl-3.5 pr-10 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400 transition">
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">₫</span>
+                        </div>
+                        @error('sale_price')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
+                    </div>
+                    <div class="lg:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Mô tả ngắn</label>
+                        <textarea name="short_description" rows="2" class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400 transition">{{ old('short_description', $product->short_description) }}</textarea>
+                    </div>
+                    <div class="lg:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Mô tả chi tiết</label>
+                        <textarea name="description" rows="5" class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400 transition">{{ old('description', $product->description) }}</textarea>
+                    </div>
+                    <div class="lg:col-span-2 flex flex-wrap gap-4">
+                        <label class="flex items-center gap-3 border border-gray-200 rounded-xl px-4 py-3 cursor-pointer hover:border-green-300 transition flex-1 min-w-[200px]">
+                            <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $product->is_active ?? false)) class="rounded border-gray-300 text-green-600 focus:ring-green-500">
+                            <div>
+                                <p class="font-medium text-gray-900 text-sm">Kích hoạt</p>
+                                <p class="text-xs text-gray-500">Hiển thị trên website</p>
+                            </div>
+                        </label>
+                        <label class="flex items-center gap-3 border border-gray-200 rounded-xl px-4 py-3 cursor-pointer hover:border-amber-300 transition flex-1 min-w-[200px]">
+                            <input type="checkbox" name="is_featured" value="1" @checked(old('is_featured', $product->is_featured ?? false)) class="rounded border-gray-300 text-amber-600 focus:ring-amber-500">
+                            <div>
+                                <p class="font-medium text-gray-900 text-sm">Nổi bật</p>
+                                <p class="text-xs text-gray-500">Ưu tiên trên trang chủ</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- ═══════════════ TAB: IMAGES ═══════════════ --}}
+        <div x-show="tab === 'images'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+            <div class="bg-white border border-gray-200 rounded-xl p-6 space-y-5">
+                <div>
+                    <h3 class="text-base font-semibold text-gray-900">Ảnh sản phẩm</h3>
+                    <p class="text-xs text-gray-500 mt-0.5">Mỗi màu sắc nên có ít nhất 1 ảnh. Chọn màu sắc cho từng ảnh.</p>
+                </div>
+
+                <label class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-8 cursor-pointer hover:border-red-400 hover:bg-red-50/30 transition-all group">
+                    <input type="file" name="images[]" multiple class="hidden" @change="previewImages($event)">
+                    <div class="w-12 h-12 rounded-full bg-gray-100 group-hover:bg-red-100 flex items-center justify-center mb-3 transition">
+                        <i class="fas fa-cloud-upload-alt text-gray-400 group-hover:text-red-500 text-lg transition"></i>
+                    </div>
+                    <p class="text-sm font-medium text-gray-600">Kéo thả hoặc bấm để chọn ảnh</p>
+                    <p class="text-xs text-gray-400 mt-1">JPEG, PNG, WebP - Tự động resize 800x800</p>
+                </label>
+                @error('images.*')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
+
+                <template x-if="previewUrls.length > 0">
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-700 mb-3">Ảnh mới sẽ upload</h4>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                            <template x-for="(url, idx) in previewUrls" :key="url">
+                                <div class="border border-gray-200 rounded-xl overflow-hidden bg-white">
+                                    <img :src="url" class="w-full aspect-square object-cover">
+                                    <div class="p-2.5">
+                                        <select :name="'image_colors[' + idx + ']'" class="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:ring-2 focus:ring-red-500/20 focus:border-red-400">
+                                            <option value="">-- Chọn màu sắc --</option>
+                                            @foreach ($colors as $color)
+                                                <option value="{{ $color->id }}">{{ $color->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+
+                @if ($isEdit && $product->images->count() > 0)
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-700 mb-3">Ảnh hiện có ({{ $product->images->count() }})</h4>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                            @foreach ($product->images as $image)
+                                @php
+                                    $imageSrc = \Illuminate\Support\Str::startsWith($image->image_path, ['http://', 'https://'])
+                                        ? $image->image_path
+                                        : asset('storage/' . $image->image_path);
+                                @endphp
+                                <div class="border border-gray-200 rounded-xl overflow-hidden bg-white {{ $image->is_primary ? 'ring-2 ring-red-500' : '' }}">
+                                    <div class="relative">
+                                        <img src="{{ $imageSrc }}" class="w-full aspect-square object-cover" onerror="this.onerror=null;this.src='{{ asset('images/product-placeholder.svg') }}';">
+                                        @if ($image->is_primary)
+                                            <span class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">Ảnh chính</span>
+                                        @endif
+                                        @if ($image->color)
+                                            <span class="absolute bottom-2 left-2 flex items-center gap-1 bg-black/60 text-white text-[10px] font-medium px-2 py-0.5 rounded backdrop-blur-sm">
+                                                <span class="w-2.5 h-2.5 rounded-full border border-white/30" style="background-color: {{ $image->color->hex_code }}"></span>
+                                                {{ $image->color->name }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <div class="p-2.5 space-y-2">
+                                        <select name="existing_image_colors[{{ $image->id }}]" class="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:ring-2 focus:ring-red-500/20 focus:border-red-400">
+                                            <option value="">-- Chọn màu sắc --</option>
+                                            @foreach ($colors as $color)
+                                                <option value="{{ $color->id }}" @selected($image->color_id == $color->id)>{{ $color->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="flex items-center justify-between">
+                                            <label class="flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer">
+                                                <input type="radio" name="primary_image_id" value="{{ $image->id }}" @checked($image->is_primary) class="text-red-600 focus:ring-red-500">
+                                                Chính
+                                            </label>
+                                            <label class="flex items-center gap-1.5 text-xs text-red-500 cursor-pointer">
+                                                <input type="checkbox" name="delete_existing_images[]" value="{{ $image->id }}" class="rounded text-red-600 focus:ring-red-500">
+                                                Xóa
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
+
+        {{-- ═══════════════ TAB: VARIANTS ═══════════════ --}}
+        <div x-show="tab === 'variants'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+            <div class="bg-white border border-gray-200 rounded-xl p-6 space-y-5">
+                <h3 class="text-base font-semibold text-gray-900">Biến thể sản phẩm</h3>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    <div>
+                        <p class="text-sm font-medium text-gray-700 mb-2">Kích cỡ</p>
+                        <div class="flex flex-wrap gap-2">
+                            @foreach ($sizes as $size)
+                                @php $sizeIdStr = (string) $size->id; @endphp
+                                <label class="inline-flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-2 text-sm cursor-pointer hover:border-gray-400 transition" :class="selectedSizes.includes('{!! $sizeIdStr !!}') ? 'border-red-400 bg-red-50' : ''">
+                                    <input type="checkbox" value="{!! $sizeIdStr !!}" x-model="selectedSizes" @change="syncVariantsFromSelections()" class="rounded text-red-600 focus:ring-red-500">
+                                    {{ $size->short_label }}
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-700 mb-2">Màu sắc</p>
+                        <div class="flex flex-wrap gap-2">
+                            @foreach ($colors as $color)
+                                @php $colorIdStr = (string) $color->id; @endphp
+                                <label class="inline-flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-2 text-sm cursor-pointer hover:border-gray-400 transition" :class="selectedColors.includes('{!! $colorIdStr !!}') ? 'border-red-400 bg-red-50' : ''">
+                                    <input type="checkbox" value="{!! $colorIdStr !!}" x-model="selectedColors" @change="syncVariantsFromSelections()" class="rounded text-red-600 focus:ring-red-500">
+                                    <span class="w-4 h-4 rounded-full border border-gray-300" style="background-color: {{ $color->hex_code }}"></span>
+                                    {{ $color->name }}
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                <template x-for="(id, idx) in selectedSizes" :key="'size-'+idx">
+                    <input type="hidden" :name="`selected_size_ids[${idx}]`" :value="id">
+                </template>
+                <template x-for="(id, idx) in selectedColors" :key="'color-'+idx">
+                    <input type="hidden" :name="`selected_color_ids[${idx}]`" :value="id">
+                </template>
+
+                <div class="overflow-x-auto border border-gray-200 rounded-xl">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="p-3 text-left text-xs font-semibold text-gray-500 uppercase">Size</th>
+                                <th class="p-3 text-left text-xs font-semibold text-gray-500 uppercase">Màu</th>
+                                <th class="p-3 text-left text-xs font-semibold text-gray-500 uppercase">Tồn kho</th>
+                                <th class="p-3 text-left text-xs font-semibold text-gray-500 uppercase">Giá thêm</th>
+                                <th class="p-3 text-right text-xs font-semibold text-gray-500 uppercase">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <template x-for="(variant, index) in variants" :key="variant.uid">
+                                <tr class="hover:bg-gray-50/50 transition">
+                                    <td class="p-2.5">
+                                        <select :name="`variants[${index}][size_id]`" x-model="variant.size_id" class="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400" required>
+                                            <option value="">--</option>
+                                            <template x-for="size in sizes" :key="size.id">
+                                                <option :value="size.id" :selected="variant.size_id === size.id" x-text="size.name"></option>
+                                            </template>
+                                        </select>
+                                    </td>
+                                    <td class="p-2.5">
+                                        <select :name="`variants[${index}][color_id]`" x-model="variant.color_id" class="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400" required>
+                                            <option value="">--</option>
+                                            <template x-for="color in colors" :key="color.id">
+                                                <option :value="color.id" :selected="variant.color_id === color.id" x-text="color.name"></option>
+                                            </template>
+                                        </select>
+                                    </td>
+                                    <td class="p-2.5">
+                                        <input type="number" min="0" :name="`variants[${index}][stock_quantity]`" x-model="variant.stock_quantity" class="w-24 border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400" required>
+                                    </td>
+                                    <td class="p-2.5">
+                                        <input type="number" min="0" step="1000" :name="`variants[${index}][additional_price]`" x-model="variant.additional_price" class="w-28 border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400">
+                                    </td>
+                                    <td class="p-2.5 text-right">
+                                        <button type="button" @click="removeVariant(index)" class="text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg p-1.5 transition">
+                                            <i class="fas fa-trash text-xs"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </template>
+                            <tr x-show="variants.length === 0">
+                                <td colspan="5" class="p-6 text-center text-gray-400 text-sm">
+                                    <i class="fas fa-layer-group text-2xl text-gray-300 mb-2 block"></i>
+                                    Chọn size và màu sắc phía trên để tạo biến thể tự động
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <button type="button" @click="addVariantRow()" class="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition">
+                    <i class="fas fa-plus text-xs"></i> Thêm biến thể thủ công
+                </button>
+
+                @error('variants')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
+                @error('variants.*.size_id')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
+                @error('variants.*.color_id')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
+                @error('variants.*.stock_quantity')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
+                @error('variants.*.additional_price')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
+            </div>
+        </div>
+
+        {{-- ═══════════════ TAB: SEO ═══════════════ --}}
+        <div x-show="tab === 'seo'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+            <div class="bg-white border border-gray-200 rounded-xl p-6 space-y-5">
+                <h3 class="text-base font-semibold text-gray-900">Tối ưu SEO</h3>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Meta title</label>
+                    <input type="text" name="meta_title" x-model="metaTitle" maxlength="60" class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400 transition">
+                    <div class="flex justify-between mt-1">
+                        @error('meta_title')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
+                        <p class="text-xs text-gray-400 ml-auto"><span x-text="metaTitle.length"></span>/60</p>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Meta description</label>
+                    <textarea name="meta_description" rows="3" x-model="metaDescription" maxlength="160" class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400 transition"></textarea>
+                    <div class="flex justify-between mt-1">
+                        @error('meta_description')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
+                        <p class="text-xs text-gray-400 ml-auto"><span x-text="metaDescription.length"></span>/160</p>
+                    </div>
+                </div>
+                <div class="border border-gray-200 rounded-xl p-4 bg-gray-50">
+                    <p class="text-xs text-gray-400 mb-2 font-medium">Xem trước trên Google</p>
+                    <p class="text-blue-700 text-base font-medium leading-snug" x-text="metaTitle || name || 'Tiêu đề sản phẩm'"></p>
+                    <p class="text-green-700 text-xs mt-0.5" x-text="'https://shop.local/san-pham/' + (slug || 'san-pham')"></p>
+                    <p class="text-gray-600 text-sm mt-1 line-clamp-2" x-text="metaDescription || shortMetaFallback()"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

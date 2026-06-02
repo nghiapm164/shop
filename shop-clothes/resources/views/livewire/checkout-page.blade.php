@@ -16,47 +16,90 @@
                     <h2 class="fashion-title text-2xl mb-6">Địa chỉ giao hàng</h2>
 
                     <!-- Saved Addresses -->
-                    @if ($this->savedAddresses->count() > 0)
+                    @if ($this->savedAddresses->count() > 0 && !$useNewAddress)
                         <div class="mb-6">
                             <h3 class="font-semibold text-gray-900 mb-4">Địa chỉ đã lưu</h3>
                             <div class="grid grid-cols-1 gap-3">
                                 @foreach ($this->savedAddresses as $address)
-                                    <label class="relative">
-                                        <input
-                                            type="radio"
-                                            name="address"
-                                            value="{{ $address->id }}"
-                                            wire:model.live="selectedAddressId"
-                                            class="sr-only">
-                                        <div class="border-2 rounded-lg p-4 cursor-pointer transition-all {{ $this->selectedAddressId === $address->id ? 'border-red-600 bg-red-50' : 'border-gray-200 hover:border-gray-300' }}">
-                                            <div class="flex items-start justify-between">
-                                                <div>
-                                                    <p class="font-semibold text-gray-900">{{ $address->recipient_name }}</p>
-                                                    <p class="text-sm text-gray-600 mt-1">{{ $address->phone }}</p>
-                                                    <p class="text-sm text-gray-600 mt-2">{{ $address->full_address }}</p>
+                                    <div class="relative">
+                                        <label class="block cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="address"
+                                                value="{{ $address->id }}"
+                                                wire:click="selectAddress({{ $address->id }})"
+                                                class="sr-only"
+                                                {{ $selectedAddressId === $address->id ? 'checked' : '' }}>
+                                            <div class="border-2 rounded-lg p-4 transition-all {{ $selectedAddressId === $address->id ? 'border-red-600 bg-red-50' : 'border-gray-200 hover:border-gray-300' }}">
+                                                <div class="flex items-start justify-between">
+                                                    <div class="flex-1">
+                                                        <div class="flex items-center gap-2">
+                                                            <p class="font-semibold text-gray-900">{{ $address->recipient_name }}</p>
+                                                            @if ($address->is_default)
+                                                                <span class="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded font-medium">Mặc định</span>
+                                                            @endif
+                                                        </div>
+                                                        <p class="text-sm text-gray-600 mt-1">{{ $address->phone }}</p>
+                                                        <p class="text-sm text-gray-600 mt-1">{{ $address->full_address }}</p>
+                                                    </div>
                                                 </div>
-                                                @if ($address->is_default)
-                                                    <span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded">Mặc định</span>
-                                                @endif
+
+                                                <!-- Address Actions -->
+                                                <div class="flex items-center gap-3 mt-3 pt-3 border-t border-gray-100">
+                                                    @if (!$address->is_default)
+                                                        <button type="button"
+                                                            wire:click="setDefaultAddress({{ $address->id }})"
+                                                            class="text-xs text-blue-600 hover:text-blue-700 font-medium">
+                                                            Đặt mặc định
+                                                        </button>
+                                                    @endif
+                                                    <button type="button"
+                                                        wire:click="editAddress({{ $address->id }})"
+                                                        class="text-xs text-gray-600 hover:text-gray-700 font-medium">
+                                                        ✏️ Sửa
+                                                    </button>
+                                                    <button type="button"
+                                                        wire:click="deleteAddress({{ $address->id }})"
+                                                        wire:confirm="Bạn có chắc muốn xóa địa chỉ này?"
+                                                        class="text-xs text-red-600 hover:text-red-700 font-medium">
+                                                        🗑️ Xóa
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </label>
+                                        </label>
+                                    </div>
                                 @endforeach
                             </div>
 
                             <button
                                 type="button"
                                 wire:click="useNewAddress"
-                                class="mt-4 text-red-600 hover:text-red-700 font-semibold text-sm">
+                                class="mt-4 text-red-600 hover:text-red-700 font-semibold text-sm flex items-center gap-1">
                                 + Thêm địa chỉ mới
                             </button>
                         </div>
                     @endif
 
-                    <!-- New Address Form -->
-                    @if ($this->useNewAddress || $this->savedAddresses->count() == 0)
-                        <div class="space-y-4 {{ $this->selectedAddressId && !$this->useNewAddress ? 'hidden' : '' }}">
-                            <h3 class="font-semibold text-gray-900">{{ $this->savedAddresses->count() > 0 ? 'Địa chỉ mới' : 'Nhập địa chỉ giao hàng' }}</h3>
+                    <!-- New/Edit Address Form -->
+                    @if ($useNewAddress)
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-semibold text-gray-900">
+                                    @if ($editingAddressId)
+                                        Chỉnh sửa địa chỉ
+                                    @elseif ($this->savedAddresses->count() > 0)
+                                        Địa chỉ mới
+                                    @else
+                                        Nhập địa chỉ giao hàng
+                                    @endif
+                                </h3>
+                                @if ($this->savedAddresses->count() > 0)
+                                    <button type="button" wire:click="cancelEditAddress"
+                                        class="text-sm text-gray-500 hover:text-gray-700">
+                                        Hủy
+                                    </button>
+                                @endif
+                            </div>
 
                             <!-- Recipient Name -->
                             <div>
@@ -90,7 +133,7 @@
                                 @enderror
                             </div>
 
-                            <!-- Address (simple text) -->
+                            <!-- Address -->
                             <div>
                                 <label for="addressDetail" class="block text-sm font-semibold text-gray-900 mb-2">
                                     Địa chỉ giao hàng *
@@ -105,7 +148,90 @@
                                     <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
+
+                            <!-- Save Address Button (separate from place order) -->
+                            <div class="flex gap-3">
+                                <button type="button" wire:click="saveAddress"
+                                    class="px-6 py-2.5 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors text-sm">
+                                    {{ $editingAddressId ? 'Cập nhật địa chỉ' : 'Lưu địa chỉ' }}
+                                </button>
+                                @if ($this->savedAddresses->count() > 0)
+                                    <button type="button" wire:click="cancelEditAddress"
+                                        class="px-6 py-2.5 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors text-sm">
+                                        Hủy
+                                    </button>
+                                @endif
+                            </div>
                         </div>
+                    @endif
+                </div>
+
+                <!-- Voucher Section -->
+                <div class="fashion-section p-6">
+                    <h2 class="fashion-title text-2xl mb-4">Mã giảm giá</h2>
+
+                    @if ($appliedCoupon)
+                        <div class="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-4">
+                            <div>
+                                <p class="font-semibold text-green-800">Mã: {{ $appliedCoupon->code }}</p>
+                                <p class="text-sm text-green-600 mt-1">
+                                    Giảm {{ number_format($discountAmount, 0, ',', '.') }}₫
+                                </p>
+                            </div>
+                            <button type="button" wire:click="removeCoupon"
+                                class="text-red-600 hover:text-red-700 font-semibold text-sm">
+                                ✕ Bỏ mã
+                            </button>
+                        </div>
+                    @else
+                        <div class="flex gap-2">
+                            <input type="text" wire:model="couponCode" placeholder="Nhập mã giảm giá"
+                                class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent uppercase"
+                                wire:keydown.enter="applyCoupon">
+                            <button type="button" wire:click="applyCoupon"
+                                class="px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors whitespace-nowrap">
+                                Áp dụng
+                            </button>
+                        </div>
+                        @if ($couponError)
+                            <p class="text-red-600 text-xs mt-2">{{ $couponError }}</p>
+                        @endif
+                        @if ($couponSuccess)
+                            <p class="text-green-600 text-xs mt-2">{{ $couponSuccess }}</p>
+                        @endif
+
+                        <!-- Available Coupons -->
+                        @if ($this->availableCoupons->count() > 0)
+                            <div class="mt-4">
+                                <p class="text-xs text-gray-500 font-medium mb-2">Mã giảm giá khả dụng:</p>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    @foreach ($this->availableCoupons as $coupon)
+                                        <div class="border border-dashed border-red-200 rounded-lg p-3 bg-red-50/50 flex items-center justify-between gap-2">
+                                            <div>
+                                                <p class="text-sm font-bold text-red-600">{{ $coupon->code }}</p>
+                                                <p class="text-xs text-gray-500 mt-0.5">
+                                                    @if ($coupon->type === 'percent')
+                                                        Giảm {{ $coupon->value }}%
+                                                        @if ($coupon->max_discount)
+                                                            (tối đa {{ number_format($coupon->max_discount, 0, ',', '.') }}₫)
+                                                        @endif
+                                                    @else
+                                                        Giảm {{ number_format($coupon->value, 0, ',', '.') }}₫
+                                                    @endif
+                                                </p>
+                                                @if ($coupon->min_order_amount)
+                                                    <p class="text-[10px] text-gray-400 mt-0.5">Đơn tối thiểu {{ number_format($coupon->min_order_amount, 0, ',', '.') }}₫</p>
+                                                @endif
+                                            </div>
+                                            <button type="button" wire:click="applyCouponCode('{{ $coupon->code }}')"
+                                                class="text-xs text-red-600 hover:text-red-700 font-semibold border border-red-300 px-3 py-1 rounded hover:bg-red-100 transition-colors whitespace-nowrap">
+                                                Dùng
+                                            </button>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                     @endif
                 </div>
 
@@ -129,12 +255,7 @@
                     <div class="space-y-3">
                         <!-- COD -->
                         <label class="relative">
-                            <input
-                                type="radio"
-                                name="paymentMethod"
-                                value="cod"
-                                wire:model="paymentMethod"
-                                class="sr-only">
+                            <input type="radio" name="paymentMethod" value="cod" wire:model="paymentMethod" class="sr-only">
                             <div class="border-2 rounded-lg p-4 cursor-pointer transition-all {{ $this->paymentMethod === 'cod' ? 'border-red-600 bg-red-50' : 'border-gray-200 hover:border-gray-300' }}">
                                 <div class="flex items-center gap-4">
                                     <div class="text-3xl">💳</div>
@@ -148,12 +269,7 @@
 
                         <!-- Bank Transfer -->
                         <label class="relative">
-                            <input
-                                type="radio"
-                                name="paymentMethod"
-                                value="bank"
-                                wire:model="paymentMethod"
-                                class="sr-only">
+                            <input type="radio" name="paymentMethod" value="bank" wire:model="paymentMethod" class="sr-only">
                             <div class="border-2 rounded-lg p-4 cursor-pointer transition-all {{ $this->paymentMethod === 'bank' ? 'border-red-600 bg-red-50' : 'border-gray-200 hover:border-gray-300' }}">
                                 <div class="flex items-center gap-4">
                                     <div class="text-3xl">🏦</div>
@@ -167,12 +283,7 @@
 
                         <!-- VNPay -->
                         <label class="relative">
-                            <input
-                                type="radio"
-                                name="paymentMethod"
-                                value="vnpay"
-                                wire:model="paymentMethod"
-                                class="sr-only">
+                            <input type="radio" name="paymentMethod" value="vnpay" wire:model="paymentMethod" class="sr-only">
                             <div class="border-2 rounded-lg p-4 cursor-pointer transition-all {{ $this->paymentMethod === 'vnpay' ? 'border-red-600 bg-red-50' : 'border-gray-200 hover:border-gray-300' }}">
                                 <div class="flex items-center gap-4">
                                     <div class="text-3xl">💳</div>
@@ -247,15 +358,12 @@
                     </div>
 
                     <!-- Place Order Button -->
-                    <button
-                        type="submit"
-                        class="w-full btn-primary py-3">
+                    <button type="submit" class="w-full btn-primary py-3">
                         Đặt hàng
                     </button>
 
                     <!-- Back to Cart -->
-                    <a
-                        href="/cart"
+                    <a href="/cart"
                         class="block text-center mt-3 px-6 py-3 rounded-xl border border-red-500 text-red-500 font-semibold hover:bg-red-50 transition-colors">
                         Quay lại giỏ hàng
                     </a>

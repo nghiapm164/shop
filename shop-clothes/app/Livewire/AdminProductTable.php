@@ -121,7 +121,7 @@ class AdminProductTable extends Component
     private function products(): LengthAwarePaginator
     {
         $query = Product::query()
-            ->with(['category', 'brand', 'images'])
+            ->with(['category', 'brand', 'images.color'])
             ->withSum('variants as total_stock', 'stock_quantity')
             ->latest();
 

@@ -78,26 +78,31 @@
             @auth
                 @php
                     $isWishlisted = auth()->user()->wishlist()->where('product_id', $product->id)->exists();
+                    $wishlistedJson = $isWishlisted ? 'true' : 'false';
                 @endphp
-                <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST" class="inline" x-data="{ wishlisted: {{ $isWishlisted ? 'true' : 'false' }} }">
-                    @csrf
-                    <button type="submit" 
+                <div x-data="{ wishlisted: {!! $wishlistedJson !!}, loading: false }">
+                    <button type="button"
                             class="btn-wishlist"
-                            @click.prevent="
+                            :class="wishlisted ? 'text-red-500' : ''"
+                            :disabled="loading"
+                            @click="
+                                loading = true;
                                 fetch('{{ route('wishlist.toggle', $product->id) }}', {
                                     method: 'POST',
                                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
                                 }).then(r => r.json()).then(d => {
                                     wishlisted = d.action === 'added';
+                                    loading = false;
                                     window.dispatchEvent(new CustomEvent('notify', { detail: { message: d.message || (wishlisted ? 'Đã thêm vào yêu thích' : 'Đã bỏ yêu thích'), type: 'success' } }));
-                                })
+                                    window.dispatchEvent(new CustomEvent('wishlist-updated'));
+                                }).catch(() => { loading = false; })
                             "
                             :title="wishlisted ? 'Bỏ yêu thích' : 'Thêm vào yêu thích'">
-                        <svg class="w-4 h-4" :fill="wishlisted ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4" :fill="wishlisted ? 'currentColor' : 'none'" :stroke="wishlisted ? 'none' : 'currentColor'" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                         </svg>
                     </button>
-                </form>
+                </div>
             @else
                 <a href="{{ route('login') }}" class="btn-wishlist" title="Đăng nhập để yêu thích">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -149,8 +154,8 @@
         @if($product->colors->count() > 0)
             <div class="flex items-center gap-1.5 mt-2.5">
                 @foreach($product->colors->take(5) as $color)
-                    <span class="h-3.5 w-3.5 rounded-full border border-slate-200 shadow-sm" 
-                          style="background-color: {{ $color->hex_code }}" 
+                    <span class="h-3.5 w-3.5 rounded-full border border-slate-200 shadow-sm"
+                          style="background-color: {{ $color->hex_code }}"
                           title="{{ $color->name }}"></span>
                 @endforeach
                 @if($product->colors->count() > 5)

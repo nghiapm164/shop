@@ -199,6 +199,12 @@ class AddToCart extends Component
 
     public function addToCart(): bool
     {
+        if (!auth()->check()) {
+            $this->dispatch('notify', message: 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng', type: 'warning');
+            $this->redirect(route('login'));
+            return false;
+        }
+
         if (!$this->selectedColorId || !$this->selectedSizeId) {
             $this->dispatch('notify', message: 'Vui lòng chọn màu sắc và kích cỡ', type: 'error');
             return false;
@@ -262,7 +268,7 @@ class AddToCart extends Component
         $this->dispatch('cart-updated', count: $cartCount);
 
         $this->dispatch('notify', message: 'Đã thêm vào giỏ hàng!', type: 'success');
-        
+
         // Keep UI smooth by selecting a default variant instead of clearing all selections
         $this->initDefaultVariantSelection();
 
