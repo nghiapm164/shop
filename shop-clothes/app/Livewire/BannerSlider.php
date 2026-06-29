@@ -16,12 +16,18 @@ class BannerSlider extends Component
             ->whereIn('position', ['home_top', 'home_middle', 'home_bottom'])
             ->orderBy('sort_order')
             ->get()
-            ->map(function (Banner $banner) {
+            ->map(function (Banner $banner, $key) {
+                $mockImages = [
+                    'https://images.unsplash.com/photo-1483721310020-03333e577078?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80', // Gym/Fitness
+                    'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80', // Gym
+                    'https://images.unsplash.com/photo-1556817411-31ae72fa3ea8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'  // Sport
+                ];
+
                 return [
                     'id' => $banner->id,
                     'title' => $banner->title,
                     'subtitle' => 'Khám phá ưu đãi mới nhất từ SportWear Shop',
-                    'image_url' => $banner->image_url,
+                    'image_url' => $mockImages[$key % 3], // Temporary mock images from Unsplash
                     'link' => $banner->link ?: '#',
                     'cta_text' => 'Xem ngay',
                 ];
@@ -53,25 +59,25 @@ class BannerSlider extends Component
         return [
             [
                 'id' => 1,
-                'title' => 'Quần áo thể thao chất lượng cao',
-                'subtitle' => 'Khám phá bộ sưu tập mới nhất của chúng tôi',
-                'image_url' => 'images/banner-default-1.svg',
+                'title' => 'Bộ Sưu Tập Thể Thao Mới',
+                'subtitle' => 'Khám phá bộ sưu tập mới nhất của chúng tôi với phong cách athleisure năng động',
+                'image_url' => 'https://images.unsplash.com/photo-1483721310020-03333e577078?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
                 'link' => '#',
                 'cta_text' => 'Mua sắm ngay',
             ],
             [
                 'id' => 2,
-                'title' => 'Giảm giá đến 50%',
-                'subtitle' => 'Cho các sản phẩm được chọn',
-                'image_url' => 'images/banner-default-2.svg',
+                'title' => 'Giảm Giá Lên Đến 50%',
+                'subtitle' => 'Áp dụng cho các sản phẩm quần áo tập luyện mùa hè được chọn',
+                'image_url' => 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
                 'link' => '#',
                 'cta_text' => 'Xem sale',
             ],
             [
                 'id' => 3,
-                'title' => 'Miễn phí vận chuyển',
-                'subtitle' => 'Cho đơn hàng từ 200.000₫',
-                'image_url' => 'images/banner-default-3.svg',
+                'title' => 'Freeship Toàn Quốc',
+                'subtitle' => 'Miễn phí vận chuyển cho tất cả đơn hàng từ 299.000₫',
+                'image_url' => 'https://images.unsplash.com/photo-1556817411-31ae72fa3ea8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
                 'link' => '#',
                 'cta_text' => 'Mua ngay',
             ],

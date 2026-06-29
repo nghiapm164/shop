@@ -26,6 +26,22 @@ class Category extends Model
     ];
 
     /**
+     * Get the full image url.
+     */
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) {
+            return null;
+        }
+
+        if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
+            return $this->image;
+        }
+
+        return asset($this->image);
+    }
+
+    /**
      * Get parent category
      */
     public function parent(): BelongsTo

@@ -1,4 +1,4 @@
-@props(['product'])
+@props(['product', 'variant' => 'default', 'index' => null])
 
 @php
     $fallbackImage = asset('images/product-placeholder.svg');
@@ -38,7 +38,121 @@
     $isNew = $product->created_at && $product->created_at->diffInDays(now()) <= 7;
 @endphp
 
-<article class="product-card stagger-enter">
+@if($variant === 'minimal')
+<article x-data="{ hovered: false }" @mouseenter="hovered = true" @mouseleave="hovered = false" class="group w-48 md:w-64 lg:w-72 shrink-0 snap-start flex flex-col gap-4">
+    <div class="relative aspect-[3/4] overflow-hidden rounded-[2rem] bg-slate-50 border border-slate-100 shadow-sm transition-all duration-500 group-hover:shadow-2xl">
+        <a href="{{ route('products.show', $product->slug) }}" class="absolute inset-0 z-30" aria-label="{{ $product->name }}"></a>
+        
+        <img src="{{ $primarySrc }}" alt="{{ $product->name }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 z-10 group-hover:scale-110" loading="lazy" onerror="this.onerror=null;this.src='{{ $fallbackImage }}';">
+
+        @if($badgeType === 'sale')
+            <div class="absolute top-4 left-4 z-40 flex items-center justify-center rounded-full bg-red-600 px-3 py-1.5 text-[10px] font-black tracking-widest text-white shadow-lg">-{{ $discountPercent }}%</div>
+        @elseif($isNew)
+            <div class="absolute top-4 left-4 z-40 flex items-center justify-center rounded-full bg-slate-900 px-3 py-1.5 text-[10px] font-black tracking-widest text-white shadow-lg">MỚI</div>
+        @endif
+
+        <div class="absolute top-4 right-4 z-50 translate-x-4 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+            @auth
+                @php
+                    $isWishlisted = auth()->user()->wishlist()->where('product_id', $product->id)->exists();
+                    $wishlistedJson = $isWishlisted ? 'true' : 'false';
+                @endphp
+                <div x-data="{ wishlisted: {!! $wishlistedJson !!}, loading: false }">
+                    <button type="button" @click.prevent.stop="
+                            loading = true;
+                            fetch('{{ route('wishlist.toggle', $product->id) }}', {
+                                method: 'POST',
+                                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
+                            }).then(r => r.json()).then(d => {
+                                wishlisted = d.action === 'added';
+                                loading = false;
+                                window.dispatchEvent(new CustomEvent('notify', { detail: { message: d.message || (wishlisted ? 'Đã thêm vào yêu thích' : 'Đã bỏ yêu thích'), type: 'success' } }));
+                                window.dispatchEvent(new CustomEvent('wishlist-updated'));
+                            }).catch(() => { loading = false; })
+                        " 
+                        class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-900 shadow-md transition-colors hover:text-red-500" :class="wishlisted ? 'text-red-500' : ''">
+                        <svg class="h-5 w-5" :fill="wishlisted ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    </button>
+                </div>
+            @else
+                <a href="{{ route('login') }}" class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-900 shadow-md transition-colors hover:text-red-500 relative z-50">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                </a>
+            @endauth
+        </div>
+
+        <div class="absolute bottom-4 left-4 right-4 z-40 translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+            <a href="{{ route('products.show', $product->slug) }}" class="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900/90 backdrop-blur-sm py-3 text-sm font-bold text-white shadow-xl transition-colors hover:bg-slate-900 relative z-50">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                Xem chi tiết
+            </a>
+        </div>
+    </div>
+    
+    <div class="px-2 text-left">
+        <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">{{ $product->category->name ?? 'Thời trang' }}</p>
+        <a href="{{ route('products.show', $product->slug) }}">
+            <h3 class="text-sm md:text-base font-bold text-slate-900 transition-colors group-hover:text-red-600 line-clamp-1">{{ $product->name }}</h3>
+        </a>
+        <div class="mt-2.5 flex items-end justify-between">
+            <div class="flex items-baseline gap-2">
+                @if($product->sale_price)
+                    <span class="text-base font-black text-red-600">{{ number_format($product->sale_price, 0, ',', '.') }}₫</span>
+                    <span class="text-xs font-bold text-slate-300 line-through">{{ number_format($product->price, 0, ',', '.') }}₫</span>
+                @else
+                    <span class="text-base font-black text-slate-900">{{ number_format($product->price, 0, ',', '.') }}₫</span>
+                @endif
+            </div>
+            @if($product->colors->count() > 0)
+                <div class="flex items-center gap-1">
+                    @foreach($product->colors->take(3) as $color)
+                        <span class="h-3.5 w-3.5 rounded-full border border-slate-200 shadow-sm" style="background-color: {{ $color->hex_code }}" title="{{ $color->name }}"></span>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </div>
+</article>
+
+@elseif($variant === 'bold')
+<article x-data="{ hovered: false }" @mouseenter="hovered = true" @mouseleave="hovered = false" class="group relative w-48 md:w-64 lg:w-72 shrink-0 snap-start overflow-hidden rounded-[2.5rem] bg-white border-[3px] border-slate-900 shadow-[8px_8px_0_rgb(15,23,42)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[12px_12px_0_rgb(15,23,42)]">
+    @if($index)
+        <div class="absolute top-0 right-0 z-40 flex h-16 w-16 items-center justify-center rounded-bl-[2.5rem] bg-red-500 text-2xl font-black text-white shadow-md border-b-[3px] border-l-[3px] border-slate-900">
+            #{{ $index }}
+        </div>
+    @endif
+    <div class="relative aspect-[4/5] overflow-hidden border-b-[3px] border-slate-900 bg-slate-100">
+        <a href="{{ route('products.show', $product->slug) }}" class="absolute inset-0 z-30" aria-label="{{ $product->name }}"></a>
+        <img src="{{ $primarySrc }}" alt="{{ $product->name }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 z-10 group-hover:scale-110" loading="lazy" onerror="this.onerror=null;this.src='{{ $fallbackImage }}';">
+        @if($badgeType === 'sale')
+            <div class="absolute top-4 left-4 z-20 rounded-xl bg-yellow-400 border-[3px] border-slate-900 px-3.5 py-1.5 text-xs font-black text-slate-900 shadow-[3px_3px_0_rgb(15,23,42)]">-{{ $discountPercent }}%</div>
+        @endif
+    </div>
+    <div class="p-5 md:p-6">
+        <a href="{{ route('products.show', $product->slug) }}" class="block min-h-[3.5rem]">
+            <h3 class="text-base md:text-lg font-black text-slate-900 group-hover:text-red-600 transition-colors line-clamp-2 leading-tight tracking-tight">{{ $product->name }}</h3>
+        </a>
+        <div class="mt-6 flex items-end justify-between gap-4">
+            <div>
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] mb-2">{{ $product->category->name ?? 'Thời trang' }}</p>
+                <div class="flex items-baseline gap-2">
+                    @if($product->sale_price)
+                        <span class="text-lg md:text-xl font-black text-slate-900">{{ number_format($product->sale_price, 0, ',', '.') }}₫</span>
+                        <span class="text-[10px] md:text-xs font-black text-slate-300 line-through decoration-red-500">{{ number_format($product->price, 0, ',', '.') }}₫</span>
+                    @else
+                        <span class="text-lg md:text-xl font-black text-slate-900">{{ number_format($product->price, 0, ',', '.') }}₫</span>
+                    @endif
+                </div>
+            </div>
+            <a href="{{ route('products.show', $product->slug) }}" class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-slate-900 text-white transition-all hover:scale-110 hover:bg-red-600 shadow-xl border-2 border-transparent hover:border-slate-900">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </a>
+        </div>
+    </div>
+</article>
+
+@else
+<article class="product-card stagger-enter w-full">
     {{-- Image Container --}}
     <div class="card-image-wrap" x-data="{ hovered: false }" @mouseenter="hovered = true" @mouseleave="hovered = false">
         {{-- Primary Image --}}
@@ -184,3 +298,4 @@
     {{-- Full card link overlay --}}
     <a href="{{ route('products.show', $product->slug) }}" class="absolute inset-0 z-0" aria-label="{{ $product->name }}"></a>
 </article>
+@endif
