@@ -115,38 +115,47 @@
 </article>
 
 @elseif($variant === 'bold')
-<article x-data="{ hovered: false }" @mouseenter="hovered = true" @mouseleave="hovered = false" class="group relative w-48 md:w-64 lg:w-72 shrink-0 snap-start overflow-hidden rounded-[2.5rem] bg-white border-[3px] border-slate-900 shadow-[8px_8px_0_rgb(15,23,42)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[12px_12px_0_rgb(15,23,42)]">
+<article x-data="{ hovered: false }" @mouseenter="hovered = true" @mouseleave="hovered = false" class="group relative w-48 md:w-64 lg:w-72 shrink-0 snap-start rounded-[2rem] bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(220,38,38,0.15)] overflow-hidden">
     @if($index)
-        <div class="absolute top-0 right-0 z-40 flex h-16 w-16 items-center justify-center rounded-bl-[2.5rem] bg-red-500 text-2xl font-black text-white shadow-md border-b-[3px] border-l-[3px] border-slate-900">
+        <div class="absolute top-4 left-4 z-40 flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-gradient-to-br from-red-500 to-red-600 text-lg md:text-xl font-black text-white shadow-lg shadow-red-500/30 ring-4 ring-white">
             #{{ $index }}
         </div>
     @endif
-    <div class="relative aspect-[4/5] overflow-hidden border-b-[3px] border-slate-900 bg-slate-100">
+    <div class="relative aspect-[4/5] overflow-hidden bg-slate-50">
         <a href="{{ route('products.show', $product->slug) }}" class="absolute inset-0 z-30" aria-label="{{ $product->name }}"></a>
         <img src="{{ $primarySrc }}" alt="{{ $product->name }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 z-10 group-hover:scale-110" loading="lazy" onerror="this.onerror=null;this.src='{{ $fallbackImage }}';">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/0 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-20"></div>
         @if($badgeType === 'sale')
-            <div class="absolute top-4 left-4 z-20 rounded-xl bg-yellow-400 border-[3px] border-slate-900 px-3.5 py-1.5 text-xs font-black text-slate-900 shadow-[3px_3px_0_rgb(15,23,42)]">-{{ $discountPercent }}%</div>
+            <div class="absolute top-4 right-4 z-20 rounded-full bg-slate-900 px-3 py-1.5 text-[10px] font-black tracking-widest text-white shadow-lg backdrop-blur-md">-{{ $discountPercent }}%</div>
         @endif
+        <div class="absolute bottom-4 left-4 right-4 z-40 translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+            <a href="{{ route('products.show', $product->slug) }}" class="flex w-full items-center justify-center gap-2 rounded-xl bg-white/95 backdrop-blur-sm py-3 text-sm font-bold text-slate-900 shadow-xl transition-colors hover:bg-white hover:text-red-600">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                Khám phá ngay
+            </a>
+        </div>
     </div>
-    <div class="p-5 md:p-6">
-        <a href="{{ route('products.show', $product->slug) }}" class="block min-h-[3.5rem]">
+    <div class="p-5 md:p-6 bg-white relative">
+        <p class="text-[10px] font-black text-red-500 uppercase tracking-[0.2em] mb-2">{{ $product->category->name ?? 'Thời trang' }}</p>
+        <a href="{{ route('products.show', $product->slug) }}" class="block min-h-[3rem]">
             <h3 class="text-base md:text-lg font-black text-slate-900 group-hover:text-red-600 transition-colors line-clamp-2 leading-tight tracking-tight">{{ $product->name }}</h3>
         </a>
-        <div class="mt-6 flex items-end justify-between gap-4">
-            <div>
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] mb-2">{{ $product->category->name ?? 'Thời trang' }}</p>
-                <div class="flex items-baseline gap-2">
-                    @if($product->sale_price)
-                        <span class="text-lg md:text-xl font-black text-slate-900">{{ number_format($product->sale_price, 0, ',', '.') }}₫</span>
-                        <span class="text-[10px] md:text-xs font-black text-slate-300 line-through decoration-red-500">{{ number_format($product->price, 0, ',', '.') }}₫</span>
-                    @else
-                        <span class="text-lg md:text-xl font-black text-slate-900">{{ number_format($product->price, 0, ',', '.') }}₫</span>
-                    @endif
-                </div>
+        <div class="mt-4 flex items-center justify-between">
+            <div class="flex items-baseline gap-2">
+                @if($product->sale_price)
+                    <span class="text-lg md:text-xl font-black text-slate-900">{{ number_format($product->sale_price, 0, ',', '.') }}₫</span>
+                    <span class="text-xs font-bold text-slate-300 line-through">{{ number_format($product->price, 0, ',', '.') }}₫</span>
+                @else
+                    <span class="text-lg md:text-xl font-black text-slate-900">{{ number_format($product->price, 0, ',', '.') }}₫</span>
+                @endif
             </div>
-            <a href="{{ route('products.show', $product->slug) }}" class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-slate-900 text-white transition-all hover:scale-110 hover:bg-red-600 shadow-xl border-2 border-transparent hover:border-slate-900">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-            </a>
+            @if($product->colors->count() > 0)
+                <div class="flex items-center gap-1">
+                    @foreach($product->colors->take(3) as $color)
+                        <span class="h-3 w-3 rounded-full shadow-[inset_0_1px_3px_rgba(0,0,0,0.1)]" style="background-color: {{ $color->hex_code }}" title="{{ $color->name }}"></span>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
 </article>

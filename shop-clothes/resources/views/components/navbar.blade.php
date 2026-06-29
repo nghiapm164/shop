@@ -5,24 +5,6 @@
         $el.classList.remove('shadow-sm');
     }
 ">
-    {{-- Top Announcement Bar --}}
-    <div class="hidden md:block border-b border-gray-100 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12 py-1.5 text-xs text-gray-500 flex items-center justify-between gap-4">
-            <p class="tracking-wide font-medium whitespace-nowrap overflow-hidden text-ellipsis flex items-center gap-2">
-                <svg class="w-3.5 h-3.5 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>
-                FREESHIP đơn từ 299.000đ &bull; Đổi trả 7 ngày &bull; Hỗ trợ size 24/7
-            </p>
-            <div class="flex items-center gap-5">
-                @auth
-                    <span class="whitespace-nowrap font-medium text-slate-600">Xin chào, {{ auth()->user()->name }}</span>
-                @else
-                    <a href="{{ route('login') }}" class="hover:text-red-500 transition-colors font-medium">Đăng nhập</a>
-                    <span class="text-slate-300">|</span>
-                    <a href="{{ route('register') }}" class="hover:text-red-500 transition-colors font-medium">Đăng ký</a>
-                @endauth
-            </div>
-        </div>
-    </div>
 
     {{-- Main Navigation --}}
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">

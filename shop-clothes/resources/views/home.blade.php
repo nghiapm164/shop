@@ -14,29 +14,29 @@
 
 <!-- Features/Benefits Strip -->
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 stagger-enter stagger-enter-delay-1">
-        <div class="flex flex-col items-center justify-center p-6 rounded-2xl bg-white shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)] border border-slate-100 text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <div data-aos="fade-up" data-aos-delay="0" class="flex flex-col items-center justify-center p-6 rounded-2xl bg-white shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)] border border-slate-100 text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
             <div class="h-14 w-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
             </div>
             <h4 class="font-bold text-slate-900">Giao nhanh nội thành</h4>
             <p class="text-sm text-slate-500 mt-1.5">Chỉ trong vòng 2 giờ</p>
         </div>
-        <div class="flex flex-col items-center justify-center p-6 rounded-2xl bg-white shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)] border border-slate-100 text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+        <div data-aos="fade-up" data-aos-delay="100" class="flex flex-col items-center justify-center p-6 rounded-2xl bg-white shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)] border border-slate-100 text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
             <div class="h-14 w-14 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
             </div>
             <h4 class="font-bold text-slate-900">Sản phẩm chính hãng</h4>
             <p class="text-sm text-slate-500 mt-1.5">Cam kết chất lượng 100%</p>
         </div>
-        <div class="flex flex-col items-center justify-center p-6 rounded-2xl bg-white shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)] border border-slate-100 text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+        <div data-aos="fade-up" data-aos-delay="200" class="flex flex-col items-center justify-center p-6 rounded-2xl bg-white shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)] border border-slate-100 text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
             <div class="h-14 w-14 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
             </div>
             <h4 class="font-bold text-slate-900">Đổi trả 30 ngày</h4>
             <p class="text-sm text-slate-500 mt-1.5">Linh hoạt và dễ dàng</p>
         </div>
-        <div class="flex flex-col items-center justify-center p-6 rounded-2xl bg-white shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)] border border-slate-100 text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+        <div data-aos="fade-up" data-aos-delay="300" class="flex flex-col items-center justify-center p-6 rounded-2xl bg-white shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)] border border-slate-100 text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
             <div class="h-14 w-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
             </div>
@@ -50,12 +50,12 @@
 <!-- Featured Categories -->
 <section class="py-12 bg-slate-50/50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-10">
+        <div class="text-center mb-10" data-aos="fade-up">
             <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">Danh Mục Nổi Bật</h2>
             <p class="text-lg text-slate-500 mt-3 font-medium">Lựa chọn phong cách phù hợp với đam mê của bạn</p>
         </div>
         
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6" data-aos="fade-up" data-aos-delay="100">
             @foreach($categories as $category)
                 <a href="{{ route('shop.index', ['category' => $category->slug]) }}" class="group block">
                     <div class="relative overflow-hidden rounded-[1.5rem] bg-white aspect-[4/5] shadow-sm border border-slate-100 transition-all duration-500 hover:shadow-[0_15px_30px_-10px_rgba(0,0,0,0.15)] hover:-translate-y-2">
@@ -80,7 +80,7 @@
 @endif
 
 @if(($flashSales ?? collect())->isNotEmpty())
-<section class="py-16">
+<section class="py-16" data-aos="fade-up">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="relative rounded-[2.5rem] overflow-hidden bg-slate-900 p-8 md:p-12 shadow-2xl">
             <!-- Background Decoration -->
@@ -152,7 +152,7 @@
 </section>
 @endif
 
-<section class="py-16 bg-white" id="new-products">
+<section class="py-16 bg-white" id="new-products" data-aos="fade-up">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
             <div>
@@ -223,7 +223,7 @@
 </section>
 
 <section class="py-16 bg-slate-50/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" data-aos="fade-up">
         <div class="bg-white rounded-[2rem] p-6 md:p-10 lg:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
             <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
                 <div>
@@ -291,123 +291,112 @@
     </div>
 </section>
 
-<section class="py-12 bg-zinc-950 overflow-hidden relative">
-    <!-- Sporty diagonal stripes background -->
-    <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(45deg, #000 0, #000 2px, transparent 2px, transparent 8px);"></div>
-    
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <h2 class="text-xl md:text-2xl font-black text-center text-white mb-8 tracking-[0.2em] uppercase italic">Thương Hiệu Đồng Hành</h2>
+<section class="py-16 bg-white overflow-hidden relative border-t border-slate-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" data-aos="fade-up">
+        <h2 class="text-2xl md:text-3xl font-black text-center text-slate-900 mb-10 tracking-tight">Thương Hiệu Đồng Hành</h2>
         
         <div x-data="{
                 interval: null,
                 init() { this.start(); },
                 start() {
                     this.stop();
-                    this.interval = setInterval(() => {
-                        const slider = this.$refs.brandSlider;
-                        if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10) {
-                            slider.scrollTo({ left: 0, behavior: 'smooth' });
-                        } else {
-                            slider.scrollBy({ left: 200, behavior: 'smooth' });
-                        }
-                    }, 3000);
+                    this.interval = setInterval(() => { this.scrollNext(true); }, 3000);
                 },
-                stop() { clearInterval(this.interval); }
+                stop() { clearInterval(this.interval); },
+                scrollNext(auto = false) {
+                    const slider = this.$refs.brandSlider;
+                    if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10) {
+                        slider.scrollTo({ left: 0, behavior: 'smooth' });
+                    } else {
+                        slider.scrollBy({ left: 200, behavior: 'smooth' });
+                    }
+                },
+                scrollPrev() {
+                    this.$refs.brandSlider.scrollBy({ left: -200, behavior: 'smooth' });
+                }
             }" 
             @mouseenter="stop" @mouseleave="start" @touchstart="stop" @touchend="start"
-            class="relative">
+            class="relative group/brand">
             
-            <div x-ref="brandSlider" class="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pb-4 pt-2 px-4 -mx-4 items-center" style="scrollbar-width: none; -ms-overflow-style: none;">
+            <button type="button" @click.prevent.stop="scrollPrev(); stop(); start();" class="absolute left-0 top-[40%] -translate-y-1/2 -ml-4 z-40 flex h-10 w-10 opacity-0 group-hover/brand:opacity-100 items-center justify-center rounded-full bg-white text-slate-900 shadow-[0_4px_20px_rgba(0,0,0,0.15)] transition-all duration-300 hover:scale-110 border border-slate-100">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            
+            <button type="button" @click.prevent.stop="scrollNext(); stop(); start();" class="absolute right-0 top-[40%] -translate-y-1/2 -mr-4 z-40 flex h-10 w-10 opacity-0 group-hover/brand:opacity-100 items-center justify-center rounded-full bg-white text-slate-900 shadow-[0_4px_20px_rgba(0,0,0,0.15)] transition-all duration-300 hover:scale-110 border border-slate-100">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+
+            <div x-ref="brandSlider" class="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pb-6 pt-2 px-4 -mx-4 items-center" style="scrollbar-width: none; -ms-overflow-style: none;">
                 <style>div[x-ref="brandSlider"]::-webkit-scrollbar { display: none; }</style>
                 @forelse($brands ?? [] as $brand)
-                    <div class="w-40 md:w-56 shrink-0 snap-center py-2">
-                        <div class="h-16 md:h-20 bg-zinc-900/80 backdrop-blur-sm border-b-4 border-red-600 flex items-center justify-center p-4 transform -skew-x-12 hover:-skew-x-6 hover:bg-zinc-800 hover:-translate-y-1 transition-all duration-300 group shadow-lg cursor-pointer">
-                            <span class="font-black text-zinc-500 group-hover:text-white transition-colors uppercase tracking-[0.2em] text-sm md:text-base text-center italic transform skew-x-12 group-hover:skew-x-6">{{ $brand->name }}</span>
+                    <div class="w-36 md:w-44 shrink-0 snap-center group cursor-pointer">
+                        <div class="bg-white rounded-[2rem] border border-slate-100 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.08)] flex flex-col items-center justify-center p-5 md:p-6 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300 gap-4">
+                            @if($brand->logo)
+                                <img src="{{ asset('storage/' . $brand->logo) }}" alt="{{ $brand->name }}" class="w-16 h-16 md:w-20 md:h-20 object-contain filter grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 drop-shadow-sm group-hover:scale-110">
+                            @else
+                                <div class="w-16 h-16 md:w-20 md:h-20 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 font-bold text-xl group-hover:scale-110 transition-transform duration-500">{{ mb_substr($brand->name, 0, 1) }}</div>
+                            @endif
+                            <span class="font-bold text-slate-600 group-hover:text-slate-900 transition-colors text-sm md:text-base text-center tracking-tight">{{ $brand->name }}</span>
                         </div>
                     </div>
                 @empty
-                    <div class="w-full text-center text-zinc-500 py-8">Chưa có thương hiệu.</div>
+                    <div class="w-full text-center text-slate-500 py-8">Chưa có thương hiệu.</div>
                 @endforelse
             </div>
         </div>
     </div>
 </section>
 
-<section class="py-20 bg-zinc-900 relative overflow-hidden">
-    <!-- Sporty background elements -->
-    <div class="absolute top-0 right-0 w-1/2 h-full bg-red-600 transform skew-x-12 translate-x-1/2 opacity-5 pointer-events-none"></div>
-    
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-            <div>
-                <h2 class="text-sm font-black tracking-[0.2em] uppercase text-red-500 mb-2 italic">Đánh Giá Thực Tế</h2>
-                <h3 class="text-3xl md:text-5xl font-black text-white tracking-tight uppercase italic">Khách Hàng Nói Gì?</h3>
-            </div>
+<section class="py-20 bg-slate-50 border-t border-slate-100 relative overflow-hidden">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8" data-aos="zoom-in" x-data="{ current: 0, reviews: @js($testimonials ?? []) }" x-init="setInterval(() => { if (reviews.length) current = (current + 1) % reviews.length }, 5000)">
+        <div class="text-center mb-16">
+            <h2 class="text-xs md:text-sm font-black tracking-[0.2em] uppercase text-red-600 mb-3">Đánh giá thực tế</h2>
+            <h3 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">Khách Hàng Nói Gì?</h3>
         </div>
 
-        <div x-data="{
-                interval: null,
-                init() { this.start(); },
-                start() {
-                    this.stop();
-                    this.interval = setInterval(() => { this.scrollNext(true); }, 5000);
-                },
-                stop() { clearInterval(this.interval); },
-                scrollNext(auto = false) {
-                    const slider = this.$refs.testiSlider;
-                    if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10) {
-                        slider.scrollTo({ left: 0, behavior: 'smooth' });
-                    } else {
-                        slider.scrollBy({ left: 400, behavior: 'smooth' });
-                    }
-                },
-                scrollPrev() {
-                    this.$refs.testiSlider.scrollBy({ left: -400, behavior: 'smooth' });
-                }
-            }" 
-            @mouseenter="stop" @mouseleave="start" @touchstart="stop" @touchend="start"
-            class="relative group/testi">
-            
-            <button type="button" @click.prevent.stop="scrollPrev(); stop(); start();" class="absolute left-0 top-[45%] -translate-y-1/2 -ml-4 md:-ml-6 z-40 flex h-12 w-12 opacity-0 group-hover/testi:opacity-100 items-center justify-center bg-zinc-800 text-white border-2 border-red-600 transition-all duration-300 hover:scale-110 hover:bg-red-600 transform -skew-x-12 shadow-[0_4px_20px_rgba(220,38,38,0.3)]">
-                <svg class="h-6 w-6 transform skew-x-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path></svg>
-            </button>
-            
-            <button type="button" @click.prevent.stop="scrollNext(); stop(); start();" class="absolute right-0 top-[45%] -translate-y-1/2 -mr-4 md:-mr-6 z-40 flex h-12 w-12 opacity-0 group-hover/testi:opacity-100 items-center justify-center bg-zinc-800 text-white border-2 border-red-600 transition-all duration-300 hover:scale-110 hover:bg-red-600 transform -skew-x-12 shadow-[0_4px_20px_rgba(220,38,38,0.3)]">
-                <svg class="h-6 w-6 transform skew-x-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
-            </button>
+        <div class="overflow-visible relative">
+            <div class="flex transition-transform duration-700 ease-in-out" :style="`transform: translateX(-${current * 100}%)`">
+                <template x-for="item in reviews" :key="item.id">
+                    <div class="w-full shrink-0 px-4">
+                        <div class="max-w-3xl mx-auto bg-white rounded-[2.5rem] p-8 md:p-12 text-center shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] border border-slate-100 relative">
+                            <!-- Quote Icon -->
+                            <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-slate-900 rounded-full flex items-center justify-center text-white shadow-xl">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"/></svg>
+                            </div>
+                            
+                            <!-- Stars -->
+                            <div class="flex justify-center gap-1 mb-6 text-yellow-400 mt-4">
+                                <template x-for="i in item.rating">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                </template>
+                            </div>
 
-            <div x-ref="testiSlider" class="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 pt-4 px-4 -mx-4" style="scrollbar-width: none; -ms-overflow-style: none;">
-                <style>div[x-ref="testiSlider"]::-webkit-scrollbar { display: none; }</style>
-                
-                @forelse($testimonials ?? [] as $item)
-                    <div class="w-80 md:w-96 lg:w-[28rem] shrink-0 snap-start">
-                        <div class="bg-zinc-800/80 backdrop-blur border-l-4 border-red-600 p-8 md:p-10 relative h-full flex flex-col justify-between hover:bg-zinc-800 transition-colors shadow-xl">
-                            <div class="absolute top-6 right-6 text-zinc-700">
-                                <svg class="w-12 h-12 opacity-20" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"/></svg>
-                            </div>
+                            <!-- Text -->
+                            <p class="text-lg md:text-2xl text-slate-700 font-semibold leading-relaxed mb-8" x-text="`&quot;${item.text}&quot;`"></p>
                             
-                            <div>
-                                <div class="flex gap-1 mb-6 text-red-500">
-                                    @for($i = 0; $i < ($item['rating'] ?? 5); $i++)
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                    @endfor
-                                </div>
-                                <p class="text-lg md:text-xl text-zinc-300 font-medium leading-relaxed mb-8 italic">"{{ $item['text'] }}"</p>
-                            </div>
-                            
-                            <div class="flex items-center gap-4 mt-auto">
-                                <div class="w-12 h-12 bg-zinc-700/50 rounded flex items-center justify-center text-2xl shadow-inner text-white font-bold">{{ $item['avatar'] }}</div>
+                            <!-- User Info -->
+                            <div class="flex items-center justify-center gap-4">
+                                <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-2xl shadow-sm border border-slate-200" x-text="item.avatar"></div>
                                 <div class="text-left">
-                                    <h4 class="font-black text-white text-base md:text-lg uppercase tracking-wider">{{ $item['name'] }}</h4>
-                                    <p class="text-[10px] md:text-xs text-red-500 font-bold uppercase tracking-[0.15em]">Khách Hàng Thực Tế</p>
+                                    <h4 class="font-bold text-slate-900 text-base" x-text="item.name"></h4>
+                                    <p class="text-xs text-slate-500 font-medium">Khách hàng xác thực</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                @empty
-                    <div class="w-full text-center text-zinc-500 py-8">Chưa có đánh giá.</div>
-                @endforelse
+                </template>
             </div>
+        </div>
+
+        <!-- Dots -->
+        <div class="flex justify-center gap-2 mt-12">
+            <template x-for="(item, index) in reviews" :key="index">
+                <button 
+                    class="h-2 rounded-full transition-all duration-300" 
+                    @click="current = index" 
+                    :class="current === index ? 'w-8 bg-slate-900' : 'w-2 bg-slate-300 hover:bg-slate-400'">
+                </button>
+            </template>
         </div>
     </div>
 </section>

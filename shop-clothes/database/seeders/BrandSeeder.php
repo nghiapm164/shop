@@ -12,12 +12,10 @@ class BrandSeeder extends Seeder
     public function run(): void
     {
         $brands = [
-            'SportWear Pro',
-            'ActiveMan',
-            'RunFast',
-            'GymCore',
-            'StreetFit',
-            'UrbanMotion',
+            'SportWear Pro', 'ActiveMan', 'RunFast', 'GymCore', 'StreetFit', 
+            'UrbanMotion', 'Nike', 'Adidas', 'Puma', 'Under Armour', 
+            'Reebok', 'Asics', 'New Balance', 'Champion', 'Fila', 
+            'Kappa', 'Umbro', 'Converse', 'Vans', 'Oakley'
         ];
 
         foreach ($brands as $index => $name) {
