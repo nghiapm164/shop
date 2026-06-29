@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
@@ -48,6 +49,23 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
+
+        // In local/testing environment, generate verification link directly
+        if (config('mail.default') === 'log') {
+            $signedUrl = URL::temporarySignedRoute(
+                'verification.verify',
+                now()->addMinutes(60),
+                [
+                    'id' => $user->getKey(),
+                    'hash' => sha1($user->getEmailForVerification()),
+                ]
+            );
+
+            return redirect()->route('verification.notice')->with([
+                'local_verify_url' => $signedUrl,
+                'local_verify_email' => $user->email,
+            ]);
+        }
 
         return redirect(RouteServiceProvider::HOME);
     }

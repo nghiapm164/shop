@@ -90,7 +90,11 @@ class OrderStatusUpdatedMail extends Mailable
             default => "Trạng thái đơn hàng đã được cập nhật từ {$oldLabel} sang {$newLabel}.",
         };
 
-        $viewOrderUrl = route('client.orders.show', $order->id);
+        try {
+            $viewOrderUrl = route('client.orders.show', $order->id);
+        } catch (\Exception $e) {
+            $viewOrderUrl = url('/my-orders/' . $order->id);
+        }
 
         return "
         <!DOCTYPE html>
@@ -102,29 +106,29 @@ class OrderStatusUpdatedMail extends Mailable
                     <h1 style='color:#fff;margin:0;font-size:24px;'>🏋️ {$appName}</h1>
                     <p style='color:rgba(255,255,255,0.8);margin:8px 0 0;font-size:14px;'>Cập nhật đơn hàng</p>
                 </div>
-                
+
                 <div style='padding:24px;'>
                     <div style='text-align:center;padding:20px 0;'>
                         <span style='font-size:48px;'>{$statusIcon}</span>
                         <h2 style='color:#111;font-size:20px;margin:16px 0 8px;'>{$newLabel}</h2>
                         <p style='color:#666;font-size:14px;line-height:1.6;margin:0;'>{$statusMessage}</p>
                     </div>
-                    
+
                     <div style='background:#f8fafc;border-radius:8px;padding:16px;margin:20px 0;'>
                         <p style='margin:0 0 8px;font-size:13px;color:#666;'><strong>Mã đơn:</strong> #{$order->order_code}</p>
                         <p style='margin:0 0 8px;font-size:13px;color:#666;'><strong>Tổng tiền:</strong> " . number_format($order->total, 0, ',', '.') . "₫</p>
-                        <p style='margin:0;font-size:13px;color:#666;'><strong>Trạng thái:</strong> 
+                        <p style='margin:0;font-size:13px;color:#666;'><strong>Trạng thái:</strong>
                             <span style='display:inline-block;padding:2px 10px;border-radius:12px;background:{$statusColor};color:#fff;font-size:12px;font-weight:600;'>{$newLabel}</span>
                         </p>
                     </div>
-                    
+
                     <div style='text-align:center;padding:20px 0;'>
                         <a href='{$viewOrderUrl}' style='display:inline-block;padding:12px 32px;background:#dc2626;color:#fff;border-radius:8px;font-weight:600;font-size:14px;text-decoration:none;'>
                             Xem đơn hàng
                         </a>
                     </div>
                 </div>
-                
+
                 <div style='background:#f8fafc;padding:16px;text-align:center;border-top:1px solid #eee;'>
                     <p style='margin:0;font-size:12px;color:#999;'>© " . date('Y') . " {$appName}</p>
                 </div>

@@ -20,8 +20,8 @@ class AdminMiddleware
             return redirect()->route('login');
         }
 
-        // Check if user is admin or super_admin
-        if ($request->user()->role !== 'admin' && $request->user()->role !== 'super_admin') {
+        // Check if user is admin, super_admin, or staff
+        if (!in_array($request->user()->role, ['admin', 'super_admin', 'staff'], true)) {
             abort(403, 'Unauthorized access to admin panel');
         }
 

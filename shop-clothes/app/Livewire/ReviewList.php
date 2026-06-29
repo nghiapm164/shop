@@ -22,7 +22,7 @@ class ReviewList extends Component
     public function reviewsSummary()
     {
         $reviews = $this->product->reviews()->approved()->get();
-        
+
         if ($reviews->isEmpty()) {
             return [
                 'average' => 0,
@@ -33,7 +33,7 @@ class ReviewList extends Component
 
         $average = $reviews->avg('rating');
         $count = $reviews->count();
-        
+
         $distribution = [];
         for ($i = 5; $i >= 1; $i--) {
             $distribution[$i] = $reviews->where('rating', $i)->count();
@@ -65,7 +65,7 @@ class ReviewList extends Component
 
         return \App\Models\Order::query()
             ->where('user_id', auth()->id())
-            ->whereHas('items', function ($q) {
+            ->whereHas('items.productVariant', function ($q) {
                 $q->where('product_id', $this->product->id);
             })
             ->exists();
@@ -109,7 +109,7 @@ class ReviewList extends Component
         ]);
 
         $this->dispatch('notify', message: 'Cảm ơn bạn đã đánh giá sản phẩm!', type: 'success');
-        
+
         // Reset form
         $this->newRating = 5;
         $this->newComment = '';

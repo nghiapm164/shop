@@ -259,5 +259,19 @@
             </div>
         </div>
     @endif
+
+    {{-- Recently Viewed Products --}}
+    @if(isset($recentlyViewed) && $recentlyViewed->isNotEmpty())
+        <div class="max-w-7xl mx-auto px-4 mt-12">
+            <div class="flex items-end justify-between mb-6">
+                <h3 class="fashion-title text-3xl">Sản phẩm đã xem gần đây</h3>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                @foreach($recentlyViewed as $recentProduct)
+                    <x-product-card :product="$recentProduct" />
+                @endforeach
+            </div>
+        </div>
+    @endif
 </div>
 @endsection

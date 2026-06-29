@@ -45,14 +45,32 @@ class CheckoutPage extends Component
     // Order notes
     public string $notes = '';
 
+    /**
+     * Get the effective price, prioritizing flash sale over sale_price.
+     */
+    private function getEffectivePrice($product): float
+    {
+        $flashSale = $product->flashSales()
+            ->running()
+            ->orderBy('flash_price')
+            ->first();
+
+        if ($flashSale) {
+            return (float) $flashSale->flash_price;
+        }
+
+        return (float) ($product->sale_price ?? $product->price);
+    }
+
     public function mount()
     {
         if (!auth()->check()) {
             $this->redirect('/login');
         }
 
-        // Load cart from session
+        // Load cart from session and sync prices
         $this->cartItems = collect(session()->get('cart', []));
+        $this->syncCartPrices();
 
         if ($this->cartItems->isEmpty()) {
             $this->redirect('/cart');
@@ -92,6 +110,21 @@ class CheckoutPage extends Component
             // Recalculate after coupon is loaded/validated
             $this->calculateTotals();
         }
+    }
+
+    /**
+     * Sync cart item prices with current product prices (including flash sales).
+     */
+    private function syncCartPrices(): void
+    {
+        $this->cartItems = $this->cartItems->map(function ($item) {
+            $variant = \App\Models\ProductVariant::with('product')->find($item['product_variant_id'] ?? null);
+            if ($variant && $variant->product && $variant->product->is_active) {
+                $basePrice = $this->getEffectivePrice($variant->product);
+                $item['price'] = (float) ($basePrice + ($variant->additional_price ?? 0));
+            }
+            return $item;
+        })->values();
     }
 
     public function calculateTotals()

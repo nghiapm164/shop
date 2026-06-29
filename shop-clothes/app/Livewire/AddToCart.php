@@ -90,14 +90,14 @@ class AddToCart extends Component
             return null;
         }
 
-        $basePrice = $this->product->sale_price ?? $this->product->price;
+        $basePrice = $this->getEffectivePrice();
         return $basePrice + ($this->selectedVariant->additional_price ?? 0);
     }
 
     #[Computed]
     public function displayPrice()
     {
-        return $this->variantPrice ?? ($this->product->sale_price ?? $this->product->price);
+        return $this->variantPrice ?? $this->getEffectivePrice();
     }
 
     #[Computed]
@@ -293,6 +293,24 @@ class AddToCart extends Component
     public function toggleSizeGuide()
     {
         $this->showSizeGuide = !$this->showSizeGuide;
+    }
+
+    /**
+     * Get the effective price, prioritizing flash sale over sale_price.
+     */
+    private function getEffectivePrice(): float
+    {
+        // Check for running flash sale
+        $flashSale = $this->product->flashSales()
+            ->running()
+            ->orderBy('flash_price')
+            ->first();
+
+        if ($flashSale) {
+            return (float) $flashSale->flash_price;
+        }
+
+        return (float) ($this->product->sale_price ?? $this->product->price);
     }
 
     public function render()

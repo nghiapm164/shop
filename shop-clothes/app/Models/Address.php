@@ -46,4 +46,13 @@ class Address extends Model
         ]);
         return implode(', ', $parts);
     }
+
+    /**
+     * Set this address as the default for the user.
+     */
+    public function makeDefault(): void
+    {
+        static::where('user_id', $this->user_id)->update(['is_default' => false);
+        $this->update(['is_default' => true]);
+    }
 }

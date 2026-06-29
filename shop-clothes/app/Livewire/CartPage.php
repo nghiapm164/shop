@@ -15,7 +15,7 @@ class CartPage extends Component
     public ?Coupon $appliedCoupon = null;
     public string $errorMessage = '';
     public string $successMessage = '';
-    
+
     const SHIPPING_FREE_THRESHOLD = 500000;
     const SHIPPING_COST = 30000;
 
@@ -50,7 +50,8 @@ class CartPage extends Component
                 return null;
             }
 
-            $price = (float) (($variant->product->sale_price ?? $variant->product->price) + ($variant->additional_price ?? 0));
+            $basePrice = $this->getEffectivePrice($variant->product);
+            $price = (float) ($basePrice + ($variant->additional_price ?? 0));
             $qty = max(1, min((int) ($item['quantity'] ?? 1), (int) $variant->stock_quantity));
 
             $item['product_id'] = $variant->product_id;
@@ -140,7 +141,7 @@ class CartPage extends Component
         }
 
         $quantity = max(1, min((int) $quantity, (int) $variant->stock_quantity));
-        $latestPrice = (float) (($variant->product->sale_price ?? $variant->product->price) + ($variant->additional_price ?? 0));
+        $latestPrice = (float) ($this->getEffectivePrice($variant->product) + ($variant->additional_price ?? 0));
 
         $this->cartItems = $this->cartItems->map(function ($item) use ($productVariantId, $quantity, $latestPrice, $variant) {
             if ($item['product_variant_id'] == $productVariantId) {
@@ -187,7 +188,7 @@ class CartPage extends Component
         }
 
         $validation = $coupon->checkValid($this->subtotal);
-        
+
         if (!$validation['valid']) {
             $this->errorMessage = $validation['message'];
             return;
@@ -195,7 +196,7 @@ class CartPage extends Component
 
         $this->appliedCoupon = $coupon;
         session()->put('coupon_id', $coupon->id);
-        $this->successMessage = "Áp dụng mã {$coupon->code} thành công! Giảm " . 
+        $this->successMessage = "Áp dụng mã {$coupon->code} thành công! Giảm " .
             number_format($this->discountAmount, 0, ',', '.') . '₫';
 
         $this->dispatch('notify', message: "Đã áp dụng mã {$coupon->code}", type: 'success');
@@ -230,6 +231,24 @@ class CartPage extends Component
 
         session()->put('coupon_id', $this->appliedCoupon?->id);
         $this->redirect('/checkout');
+    }
+
+    /**
+     * Get the effective price, prioritizing flash sale over sale_price.
+     */
+    private function getEffectivePrice($product): float
+    {
+        // Check for running flash sale
+        $flashSale = $product->flashSales()
+            ->running()
+            ->orderBy('flash_price')
+            ->first();
+
+        if ($flashSale) {
+            return (float) $flashSale->flash_price;
+        }
+
+        return (float) ($product->sale_price ?? $product->price);
     }
 
     public function render()

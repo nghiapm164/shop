@@ -10,6 +10,12 @@
         <p class="fashion-subtitle mt-3">Chúng tôi luôn sẵn sàng hỗ trợ bạn. Hãy liên hệ qua các kênh dưới đây.</p>
     </div>
 
+    @if (session('contact_success'))
+        <div class="mb-8 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-700 text-center">
+            <p class="font-semibold">{{ session('contact_success') }}</p>
+        </div>
+    @endif
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
         {{-- Contact Info --}}
         <div class="space-y-6">
@@ -19,7 +25,7 @@
                 </div>
                 <div>
                     <h3 class="font-bold text-slate-900 text-lg">Hotline</h3>
-                    <p class="text-slate-600 mt-1">0123 456 789</p>
+                    <p class="text-slate-600 mt-1">1900 6750</p>
                     <p class="text-sm text-slate-500">Hỗ trợ 8:00 - 22:00 hàng ngày</p>
                 </div>
             </div>
@@ -41,7 +47,7 @@
                 </div>
                 <div>
                     <h3 class="font-bold text-slate-900 text-lg">Địa chỉ</h3>
-                    <p class="text-slate-600 mt-1">Hà Nội, Việt Nam</p>
+                    <p class="text-slate-600 mt-1">Hồ Tùng Mậu, Hà Nội</p>
                 </div>
             </div>
         </div>
@@ -49,20 +55,56 @@
         {{-- Contact Form --}}
         <div class="fashion-section p-6">
             <h3 class="font-bold text-slate-900 text-lg mb-4">Gửi tin nhắn</h3>
-            <form class="space-y-4">
+            <form method="POST" action="{{ route('contact.submit') }}" class="space-y-4">
+                @csrf
+
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Họ và tên</label>
-                    <input type="text" class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400" placeholder="Nhập họ tên">
+                    <label for="contact_name" class="block text-sm font-medium text-gray-700 mb-1.5">Họ và tên <span class="text-red-500">*</span></label>
+                    <input type="text" id="contact_name" name="name" value="{{ old('name') }}" required
+                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400" placeholder="Nhập họ tên">
+                    @error('name')
+                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
+
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
-                    <input type="email" class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400" placeholder="email@example.com">
+                    <label for="contact_email" class="block text-sm font-medium text-gray-700 mb-1.5">Email <span class="text-red-500">*</span></label>
+                    <input type="email" id="contact_email" name="email" value="{{ old('email') }}" required
+                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400" placeholder="email@example.com">
+                    @error('email')
+                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
+
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Nội dung</label>
-                    <textarea rows="4" class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400" placeholder="Nhập nội dung..."></textarea>
+                    <label for="contact_phone" class="block text-sm font-medium text-gray-700 mb-1.5">Số điện thoại</label>
+                    <input type="tel" id="contact_phone" name="phone" value="{{ old('phone') }}"
+                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400" placeholder="0xxxxxxxxx">
                 </div>
-                <button type="button" class="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition" onclick="alert('Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất.')">
+
+                <div>
+                    <label for="contact_subject" class="block text-sm font-medium text-gray-700 mb-1.5">Chủ đề</label>
+                    <select id="contact_subject" name="subject"
+                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400">
+                        <option value="">-- Chọn chủ đề --</option>
+                        <option value="order" {{ old('subject') === 'order' ? 'selected' : '' }}>Hỗ trợ đơn hàng</option>
+                        <option value="product" {{ old('subject') === 'product' ? 'selected' : '' }}>Thông tin sản phẩm</option>
+                        <option value="return" {{ old('subject') === 'return' ? 'selected' : '' }}>Đổi trả / Hoàn tiền</option>
+                        <option value="complaint" {{ old('subject') === 'complaint' ? 'selected' : '' }}>Khiếu nại</option>
+                        <option value="other" {{ old('subject') === 'other' ? 'selected' : '' }}>Khác</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="contact_message" class="block text-sm font-medium text-gray-700 mb-1.5">Nội dung <span class="text-red-500">*</span></label>
+                    <textarea id="contact_message" name="message" rows="4" required
+                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400" placeholder="Nhập nội dung...">{{ old('message') }}</textarea>
+                    @error('message')
+                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <button type="submit" class="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition">
                     Gửi tin nhắn
                 </button>
             </form>

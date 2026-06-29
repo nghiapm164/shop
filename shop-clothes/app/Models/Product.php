@@ -26,6 +26,7 @@ class Product extends Model
         'sku',
         'is_featured',
         'is_active',
+        'view_count',
         'meta_title',
         'meta_description',
     ];

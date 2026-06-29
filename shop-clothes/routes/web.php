@@ -9,6 +9,8 @@ use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\OrderLookupController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminCategoryController;
@@ -53,7 +55,9 @@ Route::get('/best-prices', function () {
     return view('shop.best-prices');
 })->name('shop.best-prices');
 
-// Auth portals - redirect to unified login
+// Client portal routes (legacy support for client dashboard and logout)
+use App\Http\Controllers\Client\AuthController as ClientAuthController;
+
 Route::middleware('guest')->group(function () {
     Route::get('/client/login', fn () => redirect()->route('login'))->name('client.login');
     Route::post('/client/login', [AuthenticatedSessionController::class, 'store'])->name('client.login.submit');
@@ -63,6 +67,11 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/client/register', fn () => redirect()->route('register'))->name('client.register');
     Route::post('/client/register', [RegisteredUserController::class, 'store'])->name('client.register.submit');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/client/dashboard', [ClientAuthController::class, 'dashboard'])->name('client.dashboard');
+    Route::post('/client/logout', [ClientAuthController::class, 'logout'])->name('client.logout');
 });
 
 // Shopping Cart & Checkout (Protected)
@@ -107,9 +116,16 @@ Route::middleware('auth')->group(function () {
     Route::patch('/addresses/{address}/default', [AddressController::class, 'setDefault'])->name('addresses.setDefault');
 });
 
+// Order Lookup (public - no auth required)
+Route::get('/order-lookup', [OrderLookupController::class, 'index'])->name('order.lookup');
+Route::post('/order-lookup', [OrderLookupController::class, 'search'])->name('order.lookup.search');
+
+// Contact form
+Route::get('/contact', [ContactController::class, 'index'])->name('pages.contact');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
+
 // Static pages
 Route::view('/about', 'pages.about')->name('pages.about');
-Route::view('/contact', 'pages.contact')->name('pages.contact');
 Route::view('/return-policy', 'pages.return-policy')->name('pages.return-policy');
 Route::view('/privacy-policy', 'pages.privacy-policy')->name('pages.privacy-policy');
 Route::view('/terms', 'pages.terms')->name('pages.terms');
@@ -118,6 +134,24 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Profile personal info (name, phone, avatar)
+    Route::post('/profile/personal', [ProfileController::class, 'updatePersonal'])->name('profile.personal.update');
+
+    // Change password
+    Route::put('/profile/password', [ProfileController::class, 'changePassword'])->name('profile.password.change');
+
+    // Profile addresses
+    Route::get('/profile/addresses', [ProfileController::class, 'addresses'])->name('profile.addresses');
+    Route::get('/profile/addresses/create', [ProfileController::class, 'createAddress'])->name('profile.addresses.create');
+    Route::post('/profile/addresses', [ProfileController::class, 'storeAddress'])->name('profile.addresses.store');
+    Route::get('/profile/addresses/{address}/edit', [ProfileController::class, 'editAddress'])->name('profile.addresses.edit');
+    Route::put('/profile/addresses/{address}', [ProfileController::class, 'updateAddress'])->name('profile.addresses.update');
+    Route::delete('/profile/addresses/{address}', [ProfileController::class, 'destroyAddress'])->name('profile.addresses.destroy');
+
+    // Profile orders
+    Route::get('/profile/orders', [ProfileController::class, 'orders'])->name('profile.orders');
+    Route::get('/profile/orders/{order}', [ProfileController::class, 'showOrder'])->name('profile.orders.show');
 });
 
 // Admin Routes (Protected)

@@ -25,15 +25,13 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        $credentials['role'] = 'client';
-
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
             return redirect()->route('client.dashboard');
         }
 
         return back()->withErrors([
-            'email' => 'Thông tin đăng nhập không đúng hoặc bạn không phải client.',
+            'email' => 'Thông tin đăng nhập không đúng.',
         ])->onlyInput('email');
     }
 
@@ -54,7 +52,7 @@ class AuthController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role' => 'client',
+            'role' => 'customer',
         ]);
 
         Auth::login($user);
@@ -131,7 +129,7 @@ class AuthController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user || $user->role !== 'client') {
+        if (!$user || !in_array($user->role, ['customer', 'staff', 'admin', 'super_admin'], true)) {
             abort(403);
         }
 

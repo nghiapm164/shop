@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderStatusUpdatedMail;
 use App\Models\Order;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -76,6 +79,7 @@ class OrderController extends Controller
             return back()->with('error', 'Không thể hủy đơn hàng ở trạng thái hiện tại.');
         }
 
+        $oldStatus = $order->status;
         $order->update(['status' => Order::STATUS_CANCELLED]);
 
         // Restore stock
@@ -86,6 +90,16 @@ class OrderController extends Controller
                     $variant->increment('stock_quantity', $item->quantity);
                 }
             }
+        }
+
+        // Send cancellation email to customer
+        try {
+            $order->load('user');
+            if ($order->user && $order->user->email) {
+                Mail::to($order->user->email)->send(new OrderStatusUpdatedMail($order, $oldStatus, Order::STATUS_CANCELLED));
+            }
+        } catch (\Exception $e) {
+            Log::warning('Failed to send order cancellation email: ' . $e->getMessage());
         }
 
         return back()->with('success', 'Đã hủy đơn hàng ' . $order->order_code . ' thành công.');
