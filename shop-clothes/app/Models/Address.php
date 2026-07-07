@@ -52,7 +52,7 @@ class Address extends Model
      */
     public function makeDefault(): void
     {
-        static::where('user_id', $this->user_id)->update(['is_default' => false);
+        static::where('user_id', $this->user_id)->update(['is_default' => false]);
         $this->update(['is_default' => true]);
     }
 }

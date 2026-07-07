@@ -17,26 +17,26 @@
             </a>
 
             {{-- Desktop Nav Links --}}
-            <div class="hidden lg:flex items-center gap-1">
+            <div class="hidden lg:flex items-center gap-8">
                 <a href="{{ route('home') }}"
-                   class="relative px-4 py-2 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg hover:bg-gray-50 {{ request()->routeIs('home') ? 'text-red-500' : '' }}">
+                   class="relative py-2 text-sm font-bold uppercase tracking-wide text-brand-ink hover:text-brand-primary transition-colors {{ request()->routeIs('home') ? 'text-brand-primary' : '' }}">
                     Trang chủ
                 </a>
                 <a href="{{ route('shop.index') }}"
-                   class="relative px-4 py-2 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg hover:bg-gray-50 {{ request()->routeIs('shop.*') || request()->routeIs('products.*') ? 'text-red-500' : '' }}">
+                   class="relative py-2 text-sm font-bold uppercase tracking-wide text-brand-ink hover:text-brand-primary transition-colors {{ request()->routeIs('shop.*') || request()->routeIs('products.*') ? 'text-brand-primary' : '' }}">
                     Cửa hàng
                 </a>
                 <a href="{{ route('shop.new-arrivals') }}"
-                   class="relative px-4 py-2 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg hover:bg-gray-50 {{ request()->routeIs('shop.new-arrivals') ? 'text-red-500' : '' }}">
+                   class="relative py-2 text-sm font-bold uppercase tracking-wide text-brand-ink hover:text-brand-primary transition-colors {{ request()->routeIs('shop.new-arrivals') ? 'text-brand-primary' : '' }}">
                     Mới về
                 </a>
                 <a href="{{ route('shop.best-prices') }}"
-                   class="relative px-4 py-2 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg hover:bg-gray-50 {{ request()->routeIs('shop.best-prices') ? 'text-red-500' : '' }}">
+                   class="relative py-2 text-sm font-bold uppercase tracking-wide text-brand-ink hover:text-brand-primary transition-colors {{ request()->routeIs('shop.best-prices') ? 'text-brand-primary' : '' }}">
                     Giá tốt
                 </a>
                 <div class="relative" x-data="{ aboutOpen: false }" @click.outside="aboutOpen = false">
                     <button @click="aboutOpen = !aboutOpen"
-                       class="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg hover:bg-gray-50 flex items-center gap-1 {{ request()->routeIs('pages.*') ? 'text-red-500' : '' }}">
+                       class="py-2 text-sm font-bold uppercase tracking-wide text-brand-ink hover:text-brand-primary transition-colors flex items-center gap-1 {{ request()->routeIs('pages.*') ? 'text-brand-primary' : '' }}">
                         Về MODESPORT
                         <svg class="w-3 h-3 transition-transform" :class="aboutOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                     </button>

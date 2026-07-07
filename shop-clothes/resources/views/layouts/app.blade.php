@@ -21,10 +21,10 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
-    <!-- Fonts: Inter + Be Vietnam Pro (Premium Vietnamese font) -->
+    <!-- Fonts: Archivo (Delta Sport style) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <!-- AOS CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -44,7 +44,7 @@
         @yield('styles')
     </style>
 </head>
-<body class="antialiased text-slate-900 store-shell" x-data="{
+<body class="antialiased text-brand-text bg-white store-shell" x-data="{
     toasts: [],
     pushToast(detail) {
         if (!detail || !detail.message) return;

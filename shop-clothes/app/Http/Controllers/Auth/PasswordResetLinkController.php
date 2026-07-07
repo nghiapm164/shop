@@ -39,20 +39,20 @@ class PasswordResetLinkController extends Controller
             ]);
         }
 
-        // Generate reset token
-        $token = Password::createToken($user);
-
-        // Build reset URL
-        $resetUrl = route('password.reset', ['token' => $token]);
-
         // If mailer is log, show the link directly
         if (config('mail.default') === 'log') {
+            // Generate reset token
+            $token = Password::createToken($user);
+            
+            // Build reset URL
+            $resetUrl = route('password.reset', ['token' => $token]);
+            
             return back()->with('status', 'Link đặt lại mật khẩu:')
                 ->with('reset_url', $resetUrl)
                 ->with('reset_email', $request->email);
         }
 
-        // Otherwise send via email normally
+        // Otherwise send via email normally (this creates the token automatically)
         $status = Password::sendResetLink(
             $request->only('email')
         );

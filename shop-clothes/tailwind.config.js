@@ -12,16 +12,16 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Inter', 'Be Vietnam Pro', ...defaultTheme.fontFamily.sans],
-                display: ['Inter', 'Be Vietnam Pro', ...defaultTheme.fontFamily.sans],
+                sans: ['Archivo', ...defaultTheme.fontFamily.sans],
+                display: ['Archivo', ...defaultTheme.fontFamily.sans],
             },
             colors: {
                 brand: {
-                    primary: '#ef4444',
-                    'primary-hover': '#dc2626',
-                    'primary-light': '#fef2f2',
-                    ink: '#0f172a',
-                    text: '#1e293b',
+                    primary: '#E42508',
+                    'primary-hover': '#cc1e05',
+                    'primary-light': '#fee2e2',
+                    ink: '#161922',
+                    text: '#161922',
                     muted: '#64748b',
                     subtle: '#94a3b8',
                     border: '#e2e8f0',
@@ -32,8 +32,8 @@ export default {
                 },
             },
             borderRadius: {
-                'card': '16px',
-                'card-lg': '20px',
+                'card': '0px',
+                'card-lg': '0px',
             },
             boxShadow: {
                 'card': '0 2px 8px rgba(0, 0, 0, 0.06)',
