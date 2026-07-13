@@ -281,11 +281,11 @@
                 transform: translateY(0);
             }
         }
-        
+
         .product-card:hover {
             transform: translateY(-8px) !important;
         }
-        
+
         .category-card:hover {
             transform: translateY(-4px) !important;
         }

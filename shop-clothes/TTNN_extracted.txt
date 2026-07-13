@@ -1,0 +1,521 @@
+HỌC VIỆN NÔNG NGHIỆP VIỆT NAM
+KHOA CÔNG NGHỆ THÔNG TIN
+THỰC TẬP NGHỀ NGHIỆP
+ĐỀ TÀI: Xây dựng phần mềm website 
+bán quần áo thể thao nam
+Họ và tên
+Mã sinh viên
+Lê Tuấn Hùng
+6651995
+Trần Anh Đăng
+6667721
+Hoàng Văn Tú
+6667002
+HÀ NỘI – 2026
+HỌC VIỆN NÔNG NGHIỆP VIỆT NAM
+KHOA CÔNG NGHỆ THÔNG TIN
+THỰC TẬP NGHỀ NGHIỆP
+ĐỀ TÀI: Xây dựng phần mềm website 
+bán quần áo thể thao nam
+Họ và tên
+Mã sinh viên
+Lê Tuấn Hùng
+6651995
+Trần Anh Đăng
+6667721
+Hoàng Văn Tú
+6667002
+HÀ NỘI – 2026
+MỤC LỤC
+CHƯƠNG 1: TỔNG QUAN VỀ ĐƠN VỊ THỰC TẬP VÀ TỔ CHỨC NHÓM8
+1.1.Giới thiệu đơn vị thực tập8
+1.2.Quy trình làm việc tại doanh nghiệp:8
+1.3. Đặt vấn đề và Mục tiêu nhiệm vụ9
+1.4. Tổ chức nhóm thực tập9
+2.1. Cơ sở lý thuyết chuyên môn11
+2.2. Công nghệ, nền tảng và ngôn ngữ13
+2.3. Môi trường và công cụ hỗ trợ16
+CHƯƠNG 3: PHÂN TÍCH, THIẾT KẾ VÀ ĐỀ XUẤT GIẢI PHÁP17
+3.1. Đặc tả yêu cầu hệ thống17
+3.1.1. Yêu cầu chức năng17
+3.1.2. Yêu cầu phi chức năng19
+3.2. Mô hình hóa hệ thống20
+3.2.1. Biểu đồ Use Case20
+3.2.2. Biểu đồ Hoạt động (Activity Diagram) luồng Mua hàng31
+3.2.3. Biểu đồ Tuần tự (Sequence Diagram) - Đặt hàng COD32
+3.3 Thiết kế Cơ sở dữ liệu32
+Sơ đồ Thực thể Liên kết (ERD / Class Diagram)32
+3.3.1. Lược đồ quan hệ (Data Dictionary)33
+3.4. Kiến trúc hệ thống và Thiết kế giao diện (Wireframe)41
+CHƯƠNG 4: TRIỂN KHAI, CÀI ĐẶT VÀ ĐÁNH GIÁ KẾT QUẢ42
+4.1. Mô tả môi trường triển khai42
+4.2. Kết quả lập trình (Giao diện hệ thống)42
+4.2.1. Giao diện phía Khách hàng (Client)42
+4.2.2. Giao diện phía Quản trị (Admin Dashboard)60
+4.3. Mô tả kịch bản kiểm thử (Test Cases) và Kết quả65
+4.4. Đánh giá kết quả66
+CHƯƠNG 5: TỔNG KẾT VÀ ĐÁNH GIÁ67
+5.1. Kết quả đạt được của nhóm67
+5.2. Bài học kinh nghiệm68
+5.3. Bảng phân công và đánh giá mức độ hoàn thành69
+TÀI LIỆU THAM KHẢO70
+DANH MỤC HÌNH
+Hình 1 Biểu đồ Use Case Tổng Quát19
+Hình 2 Biểu Đồ Use Case: Nhóm Chức Năng Mua Hàng & Thanh Toán19
+Hình 3  Biểu Đồ Use Case: Nhóm Chức Năng Quản Trị (Admin)20
+Hình 4 Biểu Đồ Use Case: Quản Lý Tài Khoản20
+Hình 5 Biểu đồ Hoạt động (Activity Diagram) luồng Mua hàng30
+Hình 6 Biểu đồ Tuần tự (Sequence Diagram) - Đặt hàng COD31
+Hình 7 Sơ đồ Thực thể Liên kết (ERD / Class Diagram)31
+Hình 8 Giao diện Trang chủ42
+Hình 9 Giao diện Trang chủ42
+Hình 10 Giao diện Trang chủ43
+Hình 11 2. Giao diện Danh sách sản phẩm44
+Hình 12 2.Giao diện Danh sách sản phẩm44
+Hình 13 2.Giao diện Danh sách sản phẩm45
+Hình 14 3.Giao diện Chi tiết sản phẩm46
+Hình 15 3.Giao diện Chi tiết sản phẩm46
+Hình 16 3.Giao diện Chi tiết sản phẩm47
+Hình 17 Giao diện Giỏ hàng (Cart)48
+Hình 18 Giao diện Thanh toán50
+Hình 19 Giao diện Thanh toán50
+Hình 20 Giao diện trang Đặt hàng thành công51
+Hình 21 Giao diện trang chi tiết đơn hàng51
+Hình 22 6.Giao diện Quản lý tài khoản53
+Hình 23 Giao diện Đơn hàng cá nhân53
+Hình 24 Giao diện tra cứu đơn hàng54
+Hình 25Trang giới thiệu56
+Hình 26 trang liên hệ56
+Hình 27Trang chính sách57
+Hình 28 Trang bảo mật57
+Hình 29 Trang điều khoản58
+Hình 30 Màn hình Thống kê59
+Hình 31 Màn hình Thống kê59
+Hình 32 Giao diện Quản lý Sản phẩm60
+Hình 33 Trang thêm mới sản phẩm60
+Hình 34 Trang thêm mới sản phẩm61
+Hình 35 Trang thêm mới sản phẩm61
+Hình 36 Trang thêm mới sản phẩm62
+Hình 37 Giao diện Quản lý Đơn hàng63
+Hình 38 Giao diện Quản lý Đơn hàng63
+DANH MỤC BẢNG
+Bảng  1 Bảng: users (Lưu thông tin khách hàng và nhân viên)32
+Bảng  2 Bảng: products (Lưu thông tin sản phẩm chung)33
+Bảng  3 Bảng: product_variants (Lưu các biến thể màu sắc, kích cỡ)33
+Bảng  4 Bảng: orders (Lưu thông tin hóa đơn)34
+Bảng  5 Bảng: order_items (Chi tiết từng sản phẩm trong đơn hàng)34
+Bảng  6 Bảng: categories (Danh mục sản phẩm)35
+Bảng  7 Bảng: brands (Thương hiệu sản phẩm)35
+Bảng  8 Bảng: sizes (Bảng kích cỡ)35
+Bảng  9 Bảng: colors (Bảng màu sắc)36
+Bảng  10 Bảng: product_images (Thư viện ảnh sản phẩm)36
+Bảng  11 Bảng: coupons (Mã giảm giá)37
+Bảng  12 Bảng: reviews (Đánh giá sản phẩm)37
+Bảng  13 Bảng: wishlists (Sản phẩm yêu thích)37
+Bảng  14 Bảng: addresses (Sổ địa chỉ khách hàng)38
+Bảng  15 Bảng: flash_sales (Chương trình Flash Sale)39
+Bảng  16 Bảng: banners (Quản lý Banner quảng cáo)39
+Bảng  17 Bảng 4.1: Kịch bản kiểm thử chức năng Đăng nhập (Authentication)64
+Bảng  18 Bảng 4.2: Kịch bản kiểm thử chức năng Giỏ hàng và Thanh toán64
+CHƯƠNG 1: TỔNG QUAN VỀ ĐƠN VỊ THỰC TẬP VÀ TỔ CHỨC NHÓM
+1.1. Giới thiệu đơn vị thực tập
+Tên công ty: Công ty bảo hiểm bưu điện Âu Lạc
+Lĩnh vực hoạt động: Phát triển phần mềm, cung cấp giải pháp chuyển đổi số, tích hợp hệ thống quản lý và thương mại điện tử.
+Cơ cấu tổ chức & Văn hóa doanh nghiệp: Môi trường làm việc chuyên nghiệp, đề cao tính chủ động và chất lượng kỹ thuật. Ban Giám đốc luôn định hướng phát triển các sản phẩm phần mềm có tính chuẩn hóa cao, đáp ứng thực tiễn kinh doanh của khách hàng.
+1.2. Quy trình làm việc tại doanh nghiệp:
+ Công ty áp dụng quy trình phát triển phần mềm theo phương pháp luận Agile, cụ thể là khung làm việc Scrum nhằm tăng tính linh hoạt và khả năng thích ứng với yêu cầu thay đổi từ khách hàng. Quy trình vận hành cụ thể diễn ra qua các bước:
+Sprint Planning (Lập kế hoạch Sprint): Mỗi chu kỳ phát triển (Sprint) kéo dài 2 tuần. Nhóm phát triển cùng quản lý dự án (Project Manager) sẽ chọn các tính năng ưu tiên từ Product Backlog để đưa vào Sprint Backlog.
+Daily Stand-up (Họp giao ban hàng ngày): Diễn ra vào 9h00 sáng mỗi ngày, mỗi thành viên báo cáo ngắn gọn (15 phút) về 3 vấn đề: Hôm qua đã làm gì? Hôm nay sẽ làm gì? Có gặp khó khăn (blocker) nào không để nhóm cùng gỡ rối.
+Chuẩn hóa kỹ thuật và Quản lý mã nguồn: Áp dụng hệ thống quản lý phiên bản Git. Mỗi tính năng mới được phát triển trên một nhánh riêng (Feature Branch). Trước khi gộp vào nhánh chính (Main Branch), code phải vượt qua bước kiểm duyệt chéo (Code Review) giữa các thành viên để đảm bảo tuân thủ mô hình Clean Architecture, code dễ đọc, dễ bảo trì và không gây xung đột (Merge Conflict).
+Kiểm thử & Triển khai (CI/CD): Tích hợp kiểm thử liên tục trong từng giai đoạn. Các module sau khi code xong sẽ được tester kiểm thử hộp đen trên môi trường Staging trước khi nghiệm thu và triển khai (Deploy) lên máy chủ thực tế (Production).
+1.3. Đặt vấn đề và Mục tiêu nhiệm vụ 
+Đặt vấn đề: Ngành thời trang, đặc biệt là phân khúc đồ thể thao nam, đang chứng kiến tốc độ tăng trưởng mạnh mẽ cùng với sự dịch chuyển thói quen mua sắm sang thương mại điện tử. Tuy nhiên, một bộ phận lớn các cửa hàng bán lẻ truyền thống vẫn đang gặp khó khăn khi chuyển đổi số. Hệ thống website cũ kỹ của họ thường mắc phải các vấn đề: tốc độ tải trang chậm ảnh hưởng đến SEO, trải nghiệm trên thiết bị di động (UX/UI) kém, và đặc biệt là sự thiếu đồng bộ trong việc quản lý tồn kho với các mặt hàng có thuộc tính phức tạp (nhiều màu sắc, nhiều kích cỡ khác nhau cho cùng một mẫu áo).
+Mục tiêu: Tham gia vào dự án với mục tiêu xây dựng một nền tảng website thương mại điện tử bán quần áo thể thao nam khắc phục triệt để các hạn chế trên. Hệ thống phải đảm bảo tốc độ phản hồi nhanh, giao diện hiện đại (Mobile-First). Đặc biệt, hệ thống quản trị (Admin Panel) phải giải quyết được bài toán quản lý linh hoạt ma trận biến thể sản phẩm (Product Variants), quản lý luồng xử lý đơn hàng xuyên suốt và bảo vệ an toàn thông tin khách hàng thông qua mô hình phân quyền chặt chẽ (Role-Based Access Control).
+1.4. Tổ chức nhóm thực tập
+Dự án được thực hiện bởi 3 bạn với phương thức phối hợp chặt chẽ, sử dụng Git/GitHub để quản lý mã nguồn và Trello để theo dõi tiến độ công việc hàng tuần. Các yêu cầu phần mềm được nhóm báo cáo và nghiệm thu nội bộ định kỳ với Ban giám đốc. Danh sách phân công:
+Lê Tuấn Hùng: Phân tích luồng dữ liệu và thiết kế cơ sở dữ liệu (Database). Lập trình hệ thống máy chủ (Backend) và xây dựng các API xử lý dữ liệu.
+Trần Anh Đăng: Lập trình giao diện Frontend sử dụng HTML, CSS, và JavaScript. Tìm hiểu yêu cầu hệ thống và thiết kế giao diện người dùng (UI/UX). 
+Hoàng Văn Tú: Viết tài liệu kỹ thuật và tài liệu hướng dẫn sử dụng phần mềm. Thực hiện các chức năng xác thực người dùng (Đăng nhập, đăng ký, phân quyền). Hỗ trợ nhóm sửa lỗi và tối ưu hóa hiệu năng trang web.
+Chương 2: CƠ SỞ LÝ THUYẾT VÀ CÔNG NGHỆ SỬ DỤNG
+2.1. Cơ sở lý thuyết chuyên môn
+Kiến trúc Model - View - Controller (MVC): Đây là kiến trúc phần mềm tiêu chuẩn và là nền tảng cốt lõi giúp phân tách rõ ràng ứng dụng thành ba thành phần độc lập, đảm bảo nguyên tắc phân tách trách nhiệm (Separation of Concerns). Tầng dữ liệu (Model) chịu trách nhiệm giao tiếp trực tiếp với cơ sở dữ liệu, định nghĩa các cấu trúc và thao tác truy xuất thông tin. Tầng hiển thị (View) đảm nhận việc render giao diện HTML/CSS để tương tác với người dùng cuối. Tầng xử lý logic điều hướng (Controller) đóng vai trò trung gian, tiếp nhận yêu cầu từ người dùng, gọi Model để lấy/cập nhật dữ liệu và trả kết quả về View phù hợp. Đối với website thương mại điện tử bán đồ thể thao, việc áp dụng MVC giúp tách biệt hoàn toàn giữa luồng xử lý dữ liệu sản phẩm phức tạp (quản lý song song kích cỡ, màu sắc, số lượng tồn kho theo từng biến thể) và giao diện mua sắm trực quan phía khách hàng. Sự rành mạch này là nền tảng quan trọng hướng tới việc xây dựng một hệ thống theo chuẩn Clean Architecture, từ đó tối ưu hóa khả năng bảo trì, cho phép nhiều thành viên cùng phát triển các module khác nhau và dễ dàng sửa lỗi cục bộ mà không làm sụp đổ toàn bộ hệ thống.Đây là kiến trúc phần mềm tiêu chuẩn và là nền tảng cốt lõi giúp phân tách rõ ràng ứng dụng thành ba thành phần độc lập, đảm bảo nguyên tắc phân tách trách nhiệm (Separation of Concerns). Tầng dữ liệu (Model) chịu trách nhiệm giao tiếp trực tiếp với cơ sở dữ liệu, định nghĩa các cấu trúc và thao tác truy xuất thông tin. Tầng hiển thị (View) đảm nhận việc render giao diện HTML/CSS để tương tác với người dùng cuối. Tầng xử lý logic điều hướng (Controller) đóng vai trò trung gian, tiếp nhận yêu cầu từ người dùng, gọi Model để lấy/cập nhật dữ liệu và trả kết quả về View phù hợp. Đối với website thương mại điện tử bán đồ thể thao, việc áp dụng MVC giúp tách biệt hoàn toàn giữa luồng xử lý dữ liệu sản phẩm phức tạp (quản lý song song kích cỡ, màu sắc, số lượng tồn kho theo từng biến thể) và giao diện mua sắm trực quan phía khách hàng. Sự rành mạch này là nền tảng quan trọng hướng tới việc xây dựng một hệ thống theo chuẩn Clean Architecture, từ đó tối ưu hóa khả năng bảo trì, cho phép nhiều thành viên cùng phát triển các module khác nhau và dễ dàng sửa lỗi cục bộ mà không làm sụp đổ toàn bộ hệ thống.
+Kiến trúc thành phần phản hồi (Reactive Component Architecture): Để đáp ứng tiêu chuẩn khắt khe của một website bán hàng hiện đại, hệ thống cần có khả năng xử lý bất đồng bộ mượt mà nhằm tối ưu hóa trải nghiệm người dùng (UX). Kiến trúc thành phần phản hồi thay đổi cách tiếp cận truyền thống (phải tải lại toàn bộ trang web mỗi khi có yêu cầu) bằng cách chia nhỏ giao diện thành các thành phần (components) độc lập có khả năng tự nhận thức trạng thái. Việc áp dụng lý thuyết kiến trúc này cho phép các tác vụ tương tác cao như: lọc sản phẩm theo bộ lọc động (môn thể thao, khoảng giá, thương hiệu), chọn kích thước/màu sắc phục trang để kiểm tra tồn kho, hoặc cập nhật số lượng trực tiếp trong giỏ hàng được phản hồi và hiển thị ngay lập tức trên màn hình. Cách tiếp cận này giúp giảm thiểu tối đa độ trễ mạng, tiết kiệm tài nguyên máy chủ do chỉ cần gửi nhận các luồng dữ liệu nhỏ giọt thay vì toàn bộ mã HTML của trang.
+Nguyên lý bảo mật hệ thống thương mại điện tử: An toàn thông tin là yếu tố sống còn đối với các nền tảng thương mại điện tử có lưu trữ dữ liệu cá nhân và giao dịch tài chính. Hệ thống áp dụng triệt để mô hình phân quyền dựa trên vai trò (Role-Based Access Control - RBAC) nhằm kiểm soát chặt chẽ và phân định rõ ràng quyền truy cập, thao tác của từng nhóm người dùng (ví dụ: Super Admin, Nhân viên quản trị kho, Nhân viên chăm sóc khách hàng, và Khách hàng mua sắm). Cấu trúc RBAC ngăn chặn việc leo thang đặc quyền trái phép. Đồng thời, hệ thống thiết lập tiêu chuẩn phòng chống ba lỗ hổng bảo mật phổ biến nhất hiện nay: CSRF (Cross-Site Request Forgery - Giả mạo yêu cầu chéo trang) thông qua việc xác thực token cho mọi biểu mẫu; SQL Injection (Chèn mã SQL độc hại) bằng cách sử dụng cơ chế truyền tham số an toàn (Prepared Statements); và XSS (Cross-Site Scripting - Chèn mã kịch bản độc hại) bằng cách mã hóa tự động toàn bộ dữ liệu đầu ra trước khi hiển thị lên trình duyệt.
+2.2. Công nghệ, nền tảng và ngôn ngữ
+Framework Laravel (Ngôn ngữ PHP): Laravel được lựa chọn làm framework phát triển chính cho phía backend nhờ sở hữu hệ sinh thái phong phú, tài liệu hướng dẫn chuẩn mực, tính bảo mật cao và khả năng đẩy nhanh tốc độ vòng đời phát triển ứng dụng (SDLC). Điểm sáng lớn nhất khi ứng dụng Laravel vào dự án này là công cụ Eloquent ORM (Object-Relational Mapping). Trong bài toán thực tế của dự án thời trang, một mặt hàng (ví dụ áo thun) có thể sở hữu hàng chục biến thể khác nhau về size và màu sắc. Eloquent ORM giúp ánh xạ các bảng cơ sở dữ liệu thành các đối tượng PHP, hỗ trợ xử lý các mối quan hệ phức tạp (One-to-Many, Many-to-Many) một cách trực quan, tối ưu hóa các câu lệnh truy vấn phức tạp từ cơ sở dữ liệu và giảm thiểu đáng kể rủi ro bảo mật so với việc viết các câu lệnh truy vấn SQL thuần túy. Ngoài ra, công cụ dòng lệnh Artisan của Laravel giúp tự động hóa việc tạo khung mã nguồn, quản lý di chuyển cơ sở dữ liệu (Migrations) cực kỳ hiệu quả.
+Laravel Livewire: Đây là một thư viện full-stack mạnh mẽ được tích hợp trực tiếp vào hệ sinh thái Laravel, cho phép xây dựng các giao diện động, có tính tương tác cao cấp (tương tự các ứng dụng Single Page Application) bằng cách sử dụng hoàn toàn mã nguồn PHP và cú pháp Blade template. Thay vì phải thiết lập các hệ thống API phức tạp và duy trì song song một nền tảng JavaScript độc lập (như React, Vue hay Next.js) làm tăng chi phí và thời gian phát triển, Livewire xử lý các tương tác AJAX ngầm dưới nền một cách tự động. Lựa chọn Livewire giúp nhóm tối ưu hóa thời gian đồng bộ hóa dữ liệu giữa frontend và backend, đảm bảo các tính năng cốt lõi của thương mại điện tử như tính tổng tiền đơn hàng theo thời gian thực, áp dụng mã giảm giá, và thanh toán diễn ra mượt mà, đồng thời giảm tải độ phức tạp khi quản lý, bảo trì mã nguồn chung.
+Hệ quản trị cơ sở dữ liệu MySQL: MySQL là hệ quản trị cơ sở dữ liệu quan hệ (RDBMS) mã nguồn mở phổ biến nhất thế giới, nổi tiếng với độ ổn định, hiệu năng cao và độ tin cậy tuyệt đối cho các hệ thống giao dịch trực tuyến. Với đặc thù của một website bán quần áo thể thao nam — nơi cấu trúc dữ liệu đòi hỏi sự chặt chẽ và tính ràng buộc logic cực kỳ cao (bao gồm thông tin danh mục, sản phẩm, thuộc tính biến thể tồn kho, thông tin định danh khách hàng và chi tiết lịch sử đơn hàng), MySQL là sự lựa chọn tối ưu. Hệ quản trị này giúp đảm bảo tính toàn vẹn dữ liệu thông qua cơ chế khóa chính (Primary Keys) và khóa ngoại (Foreign Keys), ngăn chặn việc xóa nhầm hoặc mồ côi dữ liệu. Hơn thế nữa, MySQL hỗ trợ tối ưu hóa tốc độ truy xuất thông tin, tìm kiếm sản phẩm cho người dùng thông qua cơ chế đánh chỉ mục (Indexing) cho các trường dữ liệu thường xuyên được truy vấn.
+Ngôn ngữ đánh dấu siêu văn bản HTML5 (HyperText Markup Language): Trong kiến trúc của hệ thống, HTML5 đóng vai trò là bộ xương sống định hình toàn bộ cấu trúc dữ liệu hiển thị trên trình duyệt của người dùng. Đối với một website thương mại điện tử chuyên về thời trang thể thao nam, việc áp dụng HTML5 không chỉ dừng lại ở việc tạo ra các khối nội dung (header, footer, section, article) mà còn tận dụng tối đa các thẻ ngữ nghĩa (Semantic tags). Việc mã hóa giao diện với các thẻ ngữ nghĩa chuẩn xác giúp các công cụ tìm kiếm (như Google) dễ dàng đọc hiểu và lập chỉ mục (Index) cấu trúc trang web. Điều này đóng vai trò quyết định trong chiến lược Tối ưu hóa công cụ tìm kiếm (SEO), giúp các sản phẩm áo quần thể thao của cửa hàng dễ dàng tiếp cận với khách hàng tiềm năng trên môi trường Internet.
+Ngôn ngữ định dạng phần trình bày CSS3 (Cascading Style Sheets): Nếu HTML là bộ khung thì CSS3 chính là lớp áo mang lại diện mạo thẩm mỹ cho toàn bộ website. Đặc thù của ngành hàng thời trang thể thao nam đòi hỏi một giao diện người dùng (UI) thể hiện sự mạnh mẽ, năng động và hiện đại. CSS3 cung cấp sức mạnh để nhóm phát triển tùy biến linh hoạt mọi khía cạnh trực quan từ màu sắc thương hiệu, hiệu ứng đổ bóng, phông chữ typography cho đến các hiệu ứng chuyển động mượt mà (Animations & Transitions) khi người dùng di chuột (hover) vào hình ảnh sản phẩm. Việc tổ chức file CSS một cách có cấu trúc (theo các phương pháp luận như BEM) giúp mã nguồn giao diện dễ đọc, dễ bảo trì và có thể tái sử dụng trên nhiều trang khác nhau của hệ thống.
+Ngôn ngữ kịch bản máy khách JavaScript (JS - ES6+): Mặc dù dự án đã sử dụng Laravel Livewire để xử lý phần lớn các tương tác động đồng bộ với máy chủ, JavaScript vẫn là một mảnh ghép không thể thiếu để xử lý các logic phức tạp phía máy khách (Client-side) nhằm nâng tầm trải nghiệm người dùng (UX). Trong hệ thống này, JavaScript được ứng dụng để kiểm tra tính hợp lệ của dữ liệu đầu vào (Client-side Validation) ngay trên các biểu mẫu đăng ký, thanh toán trước khi gửi lên máy chủ, giúp giảm tải cho backend. Bên cạnh đó, JS còn được sử dụng để tích hợp các thư viện bên thứ ba, điển hình như trình chiếu ảnh sản phẩm dạng trượt (Image Slider/Carousel), các popup thông báo tức thời (Toast Notifications) khi người dùng thêm thành công một mẫu áo vào giỏ hàng, hoặc vẽ các biểu đồ thống kê trực quan về doanh thu và tồn kho trên trang quản trị của Admin.
+Tại sao chọn Laravel và Livewire cho dự án này? Thay vì sử dụng các hệ thống CMS có sẵn (như WordPress/WooCommerce) thường gặp rào cản khi muốn tùy biến sâu các luồng nghiệp vụ phức tạp, nhóm quyết định phát triển từ đầu bằng framework Laravel. Laravel cung cấp hệ sinh thái khổng lồ với Eloquent ORM - công cụ ánh xạ dữ liệu tuyệt vời giúp xử lý dễ dàng cấu trúc cơ sở dữ liệu phức tạp của thương mại điện tử (sản phẩm có nhiều biến thể size/màu). Bên cạnh đó, việc kết hợp với Livewire là một quyết định chiến lược. Với bài toán trang giỏ hàng (Cart) và thanh toán (Checkout) cần tính toán lại tổng tiền theo thời gian thực khi khách hàng đổi số lượng hoặc nhập mã giảm giá, cách truyền thống là phải dùng Javascript/Ajax gọi qua API. Tuy nhiên, Livewire cho phép tạo ra các giao diện phản hồi tức thì (Reactive) hoàn toàn bằng mã PHP. Điều này giúp nhóm phát triển không cần phải duy trì thêm một framework Javascript phức tạp như React/Vue, tiết kiệm được 30% thời gian phát triển và giảm thiểu các rủi ro bảo mật ở phía client.
+Framework CSS Tailwind: Thay vì sử dụng các framework UI truyền thống với các thành phần được định nghĩa sẵn, hệ thống áp dụng Tailwind CSS - một thư viện "Utility-first CSS" tiên tiến nhất hiện nay. Tailwind cung cấp hàng nghìn lớp tiện ích cấp thấp cho phép nhóm phát triển tùy biến giao diện linh hoạt, đáp ứng tiêu chí thiết kế "Mobile-First" (Ưu tiên thiết bị di động) - điều sống còn với một web bán hàng hiện nay. Hơn nữa, nhờ cơ chế Just-In-Time (JIT) compiler, Tailwind CSS tự động dọn dẹp và chỉ giữ lại những dòng mã CSS thực sự được sử dụng. Nhờ vậy, tệp CSS tĩnh của ứng dụng vô cùng nhẹ (chỉ khoảng dưới 15KB), giúp website load cực nhanh trên di động.
+Công cụ quản trị dữ liệu Filament PHP Để giải quyết bài toán xây dựng hệ thống Admin quản trị khổng lồ phía sau một cách nhanh chóng và chuyên nghiệp, nhóm áp dụng Filament PHP. Đây là bộ công cụ thuộc hệ sinh thái TALL stack (Tailwind, Alpine, Laravel, Livewire). Thay vì phải code thủ công hàng trăm bảng HTML cho các chức năng Thêm/Sửa/Xóa (CRUD) sản phẩm, danh mục, đơn hàng; Filament cho phép sử dụng lập trình hướng đối tượng (OOP) để tạo ra các form nhập liệu phức tạp. Điều này giúp nhóm rút gọn hàng tuần lễ viết code giao diện Admin, dành thời gian đó để tối ưu hóa hiệu năng hệ thống.
+2.3. Môi trường và công cụ hỗ trợ
+Môi trường phát triển cục bộ (Local Development Environment): Nhóm sử dụng phần mềm XAMPP để thiết lập một môi trường máy chủ chạy thử nghiệm độc lập ngay tại máy cá nhân. XAMPP tích hợp đầy đủ các thành phần cần thiết bao gồm máy chủ web Apache, hệ quản trị cơ sở dữ liệu MariaDB/MySQL và trình biên dịch ngôn ngữ PHP. Việc sử dụng XAMPP giúp đảm bảo tính đồng nhất tuyệt đối về mặt cấu hình hệ thống (phiên bản PHP, cấu hình PHP.ini, cổng kết nối) giữa tất cả các thành viên trong nhóm. Điều này đóng vai trò then chốt trong việc loại bỏ hoàn toàn các lỗi phát sinh ngoài ý muốn do sự khác biệt về môi trường hệ điều hành máy tính khi tích hợp các module tính năng lại với nhau trước khi đưa lên máy chủ thật (Production).
+Môi trường lập trình (IDE): Visual Studio Code (VS Code) của Microsoft được chọn làm công cụ soạn thảo mã nguồn chính nhờ tính chất mỏng nhẹ, tốc độ khởi động nhanh và khả năng tùy biến vô hạn. Đặc biệt, VS Code sở hữu kho tiện ích mở rộng (extensions) khổng lồ đắc lực cho hệ sinh thái PHP/Laravel như PHP Intelephense, Laravel Blade Snippets và Livewire autocomplete. Hệ thống này không chỉ cung cấp khả năng tự động hoàn thành mã (auto-complete) thông minh, giúp lập trình viên giảm thiểu sai sót gõ phím, mà còn hỗ trợ cảnh báo lỗi cú pháp theo thời gian thực. Tích hợp sẵn Terminal ngay trong trình soạn thảo cũng giúp việc chạy các lệnh Artisan hoặc Git trở nên liền mạch và tối ưu hóa thời gian lập trình.
+Hệ thống quản lý phiên bản mã nguồn (Git & GitHub): Trong một dự án có nhiều thành viên cùng tham gia, việc kiểm soát mã nguồn là bắt buộc. Toàn bộ mã nguồn của dự án được quản lý, lưu trữ và đồng bộ thông qua phần mềm quản lý phiên bản phân tán Git và được lưu trữ trên nền tảng đám mây GitHub. Bộ công cụ này giúp nhóm phân chia công việc một cách khoa học theo từng nhánh tính năng độc lập (Feature Branches) — chẳng hạn như một người làm nhánh phát triển bộ lọc sản phẩm, người khác xử lý nhánh thanh toán. Git giúp kiểm soát chi tiết lịch sử thay đổi mã nguồn của từng cá nhân, hỗ trợ quá trình đánh giá mã nguồn (Code Review) và cung cấp cơ chế giải quyết xung đột code (Merge Conflict) một cách chuyên nghiệp và an toàn khi gộp toàn bộ tính năng vào nhánh chính của dự án.
+CHƯƠNG 3: PHÂN TÍCH, THIẾT KẾ VÀ ĐỀ XUẤT GIẢI PHÁP
+3.1. Đặc tả yêu cầu hệ thống
+3.1.1. Yêu cầu chức năng
+Hệ thống website bán quần áo được chia thành 2 nhóm người dùng chính (Actor): Khách hàng (Client) và Quản trị viên (Admin).
+Đối với Khách hàng (Client):
+Quản lý tài khoản: Đăng ký, đăng nhập (xác thực bằng session), đăng xuất, quên mật khẩu (gửi email reset link), cập nhật thông tin cá nhân (tên, số điện thoại, avatar), đổi mật khẩu.
+Quản lý địa chỉ: Thêm mới, chỉnh sửa, xóa và thiết lập địa chỉ mặc định nhận hàng.
+Duyệt sản phẩm: Xem danh sách sản phẩm, lọc theo danh mục (Áo, Quần...), lọc theo thương hiệu, xem chi tiết sản phẩm (hình ảnh, giá, mô tả, chọn kích thước và màu sắc - variant).
+Giỏ hàng (Cart): Thêm sản phẩm vào giỏ (chọn đúng biến thể size/màu), cập nhật số lượng, xóa sản phẩm khỏi giỏ.
+Thanh toán (Checkout): Nhập/chọn địa chỉ giao hàng, áp dụng mã giảm giá (Coupon), xác nhận đặt hàng với phương thức Thanh toán khi nhận hàng (COD).
+Quản lý đơn hàng: Xem lịch sử mua hàng, xem chi tiết đơn hàng, tra cứu tình trạng đơn hàng, yêu cầu hủy đơn (khi đang ở trạng thái chờ xác nhận).
+Tương tác: Thêm sản phẩm vào danh sách yêu thích (Wishlist), đánh giá (Review/Rating) sản phẩm sau khi mua hàng thành công.
+Đối với Quản trị viên (Admin/Staff):
+Đăng nhập: Xác thực qua cổng riêng biệt, phân quyền Role/Permission.
+Quản lý Sản phẩm (Catalog): Thêm, sửa, xóa sản phẩm. Quản lý hình ảnh sản phẩm (Gallery), quản lý các biến thể (Product Variants - Size, Color, Số lượng tồn kho).
+Quản lý Danh mục và Thương hiệu: Thêm, sửa, xóa, hiển thị trên Menu.
+Quản lý Đơn hàng: Xem danh sách, tìm kiếm, duyệt đơn hàng (chuyển trạng thái từ Chờ xác nhận -> Đang giao -> Hoàn thành), cập nhật trạng thái thanh toán, in hóa đơn.
+Quản lý Khuyến mãi: Tạo và quản lý mã giảm giá (Coupon - giảm theo % hoặc số tiền cố định), chương trình Flash Sale (thời gian bắt đầu/kết thúc).
+Quản lý Người dùng & Khách hàng: Xem danh sách khách hàng/nhân viên, cấp quyền, khóa/mở khóa tài khoản.
+Thống kê Báo cáo: Dashboard hiển thị doanh thu, tổng số đơn hàng, sản phẩm bán chạy, khách hàng mới theo thời gian thực.
+Hệ thống (Settings): Cấu hình thông tin website (logo, banner, email liên hệ), xem Audit Logs (lịch sử thao tác của Admin).
+3.1.2. Yêu cầu phi chức năng
+Bảo mật: Mật khẩu phải được mã hóa băm (Bcrypt/Argon2). Chống tấn công XSS, CSRF (dùng @csrf của Laravel). Bảo vệ các Route Admin bằng Middleware.
+Hiệu năng: Thời gian phản hồi trung bình < 2 giây. Hình ảnh tải lên cần được tối ưu kích thước.
+UI/UX: Giao diện Responsive (tương thích máy tính, máy tính bảng và điện thoại). Hiệu ứng thao tác mượt mà, thân thiện với người dùng (dùng TailwindCSS).
+3.2. Mô hình hóa hệ thống
+3.2.1. Biểu đồ Use Case
+Biểu đồ Use Case Tổng Quát
+Hình 1 Biểu đồ Use Case Tổng Quát
+Biểu Đồ Use Case: Nhóm Chức Năng Mua Hàng & Thanh Toán
+Hình 2 Biểu Đồ Use Case: Nhóm Chức Năng Mua Hàng & Thanh Toán
+Biểu Đồ Use Case: Nhóm Chức Năng Quản Trị (Admin)
+Hình 3  Biểu Đồ Use Case: Nhóm Chức Năng Quản Trị (Admin)
+Biểu Đồ Use Case: Quản Lý Tài Khoản
+Hình 4 Biểu Đồ Use Case: Quản Lý Tài Khoản
+1. Đặc tả Use Case: Đăng ký tài khoản
+Tên Use Case: Đăng ký tài khoản khách hàng mới.
+Tác nhân (Actor): Khách vãng lai (Guest).
+Mục đích: Cho phép người dùng chưa có tài khoản đăng ký để trở thành thành viên, từ đó có thể mua hàng và theo dõi đơn hàng.
+Điều kiện tiên quyết: Người dùng đang truy cập trang web và chưa đăng nhập.
+Luồng sự kiện chính (Main Flow):
+Người dùng bấm vào nút "Đăng ký" trên thanh Header.
+Hệ thống hiển thị Form đăng ký gồm: Họ tên, Email, Số điện thoại, Mật khẩu và Xác nhận mật khẩu.
+Người dùng điền đầy đủ thông tin và bấm "Đăng ký".
+Hệ thống kiểm tra tính hợp lệ của dữ liệu (Không để trống, Email đúng định dạng, Mật khẩu trùng khớp).
+Hệ thống kiểm tra Email đã tồn tại trong CSDL chưa.
+Nếu hợp lệ, hệ thống mã hóa mật khẩu, tạo tài khoản mới và lưu vào bảng users.
+Hệ thống thông báo "Đăng ký thành công", tự động đăng nhập và chuyển hướng về Trang chủ.
+Luồng rẽ nhánh/Ngoại lệ (Alternative Flow):
+Ở bước 4: Nếu dữ liệu không hợp lệ, hệ thống bôi đỏ các ô lỗi và yêu cầu nhập lại.
+Ở bước 5: Nếu Email đã tồn tại, hiển thị thông báo "Email này đã được sử dụng".
+Hậu điều kiện: Khách hàng có một tài khoản kích hoạt và phiên (Session) đăng nhập được tạo.
+2. Đặc tả Use Case: Đăng nhập
+Tên Use Case: Đăng nhập hệ thống.
+Tác nhân: Khách hàng (Customer), Quản trị viên (Admin).
+Mục đích: Xác thực danh tính người dùng để cấp quyền sử dụng các chức năng tương ứng.
+Điều kiện tiên quyết: Người dùng đã có tài khoản trong hệ thống.
+Luồng sự kiện chính:
+Người dùng chọn "Đăng nhập".
+Hệ thống hiển thị Form đăng nhập yêu cầu nhập Email và Mật khẩu.
+Người dùng nhập thông tin và bấm "Đăng nhập".
+Hệ thống truy vấn CSDL để kiểm tra Email.
+Hệ thống so sánh mật khẩu nhập vào với mật khẩu đã mã hóa (Bcrypt) trong CSDL.
+Nếu khớp, hệ thống kiểm tra trường role.
+Nếu là 'customer', chuyển hướng về Trang chủ. Nếu là 'admin', chuyển hướng vào Admin Dashboard.
+Luồng ngoại lệ:
+Nếu sai Email hoặc Mật khẩu: Thông báo "Tài khoản hoặc mật khẩu không chính xác". Trạng thái chưa đăng nhập.
+Hậu điều kiện: Người dùng được truy cập vào các chức năng bị khóa (Giỏ hàng, Đơn hàng, Quản trị).
+3. Đặc tả Use Case: Thêm sản phẩm vào giỏ hàng
+Tên Use Case: Thêm sản phẩm vào giỏ (Add to Cart).
+Tác nhân: Khách hàng (Đã đăng nhập hoặc Chưa đăng nhập).
+Mục đích: Chọn sản phẩm yêu thích và đưa vào giỏ để chuẩn bị thanh toán.
+Điều kiện tiên quyết: Khách hàng đang ở trang Chi tiết sản phẩm.
+Luồng sự kiện chính:
+Khách hàng xem chi tiết thông tin áo/quần thể thao.
+Khách hàng BẮT BUỘC chọn Biến thể: Kích cỡ (Size M, L, XL...) và Màu sắc (Đen, Trắng...).
+Khách hàng điều chỉnh số lượng mua (mặc định là 1).
+Khách hàng nhấn nút "Thêm vào giỏ hàng".
+Hệ thống gửi Request (Livewire/Ajax) kiểm tra số lượng tồn kho của biến thể product_variants tương ứng.
+Nếu tồn kho đủ, hệ thống thêm sản phẩm vào Session Cart (hoặc bảng giỏ hàng) kèm ID biến thể.
+Hệ thống cập nhật biểu tượng Giỏ hàng trên thanh Header (Tăng số lượng lên 1) và hiển thị Popup "Đã thêm vào giỏ".
+Luồng ngoại lệ:
+Nếu chưa chọn Size/Màu: Form bị chặn lại, cảnh báo "Vui lòng chọn Size và Màu".
+Nếu số lượng yêu cầu lớn hơn tồn kho thực tế: Báo lỗi "Kho không đủ hàng".
+4. Đặc tả Use Case: Thanh toán đơn hàng (Checkout)
+Tên Use Case: Đặt hàng và thanh toán.
+Tác nhân: Khách hàng.
+Mục đích: Hoàn tất quá trình mua sắm, chốt đơn hàng và gửi cho cửa hàng.
+Điều kiện tiên quyết: Trong giỏ hàng có ít nhất 1 sản phẩm.
+Luồng sự kiện chính:
+Khách hàng vào trang Giỏ hàng, kiểm tra lại danh sách mặt hàng và nhấn "Tiến hành thanh toán".
+Hệ thống chuyển sang trang Checkout.
+Khách hàng nhập thông tin Giao hàng (Họ tên, SĐT, Địa chỉ chi tiết).
+Khách hàng nhập Mã giảm giá (nếu có) và nhấn Áp dụng.
+Hệ thống tính toán lại Tổng tiền cuối cùng = (Tổng giá sản phẩm) - (Tiền giảm giá) + (Phí vận chuyển).
+Khách hàng chọn phương thức "Thanh toán khi nhận hàng (COD)".
+Khách hàng nhấn "Xác nhận đặt hàng".
+Hệ thống tạo mới 1 Record trong bảng orders (trạng thái Pending) và nhiều Records trong bảng order_items.
+Hệ thống trừ trực tiếp số lượng tồn kho trong bảng product_variants.
+Hệ thống xóa trắng Giỏ hàng hiện tại.
+Chuyển hướng khách hàng đến trang "Đặt hàng thành công".
+Luồng ngoại lệ:
+Ở bước 8: Nếu trong lúc thanh toán, một khách hàng khác đã mua hết số lượng sản phẩm đó -> Hệ thống báo lỗi "Sản phẩm A đã hết hàng, vui lòng kiểm tra lại giỏ hàng". Giao dịch bị hủy (Rollback).
+5. Đặc tả Use Case: Quản lý Sản phẩm (Admin)
+Tên Use Case: Thêm mới và quản lý mặt hàng thời trang.
+Tác nhân: Quản trị viên (Admin).
+Mục đích: Cập nhật các mẫu áo quần mới lên website, thiết lập giá và cập nhật tồn kho.
+Điều kiện tiên quyết: Admin đã đăng nhập vào Filament Dashboard.
+Luồng sự kiện chính:
+Admin chọn menu "Products" và nhấn "Create Product".
+Admin nhập thông tin chung: Tên, Danh mục, Giá gốc, Hình ảnh (Gallery), Mô tả chi tiết.
+Admin chuyển sang Tab "Biến thể (Variants)".
+Admin tích chọn các Size (S, M, L) và Màu (Đỏ, Xanh). Hệ thống tự động sinh ra ma trận các tổ hợp (VD: S-Đỏ, S-Xanh, M-Đỏ...).
+Admin nhập Số lượng tồn kho và Giá chênh lệch cho từng dòng tổ hợp đó.
+Admin nhấn "Lưu".
+Hệ thống validate dữ liệu, lưu thông tin vào bảng products và tạo các dòng tương ứng vào bảng product_variants.
+Thông báo thêm mới thành công, sản phẩm xuất hiện ngoài trang chủ.
+Hậu điều kiện: Cơ sở dữ liệu được cập nhật, khách hàng có thể tìm và mua sản phẩm mới này.
+6. Đặc tả Use Case: Quản lý Đơn hàng (Admin)
+Tên Use Case: Xử lý đơn đặt hàng của khách.
+Tác nhân: Quản trị viên / Nhân viên cửa hàng.
+Mục đích: Theo dõi, xác nhận và cập nhật tiến độ giao hàng cho khách.
+Điều kiện tiên quyết: Admin đang ở trong Dashboard.
+Luồng sự kiện chính:
+Admin truy cập menu "Orders" (Đơn hàng).
+Hệ thống hiển thị danh sách đơn hàng được sắp xếp theo thời gian mới nhất, các đơn mới có trạng thái "Chờ xác nhận" (Pending).
+Admin bấm vào icon Xem chi tiết để kiểm tra thông tin khách hàng, số điện thoại, địa chỉ và danh sách sản phẩm mua.
+Admin gọi điện cho khách để xác nhận đơn.
+Sau khi xác nhận, Admin chuyển trạng thái đơn hàng sang "Đang giao hàng" (Shipping).
+Khi Shipper báo đã giao thành công, Admin chuyển trạng thái sang "Hoàn thành" (Completed).
+Luồng rẽ nhánh:
+Nếu khách yêu cầu hủy hoặc gọi điện không nghe máy: Admin chuyển trạng thái sang "Đã hủy" (Canceled). Hệ thống tự động hoàn lại số lượng tồn kho vào bảng product_variants.
+Hậu điều kiện: Lịch sử đơn hàng được cập nhật. Khách hàng vào trang cá nhân sẽ thấy trạng thái đơn hàng của mình thay đổi theo thời gian thực.
+7. Đặc tả Use Case: Áp dụng Mã giảm giá (Coupon)
+Tên Use Case: Sử dụng mã khuyến mãi.
+Tác nhân: Khách hàng.
+Mục đích: Kích cầu mua sắm bằng cách cho phép khách hàng nhập mã để giảm giá đơn hàng.
+Điều kiện tiên quyết: Khách hàng đang ở trang Giỏ hàng/Thanh toán.
+Luồng sự kiện chính:
+Khách nhập mã code (VD: SUMMER2026) vào ô mã giảm giá.
+Nhấn nút "Áp dụng".
+Hệ thống gửi yêu cầu lên Backend. Backend truy vấn bảng coupons để kiểm tra các điều kiện:
+Mã có tồn tại không?
+Còn trong thời hạn sử dụng không?
+Đã hết lượt sử dụng chưa?
+Tổng đơn hàng hiện tại có đạt Giá trị tối thiểu để áp mã không?
+Nếu tất cả thỏa mãn, hệ thống tính toán số tiền được giảm (theo % hoặc số tiền cứng).
+Hệ thống trả về kết quả thành công. Giao diện Livewire tự động cập nhật hiển thị dòng "Giảm giá: -50.000đ" và tính lại Tổng tiền cuối.
+Luồng ngoại lệ:
+Nếu một trong các điều kiện ở bước 3 bị vi phạm: Hệ thống báo lỗi "Mã không tồn tại hoặc đã hết hạn".
+8. Đặc tả Use Case: Lịch sử mua hàng
+Tên Use Case: Xem lịch sử giao dịch cá nhân.
+Tác nhân: Khách hàng.
+Mục đích: Cho phép khách hàng theo dõi lại các sản phẩm mình đã mua và xem trạng thái đơn đang giao.
+Điều kiện tiên quyết: Khách hàng đã Đăng nhập.
+Luồng sự kiện chính:
+Khách hàng click vào Avatar góc trên cùng, chọn "Tài khoản của tôi".
+Khách hàng chọn menu "Đơn hàng của tôi".
+Hệ thống truy vấn bảng orders với điều kiện user_id bằng ID của khách hàng hiện tại.
+Hiển thị danh sách các đơn hàng (Mã đơn, Ngày đặt, Tổng tiền, Trạng thái: Đang giao, Đã hủy...).
+Khách hàng bấm "Xem chi tiết" vào một đơn cụ thể.
+Hệ thống hiển thị bảng order_items gồm hình ảnh thu nhỏ, size, màu sắc của từng áo/quần đã mua.
+Hậu điều kiện: Tăng tính minh bạch và sự an tâm cho khách hàng khi mua sắm trực tuyến.
+Kịch bản Use Case (Usecase Scenario) - Đặt hàng:
+Tên UC: Thanh toán đơn hàng.
+Tác nhân: Khách hàng.
+Điều kiện tiên quyết: Khách hàng đã đăng nhập và có sản phẩm trong giỏ hàng.
+Luồng sự kiện chính:
+Khách hàng chọn "Thanh toán".
+Hệ thống hiển thị form nhập thông tin giao hàng (hoặc chọn địa chỉ đã lưu).
+Khách hàng nhập mã giảm giá (nếu có) và nhấn áp dụng.
+Hệ thống kiểm tra mã giảm giá và tính toán lại tổng tiền (trừ tiền giảm).
+Khách hàng chọn phương thức "Thanh toán khi nhận hàng (COD)" và nhấn "Xác nhận đặt hàng".
+Hệ thống lưu thông tin đơn hàng vào Cơ sở dữ liệu với trạng thái "Chờ xác nhận" (Pending).
+Hệ thống làm rỗng giỏ hàng hiện tại.
+Hệ thống gửi email thông báo đặt hàng thành công đến khách hàng.
+Hệ thống chuyển hướng khách hàng sang trang "Đặt hàng thành công”.
+3.2.2. Biểu đồ Hoạt động (Activity Diagram) luồng Mua hàng
+Hình 5 Biểu đồ Hoạt động (Activity Diagram) luồng Mua hàng
+3.2.3. Biểu đồ Tuần tự (Sequence Diagram) - Đặt hàng COD
+Hình 6 Biểu đồ Tuần tự (Sequence Diagram) - Đặt hàng COD
+3.3 Thiết kế Cơ sở dữ liệu
+ Sơ đồ Thực thể Liên kết (ERD / Class Diagram)
+Hình 7 Sơ đồ Thực thể Liên kết (ERD / Class Diagram)
+3.3.1. Lược đồ quan hệ (Data Dictionary)
+Bảng: users (Lưu thông tin khách hàng và nhân viên)
+Bảng  1 Bảng: users (Lưu thông tin khách hàng và nhân viên)
+Bảng: products (Lưu thông tin sản phẩm chung)
+Bảng  2 Bảng: products (Lưu thông tin sản phẩm chung)
+Bảng: product_variants (Lưu các biến thể màu sắc, kích cỡ)
+Bảng  3 Bảng: product_variants (Lưu các biến thể màu sắc, kích cỡ)
+Bảng: orders (Lưu thông tin hóa đơn)
+Bảng  4 Bảng: orders (Lưu thông tin hóa đơn)
+Bảng: order_items (Chi tiết từng sản phẩm trong đơn hàng)
+Bảng  5 Bảng: order_items (Chi tiết từng sản phẩm trong đơn hàng)
+Bảng: categories (Danh mục sản phẩm)
+Bảng  6 Bảng: categories (Danh mục sản phẩm)
+Bảng: brands (Thương hiệu sản phẩm)
+Bảng  7 Bảng: brands (Thương hiệu sản phẩm)
+Bảng: sizes (Bảng kích cỡ)
+Bảng  8 Bảng: sizes (Bảng kích cỡ)
+Bảng: colors (Bảng màu sắc)
+Bảng  9 Bảng: colors (Bảng màu sắc)
+Bảng: product_images (Thư viện ảnh sản phẩm)
+Bảng  10 Bảng: product_images (Thư viện ảnh sản phẩm)
+Bảng: coupons (Mã giảm giá)
+Bảng  11 Bảng: coupons (Mã giảm giá)
+Bảng: reviews (Đánh giá sản phẩm)
+Bảng  12 Bảng: reviews (Đánh giá sản phẩm)
+Bảng: wishlists (Sản phẩm yêu thích)
+Bảng  13 Bảng: wishlists (Sản phẩm yêu thích)
+Bảng: addresses (Sổ địa chỉ khách hàng)
+Bảng  14 Bảng: addresses (Sổ địa chỉ khách hàng)
+Bảng: flash_sales (Chương trình Flash Sale)
+Bảng  15 Bảng: flash_sales (Chương trình Flash Sale)
+Bảng: banners (Quản lý Banner quảng cáo)
+Bảng  16 Bảng: banners (Quản lý Banner quảng cáo)
+3.4. Kiến trúc hệ thống và Thiết kế giao diện (Wireframe)
+Kiến trúc: Hệ thống hoạt động theo mô hình Client - Server thông qua giao thức HTTP/HTTPS. Áp dụng chuẩn MVC (Model - View - Controller).
+View: Blade Template kết hợp TailwindCSS và Livewire/AlpineJS xử lý UI động.
+Controller: Tiếp nhận HTTP Request từ web.php, xử lý logic, gọi Model.
+Model: Sử dụng Eloquent ORM của Laravel để thao tác với MySQL.
+Wireframe:
+Bố cục Header (Logo, Search, Giỏ hàng, Đăng nhập) - Footer.
+Trang Danh sách sản phẩm: Cột trái là Bộ lọc (Filter theo giá, màu, danh mục), Cột phải là lưới sản phẩm dạng Grid.
+Trang Chi tiết sản phẩm: Khu vực ảnh lớn bên trái, thông tin giá, nút chọn Color, nút chọn Size, nút "Thêm vào giỏ" bên phải.
+Bố cục Admin: Sidebar bên trái (Dashboard, Users, Products, Orders), Nội dung dạng bảng (DataTables) bên phải.
+CHƯƠNG 4: TRIỂN KHAI, CÀI ĐẶT VÀ ĐÁNH GIÁ KẾT QUẢ
+4.1. Mô tả môi trường triển khai
+Hệ thống được lập trình, kiểm thử và chạy thử nghiệm (Local Environment) trên môi trường có cấu hình như sau:
+Phần cứng (Hardware):
+CPU: Intel Core i5 / AMD Ryzen 5 trở lên.
+RAM: 8GB trở lên.
+Ổ cứng: Trống ít nhất 5GB (SSD được khuyến nghị để tăng tốc render và query DB).
+Phần mềm (Software):
+Hệ điều hành: Windows 10/11 (Hoặc macOS/Ubuntu).
+Trình quản lý Web Server & Database: XAMPP / Laragon (Apache/Nginx).
+Cơ sở dữ liệu: MySQL phiên bản 8.0+.
+Ngôn ngữ xử lý Backend: PHP phiên bản >= 8.1.
+Framework Backend: Laravel phiên bản 10.x.
+Môi trường chạy Frontend: Node.js (phiên bản LTS) và NPM (để build Tailwind CSS, Vite).
+Trình soạn thảo mã nguồn (IDE): Visual Studio Code.
+Trình duyệt kiểm thử: Google Chrome, Microsoft Edge.
+4.2. Kết quả lập trình (Giao diện hệ thống)
+4.2.1. Giao diện phía Khách hàng (Client)
+1. Giao diện Trang chủ Trang chủ hiển thị các banner quảng cáo, danh sách sản phẩm nổi bật (Featured) và sản phẩm mới nhất. Menu điều hướng được đặt ở trên cùng (Header) chứa thanh tìm kiếm, giỏ hàng và icon tài khoản.
+Hình 8 Giao diện Trang chủ
+Hình 9 Giao diện Trang chủ
+Hình 10 Giao diện Trang chủ
+Giao diện Danh sách sản phẩm (Trang Shop) Trang hiển thị toàn bộ sản phẩm kèm theo thanh công cụ lọc (Filter) bên trái. Khách hàng có thể lọc theo giá, lọc theo màu sắc, kích thước và danh mục sản phẩm (Áo thun, Quần Jean...).
+Hình 11 2. Giao diện Danh sách sản phẩm
+Hình 12 2.Giao diện Danh sách sản phẩm
+Hình 13 2.Giao diện Danh sách sản phẩm
+Giao diện Chi tiết sản phẩm Đây là một trong những trang phức tạp nhất, cho phép người dùng xem thư viện ảnh (Gallery) của sản phẩm. Đặc biệt, khách hàng bắt buộc phải chọn Biến thể (Màu sắc và Kích thước) trước khi bấm nút "Thêm vào giỏ hàng". Hệ thống sẽ tự động cập nhật số lượng tồn kho hiển thị dựa trên biến thể được chọn.
+Hình 14 3.Giao diện Chi tiết sản phẩm
+ 
+Hình 15 3.Giao diện Chi tiết sản phẩm
+ 
+Hình 16 3.Giao diện Chi tiết sản phẩm
+ Giao diện Giỏ hàng (Cart) Hiển thị danh sách các sản phẩm khách hàng đã chọn kèm số lượng, màu, size, giá thành và tổng tiền. Khách có thể tăng/giảm số lượng hoặc xóa sản phẩm.
+Hình 17 Giao diện Giỏ hàng (Cart)
+ Giao diện Thanh toán (Checkout) và Đặt hàng thành công Trang nhập thông tin nhận hàng (Tên, SĐT, Địa chỉ). Khách hàng có thể nhập Mã giảm giá (Coupon). Sau khi xác nhận chọn Thanh toán khi nhận hàng (COD), hệ thống chuyển hướng sang trang báo đặt hàng thành công.
+Hình 18 Giao diện Thanh toán
+ 
+Hình 19 Giao diện Thanh toán
+Hình 20 Giao diện trang Đặt hàng thành công
+Hình 21 Giao diện trang chi tiết đơn hàng
+Giao diện Quản lý tài khoản và Đơn hàng cá nhân Trang Dashboard dành riêng cho User sau khi đăng nhập. Tại đây User xem được lịch sử đơn hàng, trạng thái vận chuyển và thông tin hồ sơ của mình.
+Hình 22 6.Giao diện Quản lý tài khoản
+Hình 23 Giao diện Đơn hàng cá nhân
+Hình 24 Giao diện tra cứu đơn hàng
+Giao diện các trang thông tin khác:
+Hình 25Trang giới thiệu
+Hình 26 trang liên hệ
+Hình 27Trang chính sách
+Hình 28 Trang bảo mật
+Hình 29 Trang điều khoản
+4.2.2. Giao diện phía Quản trị (Admin Dashboard)
+1. Màn hình Thống kê (Dashboard) Tổng quan tình hình kinh doanh của shop: Tổng doanh thu, tổng số đơn hàng, khách hàng mới, sản phẩm bán chạy. Hiển thị dưới dạng biểu đồ trực quan (Chart.js).
+Hình 30 Màn hình Thống kê
+ 
+Hình 31 Màn hình Thống kê
+2. Giao diện Quản lý Sản phẩm Danh sách toàn bộ sản phẩm dạng bảng (DataTables). Chức năng Thêm mới sản phẩm bao gồm tab nhập thông tin cơ bản và tab thêm các Biến thể (Size M màu Đỏ, Size L màu Xanh...).
+Hình 32 Giao diện Quản lý Sản phẩm
+ 
+Hình 33 Trang thêm mới sản phẩm
+Hình 34 Trang thêm mới sản phẩm
+Hình 35 Trang thêm mới sản phẩm
+Hình 36 Trang thêm mới sản phẩm
+3. Giao diện Quản lý Đơn hàng Danh sách các đơn hàng đổ về từ khách hàng. Admin có thể xem chi tiết người mua, thay đổi trạng thái đơn (Từ Chờ xác nhận -> Đang giao -> Hoàn thành) và trạng thái thanh toán.
+Hình 37 Giao diện Quản lý Đơn hàng
+ 
+Hình 38 Giao diện Quản lý Đơn hàng
+4.3. Mô tả kịch bản kiểm thử (Test Cases) và Kết quả
+Trong giai đoạn này, phương pháp kiểm thử hộp đen (Black-box testing) và kiểm thử thủ công (Manual Testing) được áp dụng để đảm bảo hệ thống hoạt động đúng yêu cầu nghiệp vụ.
+Bảng 4.1: Kịch bản kiểm thử chức năng Đăng nhập (Authentication)
+Bảng  17 Bảng 4.1: Kịch bản kiểm thử chức năng Đăng nhập (Authentication)
+Bảng 4.2: Kịch bản kiểm thử chức năng Giỏ hàng và Thanh toán
+Bảng  18 Bảng 4.2: Kịch bản kiểm thử chức năng Giỏ hàng và Thanh toán
+4.4. Đánh giá kết quả
+Sau quá trình lập trình và kiểm thử, hệ thống đã đáp ứng được hầu hết các yêu cầu đặt ra từ ban đầu:
+Ưu điểm: Hoàn thiện đầy đủ nghiệp vụ quản lý bán hàng (Giỏ hàng, Coupon, Biến thể SP). Luồng đặt hàng nhanh chóng, thân thiện. Giao diện Admin quản trị dễ sử dụng, giao diện Client tối ưu trải nghiệm (Responsive).
+Hạn chế: Tốc độ load hình ảnh sản phẩm đôi khi còn chậm nếu upload ảnh dung lượng quá lớn (chưa tự động compress ảnh). Chưa có tính năng Chat trực tuyến để hỗ trợ khách hàng tức thời.
+Tính ổn định: Hệ thống chạy ổn định trên môi trường XAMPP cục bộ không xảy ra lỗi crash nghiêm trọng (Fatal Error). Các Exception đều được try-catch và hiển thị thông báo lỗi thân thiện cho người dùng.
+CHƯƠNG 5: TỔNG KẾT VÀ ĐÁNH GIÁ
+5.1. Kết quả đạt được của nhóm
+Đánh giá mức độ hoàn thành so với mục tiêu ban đầu:
+Nhóm đã hoàn thành tốt các mục tiêu ban đầu đề ra. Đã xây dựng thành công và đưa vào hoạt động thử nghiệm website thương mại điện tử bán quần áo.
+Hệ thống ứng dụng thành công các công nghệ hiện đại như Laravel framework làm nền tảng cốt lõi, Livewire để xây dựng các giao diện tương tác động ở phía người dùng (Frontend) mà không cần phụ thuộc quá nhiều vào JavaScript, và Filament PHP để phát triển hệ thống quản trị (Admin Panel) một cách chuyên nghiệp và bảo mật.
+Các tính năng cốt lõi như: duyệt sản phẩm theo danh mục/thương hiệu, quản lý giỏ hàng, quy trình thanh toán (checkout), quản lý địa chỉ giao hàng, và quản lý đơn hàng đều hoạt động trơn tru.
+Những hạn chế:
+Chưa tích hợp đa dạng các cổng thanh toán trực tuyến thực tế (như VNPay, MoMo, ZaloPay), hiện tại hệ thống chủ yếu hỗ trợ thanh toán khi nhận hàng (COD) hoặc chuyển khoản thủ công.
+Chưa có tính năng gợi ý sản phẩm (Recommendation) dựa trên hành vi và sở thích của người dùng.
+Hiệu năng tải trang khi số lượng sản phẩm lớn cùng hình ảnh độ phân giải cao chưa được tối ưu hóa triệt để (Caching, Image Optimization).
+Hướng phát triển tiếp theo:
+Tích hợp các ví điện tử và cổng thanh toán trực tuyến phổ biến.
+Phát triển thêm tính năng đánh giá, bình luận sản phẩm có hình ảnh/video.
+Áp dụng AI/Machine Learning để phân tích dữ liệu mua hàng, từ đó đưa ra các chiến dịch khuyến mãi phù hợp và gợi ý sản phẩm thông minh.
+Phát triển thêm ứng dụng di động (Mobile App) đồng bộ dữ liệu với hệ thống web hiện tại.
+5.2. Bài học kinh nghiệm
+Kiến thức chuyên môn mới tiếp thu được:
+Nắm vững kiến trúc mô hình MVC và các Design Pattern được áp dụng trong framework Laravel.
+Hiểu rõ quy trình thiết kế cơ sở dữ liệu quan hệ cho một hệ thống E-commerce thực tế (quan hệ giữa User, Product, Category, Order, Address...).
+Học được cách sử dụng Livewire để xử lý state và data binding theo thời gian thực trên giao diện người dùng.
+Biết cách sử dụng Filament để triển khai nhanh các trang quản trị dữ liệu (CRUD), phân quyền và báo cáo thống kê.
+Kỹ năng mềm rèn luyện được:
+Làm việc nhóm: Biết cách phân chia công việc theo thế mạnh của từng thành viên. Sử dụng thành thạo Git/GitHub để quản lý mã nguồn, xử lý conflict code và review code của nhau.
+Giao tiếp công sở: Rèn luyện kỹ năng báo cáo tiến độ công việc hàng tuần, kỹ năng trình bày, bảo vệ ý tưởng thiết kế trước giảng viên và các thành viên trong nhóm.
+Tuân thủ kỷ luật doanh nghiệp: Rèn luyện thói quen làm việc theo quy trình (Agile/Scrum cơ bản), bám sát timeline dự án (deadline), và viết tài liệu (document) đầy đủ cho các chức năng đã phát triển.
+5.3. Bảng phân công và đánh giá mức độ hoàn thành
+STT
+Họ tên
+Vai trò
+Nhiệm vụ
+Tỉ lệ hoàn thành
+Minh chứng
+1
+Lê Tuấn Hùng
+Backend
+Phân tích luồng dữ liệu và thiết kế cơ sở dữ liệu (Database). Lập trình hệ thống máy chủ (Backend) và xây dựng các API xử lý dữ liệu.
+100%
+- Sơ đồ ERD hệ thống dữ liệu. - Các tệp tin di cư cơ sở dữ liệu (database/migrations). 
+2
+Trần Anh Đăng
+Frontend
+Lập trình giao diện Frontend sử dụng HTML, CSS, và JavaScript. Tìm hiểu yêu cầu hệ thống và thiết kế giao diện người dùng (UI/UX). Tối ưu hóa giao diện hiển thị trên các thiết bị di động
+100%
+- Bản thiết kế giao diện UI/UX trên Figma. 
+- Các tệp tin giao diện Blade template kết hợp TailwindCSS/Bootstrap trong thư mục resources/views. 
+3
+Hoàng Văn Tú
+Backend, BA
+Viết tài liệu kỹ thuật và tài liệu hướng dẫn sử dụng phần mềm. Thực hiện các chức năng xác thực người dùng (Đăng nhập, đăng ký, phân quyền). Hỗ trợ nhóm sửa lỗi và tối ưu hóa hiệu năng trang web.
+100%
+- File tài liệu Đặc tả yêu cầu phần mềm và Tài liệu Hướng dẫn sử dụng. 
+- Các lớp xử lý Middleware xác thực (Authenticate.php, RoleMiddleware.php).
+TÀI LIỆU THAM KHẢO
+[1] Laravel, "Laravel - The PHP Framework For Web Artisans," Laravel Documentation. [Trực tuyến]. Địa chỉ liên kết: https://laravel.com/docs. (Truy cập: 10/03/2026).
+[2] Livewire, "Livewire - A full-stack framework for Laravel," Livewire Documentation. [Trực tuyến]. Địa chỉ liên kết: https://livewire.laravel.com/docs. (Truy cập: 12/03/2026).
+[3] Filament, "Filament - A collection of tools for rapidly building beautiful TALL stack apps," Filament Documentation. [Trực tuyến]. Địa chỉ liên kết: https://filamentphp.com/docs. (Truy cập: 15/03/2026).
+[4] Tailwind Labs, "Tailwind CSS - Rapidly build modern websites without ever leaving your HTML," Tailwind CSS. [Trực tuyến]. Địa chỉ liên kết: https://tailwindcss.com/docs. (Truy cập: 15/03/2026).
+[5] MySQL, "MySQL 8.0 Reference Manual," MySQL Documentation. [Trực tuyến]. Địa chỉ liên kết: https://dev.mysql.com/doc/refman/8.0/en/. (Truy cập: 20/03/2026).
+[6] K. C. Laudon và C. G. Traver, E-commerce 2021-2022: business. technology. society., Lần xuất bản thứ 17. New York: Pearson, 2021.
+[7] Nguyễn Trọng Tài và Lê Hữu Dũng, "Nghiên cứu và xây dựng website thương mại điện tử ứng dụng framework Laravel," Tạp chí Khoa học Công nghệ và Truyền thông, vol. 5, no. 1, pp. 20-28, 2022.

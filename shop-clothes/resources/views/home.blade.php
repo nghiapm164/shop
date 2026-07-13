@@ -131,8 +131,8 @@
                                 </span>
                             </div>
                             <div class="absolute bottom-4 left-4 right-4 z-20">
-                                <div class="bg-brand-ink/90 backdrop-blur-md rounded-none p-2.5 text-center border border-white/10" data-flash-countdown data-end="{{ $flashSale->end_at->toIso8601String() }}">
-                                    <span class="text-brand-primary font-bold text-sm tracking-wider uppercase">Đang cập nhật...</span>
+                                <div class="bg-brand-ink/90 backdrop-blur-md rounded-none p-2.5 text-center border border-white/10 text-white font-bold text-sm tracking-wider uppercase" data-flash-countdown data-end="{{ $flashSale->end_at->toIso8601String() }}">
+                                    Đang cập nhật...
                                 </div>
                             </div>
                         </div>
