@@ -66,22 +66,29 @@ class OrderController extends Controller
         return view('client.orders.show', compact('order'));
     }
 
+    // HUY_DON_HANG (Hàm xử lý hủy đơn hàng)
     /**
      * Cancel an order (client-side).
+     * Hàm này cho phép khách hàng tự hủy đơn hàng của mình
      */
     public function cancel(Order $order): RedirectResponse
     {
+        // 1. Kiểm tra bảo mật: Chỉ chủ nhân của đơn hàng mới được quyền hủy
         if ($order->user_id !== auth()->id()) {
             throw new AuthorizationException('Bạn không có quyền hủy đơn hàng này.');
         }
 
-        if (!in_array($order->status, [Order::STATUS_PENDING, Order::STATUS_CONFIRMED])) {
+        // 2. Chỉ cho phép hủy khi đơn hàng đang ở trạng thái Chờ xử lý
+        // Nếu đã xác nhận hoặc giao cho đơn vị vận chuyển thì không thể hủy
+        if ($order->status !== Order::STATUS_PENDING) {
             return back()->with('error', 'Không thể hủy đơn hàng ở trạng thái hiện tại.');
         }
 
         $oldStatus = $order->status;
+        // 3. Cập nhật trạng thái đơn hàng thành "Đã hủy"
         $order->update(['status' => Order::STATUS_CANCELLED]);
 
+        // 4. Hoàn lại số lượng tồn kho cho các sản phẩm trong đơn hàng
         // Restore stock
         foreach ($order->items as $item) {
             if ($item->product_variant_id) {
@@ -92,6 +99,7 @@ class OrderController extends Controller
             }
         }
 
+        // 5. Gửi email thông báo hủy đơn hàng cho khách
         // Send cancellation email to customer
         try {
             $order->load('user');

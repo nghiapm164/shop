@@ -256,40 +256,12 @@
                         <!-- COD -->
                         <label class="relative">
                             <input type="radio" name="paymentMethod" value="cod" wire:model="paymentMethod" class="sr-only">
-                            <div class="border-2 rounded-lg p-4 cursor-pointer transition-all {{ $this->paymentMethod === 'cod' ? 'border-red-600 bg-red-50' : 'border-gray-200 hover:border-gray-300' }}">
+                            <div class="border-2 rounded-lg p-4 cursor-pointer transition-all border-red-600 bg-red-50">
                                 <div class="flex items-center gap-4">
                                     <div class="text-3xl">💳</div>
                                     <div>
                                         <p class="font-semibold text-gray-900">Thanh toán khi nhận hàng (COD)</p>
                                         <p class="text-sm text-gray-500 mt-1">Thanh toán tiền mặt khi nhận đơn hàng</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </label>
-
-                        <!-- Bank Transfer -->
-                        <label class="relative">
-                            <input type="radio" name="paymentMethod" value="bank" wire:model="paymentMethod" class="sr-only" disabled>
-                            <div class="border-2 rounded-lg p-4 cursor-not-allowed opacity-60 bg-gray-50 border-gray-200">
-                                <div class="flex items-center gap-4">
-                                    <div class="text-3xl">🏦</div>
-                                    <div>
-                                        <p class="font-semibold text-gray-500">Chuyển khoản ngân hàng <span class="text-xs text-red-500 font-normal ml-2">(Tạm thời bảo trì)</span></p>
-                                        <p class="text-sm text-gray-400 mt-1">Hệ thống đang nâng cấp, mong quý khách thông cảm.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </label>
-
-                        <!-- VNPay -->
-                        <label class="relative">
-                            <input type="radio" name="paymentMethod" value="vnpay" wire:model="paymentMethod" class="sr-only" disabled>
-                            <div class="border-2 rounded-lg p-4 cursor-not-allowed opacity-60 bg-gray-50 border-gray-200">
-                                <div class="flex items-center gap-4">
-                                    <div class="text-3xl">💳</div>
-                                    <div>
-                                        <p class="font-semibold text-gray-500">VNPay <span class="text-xs text-red-500 font-normal ml-2">(Tạm thời bảo trì)</span></p>
-                                        <p class="text-sm text-gray-400 mt-1">Cổng thanh toán đang bảo trì, vui lòng chọn COD.</p>
                                     </div>
                                 </div>
                             </div>

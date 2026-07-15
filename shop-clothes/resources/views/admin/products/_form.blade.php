@@ -15,7 +15,7 @@
             selectedSizes: config.selectedSizes || [],
             selectedColors: config.selectedColors || [],
             variants: [],
-            previewUrls: [],
+            newImages: [],
             metaTitle: config.metaTitle || '',
             metaDescription: config.metaDescription || '',
 
@@ -71,7 +71,25 @@
 
             previewImages(event) {
                 const files = Array.from(event.target.files || []);
-                this.previewUrls = files.map((file) => URL.createObjectURL(file));
+                files.forEach(file => {
+                    this.newImages.push({
+                        id: this.uid(),
+                        url: URL.createObjectURL(file),
+                        file: file
+                    });
+                });
+                this.syncFileInput();
+            },
+
+            removeNewImage(index) {
+                this.newImages.splice(index, 1);
+                this.syncFileInput();
+            },
+
+            syncFileInput() {
+                const dt = new DataTransfer();
+                this.newImages.forEach(img => dt.items.add(img.file));
+                this.$refs.imageInput.files = dt.files;
             },
 
             syncVariantsFromSelections() {
@@ -251,7 +269,7 @@
                 </div>
 
                 <label class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-8 cursor-pointer hover:border-red-400 hover:bg-red-50/30 transition-all group">
-                    <input type="file" name="images[]" multiple class="hidden" @change="previewImages($event)">
+                    <input type="file" name="images[]" multiple class="hidden" x-ref="imageInput" @change="previewImages($event)">
                     <div class="w-12 h-12 rounded-full bg-gray-100 group-hover:bg-red-100 flex items-center justify-center mb-3 transition">
                         <i class="fas fa-cloud-upload-alt text-gray-400 group-hover:text-red-500 text-lg transition"></i>
                     </div>
@@ -260,19 +278,22 @@
                 </label>
                 @error('images.*')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
 
-                <template x-if="previewUrls.length > 0">
+                <template x-if="newImages.length > 0">
                     <div>
                         <h4 class="text-sm font-medium text-gray-700 mb-3">Ảnh mới sẽ upload</h4>
                         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                            <template x-for="(url, idx) in previewUrls" :key="url">
-                                <div class="border border-gray-200 rounded-xl overflow-hidden bg-white">
-                                    <img :src="url" class="w-full aspect-square object-cover">
+                            <template x-for="(image, idx) in newImages" :key="image.id">
+                                <div class="border border-gray-200 rounded-xl overflow-hidden bg-white relative group">
+                                    <button type="button" @click="removeNewImage(idx)" class="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-sm hover:bg-red-600 z-10">
+                                        <i class="fas fa-times text-xs"></i>
+                                    </button>
+                                    <img :src="image.url" class="w-full aspect-square object-cover">
                                     <div class="p-2.5">
-                                        <select :name="'image_colors[' + idx + ']'" class="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:ring-2 focus:ring-red-500/20 focus:border-red-400">
+                                        <select name="image_colors[]" class="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:ring-2 focus:ring-red-500/20 focus:border-red-400">
                                             <option value="">-- Chọn màu sắc --</option>
-                                            @foreach ($colors as $color)
-                                                <option value="{{ $color->id }}">{{ $color->name }}</option>
-                                            @endforeach
+                                            <template x-for="color in colors.filter(c => selectedColors.includes(c.id))" :key="color.id">
+                                                <option :value="color.id" x-text="color.name"></option>
+                                            </template>
                                         </select>
                                     </div>
                                 </div>
@@ -291,8 +312,14 @@
                                         ? $image->image_path
                                         : asset('storage/' . $image->image_path);
                                 @endphp
-                                <div class="border border-gray-200 rounded-xl overflow-hidden bg-white {{ $image->is_primary ? 'ring-2 ring-red-500' : '' }}">
-                                    <div class="relative">
+                                <div x-data="{ deleted: {{ in_array($image->id, old('delete_existing_images', [])) ? 'true' : 'false' }} }" x-show="!deleted" class="border border-gray-200 rounded-xl overflow-hidden bg-white {{ $image->is_primary ? 'ring-2 ring-red-500' : '' }}">
+                                    <template x-if="deleted">
+                                        <input type="hidden" name="delete_existing_images[]" value="{{ $image->id }}">
+                                    </template>
+                                    <div class="relative group">
+                                        <button type="button" @click="deleted = true" class="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-sm hover:bg-red-600 z-10" title="Xóa ảnh này">
+                                            <i class="fas fa-times text-xs"></i>
+                                        </button>
                                         <img src="{{ $imageSrc }}" class="w-full aspect-square object-cover" onerror="this.onerror=null;this.src='{{ asset('images/product-placeholder.svg') }}';">
                                         @if ($image->is_primary)
                                             <span class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">Ảnh chính</span>
@@ -307,19 +334,18 @@
                                     <div class="p-2.5 space-y-2">
                                         <select name="existing_image_colors[{{ $image->id }}]" class="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:ring-2 focus:ring-red-500/20 focus:border-red-400">
                                             <option value="">-- Chọn màu sắc --</option>
-                                            @foreach ($colors as $color)
-                                                <option value="{{ $color->id }}" @selected($image->color_id == $color->id)>{{ $color->name }}</option>
-                                            @endforeach
+                                            <template x-for="color in colors.filter(c => selectedColors.includes(c.id) || c.id === '{{ $image->color_id }}')" :key="color.id">
+                                                <option :value="color.id" :selected="color.id === '{{ $image->color_id }}'" x-text="color.name"></option>
+                                            </template>
                                         </select>
                                         <div class="flex items-center justify-between">
                                             <label class="flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer">
                                                 <input type="radio" name="primary_image_id" value="{{ $image->id }}" @checked($image->is_primary) class="text-red-600 focus:ring-red-500">
                                                 Chính
                                             </label>
-                                            <label class="flex items-center gap-1.5 text-xs text-red-500 cursor-pointer">
-                                                <input type="checkbox" name="delete_existing_images[]" value="{{ $image->id }}" class="rounded text-red-600 focus:ring-red-500">
-                                                Xóa
-                                            </label>
+                                            <button type="button" @click="deleted = true" class="text-red-500 hover:text-red-700 text-xs font-medium flex items-center gap-1.5 transition-colors">
+                                                <i class="fas fa-trash"></i> Xóa
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

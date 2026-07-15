@@ -96,7 +96,13 @@ class AdminProductTable extends Component
         }
 
         if ($this->bulkAction === 'delete') {
-            $products->delete();
+            $productModels = $products->get();
+            foreach ($productModels as $productModel) {
+                foreach ($productModel->images as $image) {
+                    $this->deleteImageFiles($image->image_path);
+                }
+                $productModel->delete();
+            }
             session()->flash('success', 'Đã xóa các sản phẩm đã chọn.');
         }
 
@@ -116,6 +122,17 @@ class AdminProductTable extends Component
     {
         $product = Product::findOrFail($productId);
         $product->update(['is_active' => !$product->is_active]);
+    }
+
+    private function deleteImageFiles(string $imagePath): void
+    {
+        $pathInfo = pathinfo($imagePath);
+        $directory = $pathInfo['dirname'] ?? 'products';
+        $fileName = $pathInfo['filename'] ?? '';
+        $extension = isset($pathInfo['extension']) ? '.' . $pathInfo['extension'] : '';
+        $thumbPath = $directory . '/thumbs/' . $fileName . '_thumb' . $extension;
+
+        \Illuminate\Support\Facades\Storage::disk('public')->delete([$imagePath, $thumbPath]);
     }
 
     private function products(): LengthAwarePaginator

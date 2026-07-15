@@ -1,4 +1,10 @@
 <div class="space-y-4">
+    @if (session('success'))
+        <div class="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-700 text-sm">
+            {{ session('success') }}
+        </div>
+    @endif
+
     {{-- Filters --}}
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
         <div class="flex flex-col lg:flex-row gap-3">
@@ -94,7 +100,7 @@
                             $colorImageCount = $product->images->whereNotNull('color_id')->unique('color_id')->count();
                             $totalImageCount = $product->images->count();
                         @endphp
-                        <tr class="hover:bg-gray-50/50 transition-colors">
+                        <tr wire:key="product-{{ $product->id }}-{{ $product->is_active ? '1' : '0' }}" class="hover:bg-gray-50/50 transition-colors">
                             <td class="py-3 px-4">
                                 <input type="checkbox" value="{{ $product->id }}" wire:model.live="selected" class="rounded border-gray-300 text-red-600 focus:ring-red-500">
                             </td>

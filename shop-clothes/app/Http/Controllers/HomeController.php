@@ -11,19 +11,22 @@ use Illuminate\View\View;
 
 class HomeController extends Controller
 {
+    //  LOGIC_TRANG_CHU (Logic lấy dữ liệu hiển thị trên trang chủ)
     /**
-     * Display the homepage with featured products, banners, and testimonials
+     * Hàm này có nhiệm vụ lấy tất cả dữ liệu cần thiết từ Database để hiển thị ra trang chủ (Home)
      */
     public function __invoke(): View
     {
-        // Latest products (8 items) - ordered by creation date
+        // 1. Sản phẩm mới nhất (Latest products)
+        // Lấy 8 sản phẩm đang được kích hoạt (is_active = true), sắp xếp theo ngày tạo mới nhất giảm dần
         $newProducts = Product::where('is_active', true)
             ->with(['category', 'images', 'variants.color', 'reviews'])
             ->latest('created_at')
             ->limit(8)
             ->get();
 
-        // Best sellers (8 items) - ordered by sales count
+        // 2. Sản phẩm bán chạy nhất (Best sellers)
+        // Tính tổng số lượng đã bán của từng sản phẩm thông qua bảng order_items, sau đó lấy 8 sản phẩm bán nhiều nhất
         $bestSellers = Product::where('is_active', true)
             ->withSum('orderItems as sold_quantity', 'quantity')
             ->orderByDesc('sold_quantity')
@@ -32,13 +35,15 @@ class HomeController extends Controller
             ->limit(8)
             ->get();
 
-        // Advertising banner for middle section
+        // 3. Banner quảng cáo giữa trang (Advertising banner)
+        // Lấy 1 banner đang hoạt động được cài đặt để hiển thị ở vị trí 'middle'
         $adBanner = Banner::where('is_active', true)
             ->where('position', 'middle')
             ->orderBy('sort_order')
             ->first();
 
-        // Running flash sale products for homepage
+        // 4. Flash Sale (Sản phẩm đang chạy Flash Sale)
+        // Tìm các chương trình Flash Sale đang trong thời gian diễn ra (running()) và kèm theo thông tin sản phẩm
         $flashSales = FlashSale::query()
             ->running()
             ->with([
@@ -51,10 +56,11 @@ class HomeController extends Controller
             ->orderBy('start_at')
             ->limit(8)
             ->get()
-            ->filter(fn ($item) => $item->product !== null)
+            ->filter(fn ($item) => $item->product !== null) // Chỉ lấy các mục mà sản phẩm gốc chưa bị xóa/tắt
             ->values();
 
-        // Featured categories (6 items)
+        // 5. Danh mục nổi bật (Featured categories)
+        // Lấy 6 danh mục gốc (không có parent_id), đếm số lượng sản phẩm bên trong và sắp xếp lấy nhiều nhất
         $categories = Category::where('is_active', true)
             ->whereNull('parent_id')
             ->withCount('products')
@@ -62,15 +68,18 @@ class HomeController extends Controller
             ->limit(6)
             ->get();
 
-        // Featured brands (6 items)
+        // 6. Thương hiệu nổi bật (Featured brands)
+        // Lấy 6 thương hiệu ngẫu nhiên đang được kích hoạt, sắp xếp theo tên
         $brands = Brand::where('is_active', true)
             ->limit(6)
             ->orderBy('name')
             ->get();
 
-        // Testimonials from product reviews (4 items)
+        // 7. Nhận xét của khách hàng (Testimonials)
+        // Lọc ngẫu nhiên các đánh giá 4-5 sao từ người dùng thật
         $testimonials = $this->getTestimonials();
 
+        // Trả tất cả dữ liệu (biến) ở trên vào file giao diện (view) resources/views/home.blade.php
         return view('home', [
             'newProducts' => $newProducts,
             'bestSellers' => $bestSellers,

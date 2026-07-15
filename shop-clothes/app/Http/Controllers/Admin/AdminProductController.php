@@ -44,11 +44,17 @@ class AdminProductController extends Controller
         ]);
     }
 
+    // TAO_SAN_PHAM (Hàm tạo mới sản phẩm và biến thể)
+    // Hàm này nhận dữ liệu từ Form thêm mới sản phẩm và lưu vào Database
     public function store(StoreProductRequest $request): RedirectResponse
     {
+        // Sử dụng DB::transaction để đảm bảo an toàn: 
+        // Nếu đang lưu dở mà bị lỗi (ví dụ lỗi mạng, lỗi ổ cứng) thì sẽ hoàn tác (rollback) toàn bộ, không bị lưu thiếu dữ liệu.
         DB::transaction(function () use ($request) {
+            // 1. Kiểm tra tính hợp lệ của dữ liệu đầu vào
             $data = $request->validated();
 
+            // 2. Tạo bản ghi Sản Phẩm gốc (lưu thông tin chung như Tên, Giá, Danh mục, Thương hiệu...)
             $product = Product::create([
                 'name' => $data['name'],
                 'slug' => $data['slug'] ?: Str::slug($data['name']) . '-' . Str::lower(Str::random(4)),
@@ -65,8 +71,10 @@ class AdminProductController extends Controller
                 'meta_description' => $data['meta_description'] ?? null,
             ]);
 
+            // 3. Xử lý đồng bộ các biến thể (Màu sắc, Kích cỡ, Tồn kho riêng)
             $this->syncVariants($product, $data['variants']);
 
+            // 4. Xử lý upload và nén hình ảnh
             $uploadedImages = $request->file('images', []);
             $imageColors = $request->input('image_colors', []);
             if (!empty($uploadedImages)) {
@@ -74,6 +82,7 @@ class AdminProductController extends Controller
             }
         });
 
+        // 5. Quay về trang danh sách và báo thành công
         return redirect()->route('admin.products.index')->with('success', 'Tạo sản phẩm thành công.');
     }
 

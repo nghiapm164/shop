@@ -69,7 +69,7 @@
                     </span>
                 @endif
 
-                @if(in_array($order->status, ['pending', 'confirmed']))
+                @if($order->status === 'pending')
                     <form method="POST" action="{{ route('client.orders.cancel', $order) }}"
                           onsubmit="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')">
                         @csrf

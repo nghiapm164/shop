@@ -370,8 +370,11 @@ class CheckoutPage extends Component
         $this->calculateTotals();
     }
 
+    // XU_LY_DAT_HANG (Hàm xử lý đặt hàng)
+    // Hàm này được gọi khi khách hàng nhấn nút "Đặt hàng"
     public function placeOrder()
     {
+        // 1. Kiểm tra xem khách hàng đã chọn địa chỉ giao hàng chưa
         if (!$this->selectedAddressId && $this->savedAddresses->count() == 0) {
             $this->useNewAddress = true;
         }
@@ -380,17 +383,19 @@ class CheckoutPage extends Component
             $this->useNewAddress = true;
         }
 
+        // Nếu chưa chọn địa chỉ nào và cũng không nhập địa chỉ mới, báo lỗi
         if (!$this->selectedAddressId && !$this->useNewAddress) {
             $this->dispatch('notify', message: 'Vui lòng chọn địa chỉ giao hàng', type: 'warning');
             return;
         }
 
+        // 2. Nếu khách hàng nhập địa chỉ mới, tiến hành xác thực dữ liệu (tên, sđt, địa chỉ)
         if ($this->useNewAddress) {
             $this->validate([
                 'recipientName' => 'required|min:2|max:100',
                 'phone' => ['required', 'regex:/^(\+84|0)[0-9]{9,10}$/'],
                 'addressDetail' => 'required|min:5|max:500',
-                'paymentMethod' => 'required|in:cod,bank,vnpay',
+                'paymentMethod' => 'required|in:cod',
                 'notes' => 'nullable|max:500',
             ], [
                 'recipientName.required' => 'Vui lòng nhập tên người nhận',
@@ -402,9 +407,11 @@ class CheckoutPage extends Component
             ]);
         }
 
+        // 3. Chuẩn bị dữ liệu địa chỉ để lưu vào đơn hàng
         $shippingAddress = [];
 
         if ($this->selectedAddressId) {
+            // Lấy địa chỉ đã có sẵn trong danh bạ của khách hàng
             $address = Address::find($this->selectedAddressId);
             $shippingAddress = [
                 'recipient_name' => $address->recipient_name,
@@ -412,12 +419,14 @@ class CheckoutPage extends Component
                 'address' => $address->full_address,
             ];
         } else {
+            // Lấy địa chỉ mới vừa nhập
             $shippingAddress = [
                 'recipient_name' => $this->recipientName,
                 'phone' => $this->phone,
                 'address' => $this->addressDetail,
             ];
 
+            // Tự động lưu địa chỉ mới này vào danh bạ của khách hàng để lần sau dùng lại
             Address::create([
                 'user_id' => auth()->id(),
                 'recipient_name' => $this->recipientName,
@@ -427,17 +436,11 @@ class CheckoutPage extends Component
             ]);
         }
 
-        $paymentMethod = match ($this->paymentMethod) {
-            'bank' => 'bank_transfer',
-            'vnpay' => 'e_wallet',
-            default => 'cod',
-        };
-
         $order = Order::create([
             'user_id' => auth()->id(),
             'order_code' => 'ORD-' . strtoupper(uniqid()),
             'status' => Order::STATUS_PENDING,
-            'payment_method' => $paymentMethod,
+            'payment_method' => 'cod',
             'payment_status' => Order::PAYMENT_STATUS_UNPAID,
             'subtotal' => $this->subtotal,
             'discount_amount' => $this->discountAmount,
@@ -479,11 +482,7 @@ class CheckoutPage extends Component
         session()->forget('coupon_id');
         $this->dispatch('cart-updated', count: 0);
 
-        if ($this->paymentMethod === 'vnpay') {
-            $this->redirect(route('payment.vnpay', ['order_code' => $order->order_code]));
-        } else {
-            $this->redirect(route('order.success', ['code' => $order->order_code]));
-        }
+        $this->redirect(route('order.success', ['code' => $order->order_code]));
     }
 
     public function render()

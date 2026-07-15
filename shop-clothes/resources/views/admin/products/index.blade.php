@@ -19,11 +19,6 @@
         </a>
     </div>
 
-    @if (session('success'))
-        <div class="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-700 text-sm">
-            {{ session('success') }}
-        </div>
-    @endif
 
     <livewire:admin-product-table />
 </div>

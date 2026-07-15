@@ -8,7 +8,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\AddressController;
-use App\Http\Controllers\PaymentController;
+
 use App\Http\Controllers\OrderLookupController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\AdminDashboardController;
@@ -93,12 +93,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/my-orders/{order}/cancel', [ClientOrderController::class, 'cancel'])->name('client.orders.cancel');
 });
 
-// Payment (VNPay)
-Route::middleware('auth')->group(function () {
-    Route::get('/payment/vnpay', [PaymentController::class, 'createVnpayPayment'])->name('payment.vnpay');
-    Route::get('/payment/vnpay/callback', [PaymentController::class, 'vnpayCallback'])->name('payment.vnpay.callback');
-});
-Route::post('/payment/vnpay/ipn', [PaymentController::class, 'vnpayIpn'])->name('payment.vnpay.ipn');
 
 // Wishlist
 Route::middleware('auth')->group(function () {

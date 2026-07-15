@@ -17,7 +17,7 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        $totalProducts = 1000;
+        $totalProducts = 50;
 
         $categories = Category::where('is_active', true)->orderBy('id')->get();
         $brands = Brand::where('is_active', true)->orderBy('id')->get();
