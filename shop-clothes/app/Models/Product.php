@@ -206,8 +206,8 @@ class Product extends Model
         }
 
         return $primary?->image_path
-            ? 'storage/' . $primary->image_path
-            : 'images/product-placeholder.svg';
+            ? asset('storage/' . $primary->image_path)
+            : asset('images/product-placeholder.svg');
     }
 
     /**
@@ -222,7 +222,7 @@ class Product extends Model
         }
 
         return $secondary?->image_path
-            ? 'storage/' . $secondary->image_path
+            ? asset('storage/' . $secondary->image_path)
             : null;
     }
 

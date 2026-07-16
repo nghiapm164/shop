@@ -133,7 +133,7 @@ class HomeController extends Controller
                 'id' => 2,
                 'name' => 'Trần Thị B',
                 'rating' => 5,
-                'text' => 'Rất hài lòng với chất lượng áo thể thao, thoáng mát và dễ chịu khi mặc.',
+                'text' => 'Rất hài lòng với chất lượng áo thể thao, thoáng mát và dễ chịu khi mặc OK.',
                 'avatar' => '👩',
             ],
             [

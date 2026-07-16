@@ -102,6 +102,18 @@ class AdminProductController extends Controller
         $selectedSizes = collect($initialVariants)->pluck('size_id')->unique()->values()->all();
         $selectedColors = collect($initialVariants)->pluck('color_id')->unique()->values()->all();
 
+        $returnUrl = route('admin.products.index');
+        $previousUrl = url()->previous();
+        $parsedUrl = parse_url($previousUrl);
+        $indexPath = parse_url(route('admin.products.index'), PHP_URL_PATH);
+        
+        if ($previousUrl !== url()->current() && isset($parsedUrl['path']) && $parsedUrl['path'] === $indexPath) {
+            session()->put('product_list_return_url', $previousUrl);
+            $returnUrl = $previousUrl;
+        } elseif (session()->has('product_list_return_url')) {
+            $returnUrl = session()->get('product_list_return_url');
+        }
+
         return view('admin.products.edit', [
             'product' => $product,
             'categoryOptions' => $this->buildCategoryOptions(),
@@ -112,6 +124,7 @@ class AdminProductController extends Controller
             'selectedColors' => $selectedColors,
             'initialVariants' => $initialVariants,
             'isEdit' => true,
+            'returnUrl' => $returnUrl,
         ]);
     }
 
@@ -166,7 +179,8 @@ class AdminProductController extends Controller
             }
         });
 
-        return redirect()->route('admin.products.index')->with('success', 'Cập nhật sản phẩm thành công.');
+        $returnUrl = session()->get('product_list_return_url', route('admin.products.index'));
+        return redirect($returnUrl)->with('success', 'Cập nhật sản phẩm thành công.');
     }
 
     public function destroy(Product $product): RedirectResponse

@@ -52,16 +52,16 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-10" data-aos="fade-up">
         <div class="text-center mb-10" data-aos="fade-up">
-            <h2 class="text-3xl md:text-4xl font-black uppercase text-brand-ink tracking-tight">Danh Mục Nổi Bật</h2>
+            <h2 class="text-3xl md:text-4xl font-black uppercase text-brand-ink tracking-tight">Danh Mục HOT</h2>
             <p class="text-lg text-slate-500 mt-3 font-medium">Lựa chọn phong cách phù hợp với đam mê của bạn</p>
         </div>
-        
+
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6" data-aos="fade-up" data-aos-delay="100">
             @foreach($categories as $category)
                 <a href="{{ route('shop.index', ['category' => $category->slug]) }}" class="group block">
                     <div class="relative overflow-hidden rounded-none bg-white aspect-[4/5] border border-slate-200 transition-all duration-500 hover:border-brand-ink">
                         @if($category->image_url)
-                            <img src="{{ $category->image_url }}" alt="{{ $category->name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <img src="{{ $category->image_url }}" alt="{{ $category->name }}" class="w-full h-full object-contain p-4 transition-transform duration-700 group-hover:scale-110">
                         @else
                             <div class="w-full h-full bg-slate-100 flex items-center justify-center text-slate-300 transition-colors duration-500 group-hover:bg-slate-200">
                                 <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -87,7 +87,7 @@
             <!-- Background Decoration -->
             <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-none bg-brand-primary/20 blur-3xl"></div>
             <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-none bg-orange-500/20 blur-3xl"></div>
-            
+
             <div class="relative z-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
                 <div class="text-white">
                     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-none bg-brand-primary/20 border border-brand-primary/50 text-brand-primary font-bold uppercase tracking-wider text-sm mb-4">
@@ -157,7 +157,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
             <div>
-                <h2 class="text-3xl md:text-4xl font-black uppercase text-brand-ink tracking-tight">Hàng Mới Lên Kệ</h2>
+                <h2 class="text-3xl md:text-4xl font-black uppercase text-brand-ink tracking-tight">Hàng Mới Lên Kệ 123</h2>
                 <p class="text-lg text-slate-500 mt-3 font-medium">Tinh thần trẻ, phối nhanh, mặc đẹp mỗi ngày.</p>
             </div>
             <a href="{{ route('shop.index', ['collection' => 'new_arrivals', 'sort' => 'newest']) }}" class="group inline-flex items-center gap-2 font-bold uppercase tracking-wider text-brand-ink hover:text-brand-primary transition-colors">
@@ -187,24 +187,24 @@
                 stop() {
                     if (this.interval) clearInterval(this.interval);
                 },
-                scrollNext() { 
+                scrollNext() {
                     this.stop();
-                    this.$refs.slider.scrollBy({ left: 300, behavior: 'smooth' }); 
+                    this.$refs.slider.scrollBy({ left: 300, behavior: 'smooth' });
                     this.start();
                 },
-                scrollPrev() { 
+                scrollPrev() {
                     this.stop();
-                    this.$refs.slider.scrollBy({ left: -300, behavior: 'smooth' }); 
+                    this.$refs.slider.scrollBy({ left: -300, behavior: 'smooth' });
                     this.start();
                 }
-            }" 
+            }"
             @mouseenter="stop" @mouseleave="start" @touchstart="stop" @touchend="start"
             class="relative group/newarrivals">
-            
+
             <button type="button" @click.prevent.stop="scrollPrev" class="absolute left-0 top-[40%] -translate-y-1/2 -ml-4 md:-ml-6 z-40 flex h-10 w-10 md:h-12 md:w-12 opacity-0 group-hover/newarrivals:opacity-100 items-center justify-center rounded-full bg-white text-slate-900 shadow-[0_4px_20px_rgba(0,0,0,0.15)] transition-all duration-300 hover:scale-110">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             </button>
-            
+
             <button type="button" @click.prevent.stop="scrollNext" class="absolute right-0 top-[40%] -translate-y-1/2 -mr-4 md:-mr-6 z-40 flex h-10 w-10 md:h-12 md:w-12 opacity-0 group-hover/newarrivals:opacity-100 items-center justify-center rounded-full bg-white text-slate-900 shadow-[0_4px_20px_rgba(0,0,0,0.15)] transition-all duration-300 hover:scale-110">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </button>
@@ -255,24 +255,24 @@
                     stop() {
                         if (this.interval) clearInterval(this.interval);
                     },
-                    scrollNext() { 
+                    scrollNext() {
                         this.stop();
-                        this.$refs.slider2.scrollBy({ left: 300, behavior: 'smooth' }); 
+                        this.$refs.slider2.scrollBy({ left: 300, behavior: 'smooth' });
                         this.start();
                     },
-                    scrollPrev() { 
+                    scrollPrev() {
                         this.stop();
-                        this.$refs.slider2.scrollBy({ left: -300, behavior: 'smooth' }); 
+                        this.$refs.slider2.scrollBy({ left: -300, behavior: 'smooth' });
                         this.start();
                     }
-                }" 
+                }"
                 @mouseenter="stop" @mouseleave="start" @touchstart="stop" @touchend="start"
                 class="relative group/slider">
-                
+
                 <button type="button" @click.prevent.stop="scrollPrev" class="absolute left-0 top-[45%] -translate-y-1/2 -ml-6 md:-ml-8 z-40 flex h-12 w-12 opacity-0 group-hover/slider:opacity-100 items-center justify-center rounded-full bg-slate-900 text-white shadow-xl transition-all duration-300 hover:scale-110 hover:bg-red-600 border-2 border-white">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
                 </button>
-                
+
                 <button type="button" @click.prevent.stop="scrollNext" class="absolute right-0 top-[45%] -translate-y-1/2 -mr-6 md:-mr-8 z-40 flex h-12 w-12 opacity-0 group-hover/slider:opacity-100 items-center justify-center rounded-full bg-slate-900 text-white shadow-xl transition-all duration-300 hover:scale-110 hover:bg-red-600 border-2 border-white">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
                 </button>
@@ -295,7 +295,7 @@
 <section class="py-16 bg-white overflow-hidden relative border-t border-slate-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" data-aos="fade-up">
         <h2 class="text-2xl md:text-3xl font-black uppercase text-center text-brand-ink mb-10 tracking-tight">Thương Hiệu Đồng Hành</h2>
-        
+
         <div x-data="{
                 interval: null,
                 init() { this.start(); },
@@ -315,14 +315,14 @@
                 scrollPrev() {
                     this.$refs.brandSlider.scrollBy({ left: -200, behavior: 'smooth' });
                 }
-            }" 
+            }"
             @mouseenter="stop" @mouseleave="start" @touchstart="stop" @touchend="start"
             class="relative group/brand">
-            
+
             <button type="button" @click.prevent.stop="scrollPrev(); stop(); start();" class="absolute left-0 top-[40%] -translate-y-1/2 -ml-4 z-40 flex h-10 w-10 opacity-0 group-hover/brand:opacity-100 items-center justify-center rounded-full bg-white text-slate-900 shadow-[0_4px_20px_rgba(0,0,0,0.15)] transition-all duration-300 hover:scale-110 border border-slate-100">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             </button>
-            
+
             <button type="button" @click.prevent.stop="scrollNext(); stop(); start();" class="absolute right-0 top-[40%] -translate-y-1/2 -mr-4 z-40 flex h-10 w-10 opacity-0 group-hover/brand:opacity-100 items-center justify-center rounded-full bg-white text-slate-900 shadow-[0_4px_20px_rgba(0,0,0,0.15)] transition-all duration-300 hover:scale-110 border border-slate-100">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </button>
@@ -364,7 +364,7 @@
                             <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-brand-ink rounded-none flex items-center justify-center text-white">
                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"/></svg>
                             </div>
-                            
+
                             <!-- Stars -->
                             <div class="flex justify-center gap-1 mb-6 text-brand-primary mt-4">
                                 <template x-for="i in item.rating">
@@ -374,7 +374,7 @@
 
                             <!-- Text -->
                             <p class="text-lg md:text-2xl text-slate-700 font-semibold leading-relaxed mb-8" x-text="`&quot;${item.text}&quot;`"></p>
-                            
+
                             <!-- User Info -->
                             <div class="flex items-center justify-center gap-4">
                                 <div class="w-12 h-12 bg-slate-100 rounded-none flex items-center justify-center text-2xl border border-slate-200" x-text="item.avatar"></div>
@@ -392,9 +392,9 @@
         <!-- Dots -->
         <div class="flex justify-center gap-2 mt-12">
             <template x-for="(item, index) in reviews" :key="index">
-                <button 
-                    class="h-2 rounded-full transition-all duration-300" 
-                    @click="current = index" 
+                <button
+                    class="h-2 rounded-full transition-all duration-300"
+                    @click="current = index"
                     :class="current === index ? 'w-8 bg-slate-900' : 'w-2 bg-slate-300 hover:bg-slate-400'">
                 </button>
             </template>

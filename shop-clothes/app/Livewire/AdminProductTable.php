@@ -140,7 +140,7 @@ class AdminProductTable extends Component
         $query = Product::query()
             ->with(['category', 'brand', 'images.color'])
             ->withSum('variants as total_stock', 'stock_quantity')
-            ->latest();
+            ->orderBy('sku', 'asc');
 
         if ($this->search !== '') {
             $keyword = trim($this->search);
