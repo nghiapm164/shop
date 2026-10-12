@@ -6,7 +6,7 @@
      data-placeholder="{{ asset('images/product-placeholder.svg') }}"
      data-suggestions='@json(\App\Services\Chatbot\ChatbotService::suggestions())'>
 
-    <button type="button" class="msc-fab" id="msc-fab" aria-label="Mở AI Sport Assistant" aria-controls="msc-panel" aria-expanded="false">
+    <button type="button" class="msc-fab" id="msc-fab" aria-label="Mở trợ lý AI MODESPORT" aria-controls="msc-panel" aria-expanded="false">
         <span class="msc-fab-ring" aria-hidden="true"></span>
         <span class="msc-fab-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
@@ -20,16 +20,17 @@
     <section class="msc-panel" id="msc-panel" role="dialog" aria-modal="false" aria-labelledby="msc-title" tabindex="-1" hidden>
         <header class="msc-header">
             <div class="msc-avatar" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.5l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M19 14l.9 2.1L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.9z" opacity=".75"/></svg>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.5l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M19 14l.9 2.1L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.9z" opacity=".7"/></svg>
+                <i class="msc-online"></i>
             </div>
             <div class="msc-title">
-                <strong id="msc-title">AI Sport Assistant</strong>
-                <span class="msc-status"><i class="msc-dot"></i><span class="msc-status-text">Trực tuyến · trả lời trong vài giây</span></span>
+                <strong id="msc-title">MODESPORT AI</strong>
+                <span class="msc-status"><span class="msc-status-text">Đang hoạt động</span></span>
             </div>
             @if (config('chatbot.demo_mode'))
                 <button type="button" class="msc-demo-btn" id="msc-demo-btn" aria-expanded="false" aria-controls="msc-demo" title="5 tình huống demo (Alt+1 … Alt+5)">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
-                    Demo
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+                    <span class="msc-demo-label">Demo</span>
                 </button>
             @endif
             <button type="button" class="msc-icon-btn" id="msc-reset" title="Cuộc trò chuyện mới" aria-label="Cuộc trò chuyện mới">
@@ -72,23 +73,24 @@
             </div>
             <div class="msc-suggestions" id="msc-suggestions" aria-label="Câu hỏi gợi ý"></div>
             <form class="msc-input" id="msc-form" autocomplete="off">
-                <input type="text" id="msc-text" maxlength="500" enterkeyhint="send"
-                       placeholder="Hỏi về sản phẩm, size, giá..." aria-label="Nhập câu hỏi">
-                <button type="submit" id="msc-send" aria-label="Gửi">
-                    <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-                </button>
+                <div class="msc-input-box">
+                    <input type="text" id="msc-text" maxlength="500" enterkeyhint="send"
+                           placeholder="Nhập câu hỏi của bạn..." aria-label="Nhập câu hỏi">
+                    <button type="submit" id="msc-send" aria-label="Gửi">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M3.4 20.4 21.5 12 3.4 3.6 3.4 10l12.1 2-12.1 2z"/></svg>
+                    </button>
+                </div>
             </form>
-            <p class="msc-note">AI chỉ tư vấn dựa trên dữ liệu sản phẩm của shop.</p>
+            <p class="msc-note">Trợ lý AI tư vấn dựa trên dữ liệu sản phẩm của MODESPORT</p>
         </div>
     </section>
 </div>
 
 <style>
     #msc-chatbot {
-        --msc-primary: #E42508; --msc-primary-dark: #b81d05; --msc-primary-soft: #fff1ee;
-        --msc-ink: #161922; --msc-ink-2: #2a2f3b; --msc-text: #1e2330; --msc-muted: #6b7280;
-        --msc-border: #e7e9ee; --msc-bg: #f5f6f8; --msc-card: #ffffff;
-        --msc-radius: 18px; --msc-shadow: 0 24px 64px -16px rgba(16, 20, 30, .35);
+        --msc-primary: #E42508; --msc-primary-dark: #b91c04; --msc-primary-soft: #fff1ee; --msc-primary-line: #fbd0c6;
+        --msc-ink: #161922; --msc-text: #1f2430; --msc-muted: #6b7280; --msc-faint: #9ca3af;
+        --msc-border: #e8eaee; --msc-bg: #f4f5f7; --msc-card: #ffffff;
         font-family: 'Archivo', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
         -webkit-font-smoothing: antialiased;
     }
@@ -101,104 +103,123 @@
         position: fixed; right: 20px; bottom: 20px; z-index: 9998;
         display: inline-flex; align-items: center; gap: 10px;
         height: 56px; padding: 0 20px 0 8px; border: 0; border-radius: 999px;
-        background: linear-gradient(135deg, #f0360f 0%, var(--msc-primary) 55%, var(--msc-primary-dark) 100%);
+        background: linear-gradient(135deg, #ff4a26 0%, var(--msc-primary) 55%, var(--msc-primary-dark) 100%);
         color: #fff; font-weight: 700; font-size: 15px; letter-spacing: .01em; cursor: pointer;
-        box-shadow: 0 12px 28px -8px rgba(228, 37, 8, .6), inset 0 1px 0 rgba(255, 255, 255, .25);
+        box-shadow: 0 14px 30px -10px rgba(228, 37, 8, .65), inset 0 1px 0 rgba(255, 255, 255, .25);
         transition: transform .2s ease, box-shadow .2s ease;
     }
-    .msc-fab:hover { transform: translateY(-2px); box-shadow: 0 16px 32px -8px rgba(228, 37, 8, .7); }
+    .msc-fab:hover { transform: translateY(-2px); box-shadow: 0 18px 34px -10px rgba(228, 37, 8, .75); }
     .msc-fab:focus-visible { outline: 3px solid rgba(228, 37, 8, .35); outline-offset: 3px; }
-    .msc-fab-icon { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, .16); }
+    .msc-fab-icon { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, .18); }
     .msc-fab-ring { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; animation: msc-ring 2.6s ease-out infinite; }
-    .msc-fab.is-open .msc-fab-ring { animation: none; }
     @keyframes msc-ring { 0% { box-shadow: 0 0 0 0 rgba(228, 37, 8, .45); } 70%, 100% { box-shadow: 0 0 0 14px rgba(228, 37, 8, 0); } }
+    .msc-fab.is-open { display: none; }
 
-    /* ---------- Khung chat ---------- */
-    /* Desktop: sidebar cao hết màn hình bên phải */
+    /* ---------- Khung chat: sidebar bên phải (desktop) ---------- */
     .msc-panel {
         outline: none;
         position: fixed; top: 0; right: 0; bottom: 0; z-index: 9999;
         width: clamp(400px, 32vw, 480px); height: 100vh; height: 100dvh;
         display: flex; flex-direction: column; overflow: hidden;
         background: var(--msc-bg); color: var(--msc-text);
-        border-left: 1px solid rgba(16, 20, 30, .08); box-shadow: -18px 0 48px -16px rgba(16, 20, 30, .35);
-        animation: msc-in .25s cubic-bezier(.2, .8, .2, 1);
+        border-left: 1px solid rgba(16, 20, 30, .08); box-shadow: -20px 0 50px -18px rgba(16, 20, 30, .35);
+        animation: msc-in .28s cubic-bezier(.2, .8, .2, 1);
     }
-    @keyframes msc-in { from { opacity: 0; transform: translateX(32px); } to { opacity: 1; transform: none; } }
-    .msc-fab.is-open { display: none; }
+    @keyframes msc-in { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: none; } }
 
+    /* Header màu thương hiệu */
     .msc-header {
-        flex: none; display: flex; align-items: center; gap: 10px;
-        padding: 14px 10px 14px 16px; color: #fff;
-        background: radial-gradient(120% 140% at 0% 0%, #2c3140 0%, var(--msc-ink) 60%);
+        position: relative; flex: none; display: flex; align-items: center; gap: 10px;
+        padding: 14px 8px 14px 16px; color: #fff;
+        background:
+            radial-gradient(140% 120% at 100% 0%, rgba(255, 255, 255, .16) 0%, rgba(255, 255, 255, 0) 55%),
+            linear-gradient(135deg, #ff4a26 0%, var(--msc-primary) 50%, var(--msc-primary-dark) 100%);
+        box-shadow: 0 6px 18px -12px rgba(185, 28, 4, .9);
     }
     .msc-avatar {
-        flex: none; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; color: #fff;
-        background: linear-gradient(135deg, #ff5a36, var(--msc-primary)); box-shadow: 0 6px 14px -6px rgba(228, 37, 8, .8);
+        position: relative; flex: none; width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center;
+        color: var(--msc-primary); background: #fff; box-shadow: 0 6px 14px -6px rgba(0, 0, 0, .35);
     }
-    .msc-title { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-    .msc-title strong { font-size: 15.5px; font-weight: 800; letter-spacing: .02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .msc-status { font-size: 12px; color: #b8bfcc; display: flex; align-items: center; gap: 6px; min-width: 0; }
+    .msc-online { position: absolute; right: 0; bottom: 1px; width: 11px; height: 11px; border-radius: 50%; background: #22c55e; border: 2px solid #fff; }
+    .msc-title { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+    .msc-title strong { font-size: 16px; font-weight: 800; letter-spacing: .01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .msc-status { font-size: 12px; color: rgba(255, 255, 255, .85); display: flex; min-width: 0; }
     .msc-status-text { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .msc-dot { flex: none; width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 3px rgba(34, 197, 94, .2); }
     .msc-icon-btn {
-        flex: none; width: 44px; height: 44px; display: grid; place-items: center;
-        border: 0; border-radius: 10px; background: transparent; color: #d5d9e2; cursor: pointer; transition: background .15s;
+        flex: none; width: 40px; height: 40px; display: grid; place-items: center;
+        border: 0; border-radius: 50%; background: transparent; color: rgba(255, 255, 255, .9); cursor: pointer; transition: background .15s;
     }
-    .msc-icon-btn:hover, .msc-icon-btn:focus-visible { background: rgba(255, 255, 255, .12); color: #fff; outline: none; }
+    .msc-icon-btn:hover, .msc-icon-btn:focus-visible { background: rgba(255, 255, 255, .18); color: #fff; outline: none; }
 
     /* ---------- Nút & bảng Demo (5 tình huống bắt buộc) ---------- */
     .msc-demo-btn {
-        flex: none; display: inline-flex; align-items: center; gap: 5px; height: 32px; padding: 0 11px; border-radius: 999px; cursor: pointer;
-        border: 1px solid rgba(255, 255, 255, .25); background: rgba(255, 255, 255, .08); color: #fff; font-size: 12.5px; font-weight: 800; letter-spacing: .02em;
-        transition: background .15s, border-color .15s;
+        flex: none; display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 11px; border-radius: 999px; cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, .45); background: rgba(255, 255, 255, .14); color: #fff; font-size: 12px; font-weight: 800; letter-spacing: .03em;
+        transition: background .15s, color .15s;
     }
-    .msc-demo-btn:hover, .msc-demo-btn[aria-expanded="true"] { background: var(--msc-primary); border-color: var(--msc-primary); }
+    .msc-demo-btn:hover, .msc-demo-btn[aria-expanded="true"] { background: #fff; color: var(--msc-primary); }
     .msc-demo {
         flex: none; max-height: 62%; overflow-y: auto; overscroll-behavior: contain;
-        background: #fff; border-bottom: 1px solid var(--msc-border); box-shadow: 0 10px 24px -18px rgba(16, 20, 30, .6);
+        background: #fff; border-bottom: 1px solid var(--msc-border); box-shadow: 0 12px 26px -20px rgba(16, 20, 30, .7);
         animation: msc-drop .18s ease-out;
     }
     @keyframes msc-drop { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
-    .msc-demo-head { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px 6px; }
+    .msc-demo-head { display: flex; flex-direction: column; gap: 2px; padding: 12px 16px 6px; }
     .msc-demo-head strong { font-size: 13.5px; font-weight: 800; }
     .msc-demo-head span { font-size: 11.5px; color: var(--msc-muted); }
-    #msc-chatbot .msc-demo-list { list-style: none; margin: 0; padding: 4px 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+    #msc-chatbot .msc-demo-list { list-style: none; margin: 0; padding: 4px 12px 12px; display: flex; flex-direction: column; gap: 6px; }
     .msc-demo-list button {
         width: 100%; display: flex; gap: 10px; align-items: flex-start; text-align: left; cursor: pointer;
-        padding: 10px 12px; border-radius: 12px; border: 1px solid var(--msc-border); background: var(--msc-bg); color: var(--msc-text);
+        padding: 10px 12px; border-radius: 12px; border: 1px solid var(--msc-border); background: #fafafb; color: var(--msc-text);
         transition: border-color .15s, background .15s;
     }
-    .msc-demo-list button:hover, .msc-demo-list button:focus-visible { border-color: #f6b4a6; background: var(--msc-primary-soft); outline: none; }
-    .msc-demo-no {
-        flex: none; width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center;
-        background: linear-gradient(135deg, #ff5a36, var(--msc-primary)); color: #fff; font-weight: 800; font-size: 13px;
-    }
+    .msc-demo-list button:hover, .msc-demo-list button:focus-visible { border-color: var(--msc-primary-line); background: var(--msc-primary-soft); outline: none; }
+    .msc-demo-no { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--msc-primary); color: #fff; font-weight: 800; font-size: 12.5px; }
     .msc-demo-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-    .msc-demo-title { font-size: 11.5px; font-weight: 800; color: var(--msc-primary); text-transform: uppercase; letter-spacing: .03em; }
+    .msc-demo-title { font-size: 11px; font-weight: 800; color: var(--msc-primary); text-transform: uppercase; letter-spacing: .04em; }
     .msc-demo-q { font-size: 13.5px; font-weight: 600; line-height: 1.4; }
     .msc-demo-expect { font-size: 11.5px; color: var(--msc-muted); }
 
-    /* ---------- Tin nhắn ---------- */
+    /* ---------- Vùng hội thoại ---------- */
     .msc-messages {
         position: relative;
         flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
-        padding: 18px 14px 12px; display: flex; flex-direction: column; gap: 14px; scroll-behavior: smooth;
+        padding: 16px 16px 14px; display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth;
     }
-    .msc-row { display: flex; gap: 8px; align-items: flex-end; min-width: 0; max-width: 100%; }
+    .msc-messages::-webkit-scrollbar { width: 6px; }
+    .msc-messages::-webkit-scrollbar-thumb { background: #d3d7de; border-radius: 3px; }
+
+    /* Thẻ chào */
+    .msc-hero { text-align: center; background: var(--msc-card); border: 1px solid var(--msc-border); border-radius: 18px; padding: 20px 18px 16px; box-shadow: 0 6px 18px -16px rgba(16, 20, 30, .5); }
+    .msc-hero-avatar {
+        width: 54px; height: 54px; margin: 0 auto 10px; border-radius: 50%; display: grid; place-items: center; color: #fff;
+        background: linear-gradient(135deg, #ff4a26, var(--msc-primary)); box-shadow: 0 10px 22px -10px rgba(228, 37, 8, .8);
+    }
+    .msc-hero h3 { margin: 0 0 4px; font-size: 17px; font-weight: 800; color: var(--msc-ink); }
+    .msc-hero p { margin: 0 auto; max-width: 300px; font-size: 13.5px; line-height: 1.5; color: var(--msc-muted); }
+    .msc-skills { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 14px; }
+    .msc-skills span { font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 999px; background: var(--msc-bg); color: #374151; }
+
+    .msc-divider { display: flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 700; color: var(--msc-faint); text-transform: uppercase; letter-spacing: .06em; }
+    .msc-divider::before, .msc-divider::after { content: ''; flex: 1; height: 1px; background: #e2e5ea; }
+
+    /* Hàng tin nhắn */
+    .msc-row { display: flex; gap: 8px; min-width: 0; max-width: 100%; }
     .msc-row.is-user { justify-content: flex-end; }
-    .msc-row.is-bot { align-items: flex-start; }
+    .msc-row.is-new { animation: msc-pop .28s ease-out; }
+    @keyframes msc-pop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
     .msc-mini-avatar {
-        flex: none; width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center; margin-top: 2px;
-        color: #fff; background: linear-gradient(135deg, #ff5a36, var(--msc-primary));
+        flex: none; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; margin-top: 18px;
+        color: #fff; background: linear-gradient(135deg, #ff4a26, var(--msc-primary));
     }
     .msc-col { display: flex; flex-direction: column; gap: 8px; min-width: 0; flex: 1; }
-    .msc-bubble { max-width: 100%; padding: 11px 14px; border-radius: 16px; font-size: 14.5px; line-height: 1.55; overflow-wrap: anywhere; }
-    .msc-row.is-user .msc-bubble {
-        max-width: 82%; background: linear-gradient(135deg, #f0360f, var(--msc-primary)); color: #fff;
-        border-bottom-right-radius: 5px; box-shadow: 0 6px 16px -10px rgba(228, 37, 8, .9);
-    }
-    .msc-row.is-bot .msc-bubble { align-self: flex-start; background: var(--msc-card); border: 1px solid var(--msc-border); border-top-left-radius: 5px; box-shadow: 0 2px 6px -4px rgba(16, 20, 30, .15); }
+    .msc-row.is-user .msc-col { align-items: flex-end; }
+    .msc-sender { font-size: 11.5px; font-weight: 700; color: var(--msc-muted); margin: 0 0 -4px 2px; }
+    .msc-time { font-size: 10.5px; color: var(--msc-faint); margin: -3px 4px 0; }
+
+    .msc-bubble { max-width: 100%; padding: 10px 14px; border-radius: 18px; font-size: 14.5px; line-height: 1.55; overflow-wrap: anywhere; }
+    .msc-row.is-user .msc-bubble { max-width: 84%; background: var(--msc-primary); color: #fff; border-bottom-right-radius: 6px; box-shadow: 0 8px 18px -12px rgba(228, 37, 8, .9); }
+    .msc-row.is-bot .msc-bubble { align-self: flex-start; background: var(--msc-card); border: 1px solid var(--msc-border); border-top-left-radius: 6px; box-shadow: 0 4px 12px -10px rgba(16, 20, 30, .35); }
     .msc-bubble strong { font-weight: 700; color: inherit; }
     .msc-bubble p { margin: 0; }
     .msc-bubble p + p, .msc-bubble p + ul, .msc-bubble p + ol, .msc-bubble ul + p, .msc-bubble ol + p { margin-top: 6px; }
@@ -208,61 +229,98 @@
     #msc-chatbot .msc-bubble li { display: list-item; margin: 3px 0; }
     .msc-bubble li::marker { color: var(--msc-primary); }
 
-
-    /* AI đã phân tích */
-    .msc-analysis { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
-    .msc-analysis-label { font-size: 11px; font-weight: 700; color: var(--msc-muted); text-transform: uppercase; letter-spacing: .05em; margin-right: 2px; }
-    .msc-tag { font-size: 11.5px; padding: 3px 9px; border-radius: 999px; background: var(--msc-primary-soft); color: #b42010; border: 1px solid #fcd5cc; white-space: nowrap; }
+    /* AI hiểu */
+    .msc-analysis { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; padding: 8px 10px; border-radius: 12px; background: #eef2f7; }
+    .msc-analysis-label { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: .05em; margin-right: 2px; }
+    .msc-tag { font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: #fff; color: #334155; border: 1px solid #dde3ea; white-space: nowrap; }
 
     /* Thẻ sản phẩm */
-    .msc-cards { display: flex; gap: 10px; overflow-x: auto; overscroll-behavior-x: contain; padding: 2px 2px 6px; scroll-snap-type: x mandatory; scrollbar-width: thin; }
-    .msc-cards::-webkit-scrollbar, .msc-messages::-webkit-scrollbar { height: 6px; width: 6px; }
-    .msc-cards::-webkit-scrollbar-thumb, .msc-messages::-webkit-scrollbar-thumb { background: #cfd4dc; border-radius: 3px; }
+    .msc-cards { display: flex; gap: 10px; overflow-x: auto; overscroll-behavior-x: contain; padding: 2px 2px 8px; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+    .msc-cards::-webkit-scrollbar { height: 5px; }
+    .msc-cards::-webkit-scrollbar-thumb { background: #d3d7de; border-radius: 3px; }
     .msc-card {
-        flex: none; width: 140px; display: flex; flex-direction: column; overflow: hidden; scroll-snap-align: start;
+        flex: none; width: 150px; display: flex; flex-direction: column; overflow: hidden; scroll-snap-align: start;
         background: var(--msc-card); border: 1px solid var(--msc-border); border-radius: 14px;
-        text-decoration: none !important; color: inherit !important; transition: transform .18s, box-shadow .18s;
+        text-decoration: none !important; color: inherit !important; transition: transform .18s, box-shadow .18s, border-color .18s;
     }
-    .msc-card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -14px rgba(16, 20, 30, .45); }
-    .msc-card-img { position: relative; aspect-ratio: 4 / 5; background: #eceef2; overflow: hidden; }
-    .msc-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .msc-badge { position: absolute; top: 8px; left: 8px; background: var(--msc-primary); color: #fff; font-size: 11px; font-weight: 800; padding: 3px 7px; border-radius: 6px; }
-    .msc-card-body { flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 9px 10px 10px; }
-    .msc-card-name { font-size: 13px; font-weight: 600; line-height: 1.35; min-height: 35px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .msc-price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 6px; }
+    .msc-card:hover { transform: translateY(-2px); border-color: #dcdfe5; box-shadow: 0 14px 26px -16px rgba(16, 20, 30, .5); }
+    .msc-card-img { position: relative; aspect-ratio: 1 / 1; background: #eceef2; overflow: hidden; }
+    .msc-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .35s; }
+    .msc-card:hover .msc-card-img img { transform: scale(1.04); }
+    .msc-badge { position: absolute; top: 8px; left: 8px; background: var(--msc-primary); color: #fff; font-size: 11px; font-weight: 800; padding: 2px 7px; border-radius: 6px; }
+    .msc-card-body { flex: 1; display: flex; flex-direction: column; gap: 4px; padding: 9px 10px 10px; }
+    .msc-card-cat { font-size: 10.5px; font-weight: 700; color: var(--msc-faint); text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .msc-card-name { font-size: 13px; font-weight: 600; line-height: 1.35; min-height: 35px; color: var(--msc-ink); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .msc-price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 6px; margin-top: 2px; }
     .msc-price b { color: var(--msc-primary); font-size: 15px; font-weight: 800; }
-    .msc-price s { color: #9aa1ad; font-size: 11.5px; }
+    .msc-price s { color: var(--msc-faint); font-size: 11.5px; }
     .msc-meta { display: flex; align-items: center; justify-content: space-between; gap: 6px; font-size: 11px; color: var(--msc-muted); }
     .msc-swatches { display: flex; gap: 3px; }
-    .msc-swatch { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(0, 0, 0, .15); }
+    .msc-swatch { width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .15); }
     .msc-sizes { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .msc-card-btn { margin-top: auto; text-align: center; font-size: 12.5px; font-weight: 700; padding: 8px 0; border-radius: 9px; background: var(--msc-ink); color: #fff; transition: background .15s; }
-    .msc-card:hover .msc-card-btn { background: var(--msc-primary); }
+    .msc-card-btn {
+        margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 4px;
+        font-size: 12.5px; font-weight: 700; padding: 7px 0; border-radius: 9px;
+        background: var(--msc-primary-soft); color: var(--msc-primary); transition: background .15s, color .15s;
+    }
+    .msc-card:hover .msc-card-btn { background: var(--msc-primary); color: #fff; }
 
     /* Bộ đồ */
-    .msc-outfit { background: var(--msc-card); border: 1px solid var(--msc-border); border-radius: 16px; padding: 10px; min-width: 0; }
-    .msc-outfit-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 0 2px 8px; font-size: 13px; }
-    .msc-outfit-head strong { font-weight: 800; }
-    .msc-total { font-size: 12px; font-weight: 800; color: var(--msc-primary); background: var(--msc-primary-soft); padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
+    .msc-outfit { background: var(--msc-card); border: 1px solid var(--msc-border); border-radius: 16px; padding: 10px; min-width: 0; box-shadow: 0 4px 12px -10px rgba(16, 20, 30, .35); }
+    .msc-outfit-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 0 2px 8px; font-size: 13.5px; }
+    .msc-outfit-head strong { font-weight: 800; color: var(--msc-ink); }
+    .msc-total { font-size: 12.5px; font-weight: 800; color: #fff; background: var(--msc-primary); padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
     .msc-outfit-items { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; gap: 6px; }
-    .msc-outfit-items .msc-card { width: auto; min-width: 0; }
+    .msc-outfit-items .msc-card { width: auto; min-width: 0; box-shadow: none; }
     .msc-plus { align-self: center; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--msc-bg); color: var(--msc-muted); font-weight: 800; font-size: 14px; }
 
     .msc-links { display: flex; flex-wrap: wrap; gap: 6px; }
-    .msc-link { display: inline-flex; align-items: center; gap: 4px; font-size: 12.5px; font-weight: 700; padding: 7px 12px; border-radius: 999px; border: 1px solid #f6b4a6; color: var(--msc-primary) !important; background: #fff; text-decoration: none !important; }
+    .msc-link { display: inline-flex; align-items: center; gap: 4px; font-size: 12.5px; font-weight: 700; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--msc-primary-line); color: var(--msc-primary) !important; background: #fff; text-decoration: none !important; }
     .msc-link:hover { background: var(--msc-primary); border-color: var(--msc-primary); color: #fff !important; }
-    .msc-source { font-size: 10.5px; color: #9aa1ad; display: flex; align-items: center; gap: 4px; }
+    .msc-source { display: inline-flex; align-items: center; gap: 4px; align-self: flex-start; font-size: 10.5px; font-weight: 600; color: var(--msc-faint); }
 
-    .msc-typing { display: inline-flex; align-items: center; gap: 8px; padding: 11px 14px; background: var(--msc-card); border: 1px solid var(--msc-border); border-radius: 16px; border-top-left-radius: 5px; font-size: 12.5px; color: var(--msc-muted); }
-    .msc-dots { display: inline-flex; gap: 4px; }
-    .msc-dots i { width: 6px; height: 6px; border-radius: 50%; background: #aab1bd; animation: msc-blink 1.2s infinite; }
-    .msc-dots i:nth-child(2) { animation-delay: .15s; } .msc-dots i:nth-child(3) { animation-delay: .3s; }
-    @keyframes msc-blink { 0%, 80%, 100% { opacity: .35; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+    /* Trạng thái "AI đang làm việc" */
+    .msc-row.is-thinking .msc-mini-avatar { animation: msc-glow 1.6s ease-in-out infinite; }
+    @keyframes msc-glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(228, 37, 8, .45); } 50% { box-shadow: 0 0 0 7px rgba(228, 37, 8, 0); } }
+    .msc-thinking { display: flex; flex-direction: column; gap: 10px; align-self: stretch; }
+    .msc-think-line {
+        display: inline-flex; align-items: center; gap: 10px; align-self: flex-start; padding: 10px 16px 10px 12px;
+        background: var(--msc-card); border: 1px solid var(--msc-border); border-radius: 18px; border-top-left-radius: 6px;
+        box-shadow: 0 4px 12px -10px rgba(16, 20, 30, .35);
+    }
+    .msc-orb {
+        position: relative; flex: none; width: 18px; height: 18px; border-radius: 50%;
+        background: conic-gradient(from 0deg, #ff7a59, var(--msc-primary), #ffb199, #ff7a59);
+        animation: msc-spin 1.1s linear infinite;
+    }
+    .msc-orb::after { content: ''; position: absolute; inset: 4px; border-radius: 50%; background: #fff; }
+    @keyframes msc-spin { to { transform: rotate(360deg); } }
+    .msc-think-text {
+        font-size: 13px; font-weight: 600;
+        background: linear-gradient(90deg, #8a919e 0%, #8a919e 35%, var(--msc-primary) 50%, #8a919e 65%, #8a919e 100%);
+        background-size: 250% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
+        animation: msc-shine 1.8s linear infinite;
+    }
+    .msc-think-text.is-swap { animation: msc-shine 1.8s linear infinite, msc-fade .35s ease-out; }
+    @keyframes msc-shine { from { background-position: 100% 0; } to { background-position: -150% 0; } }
+    @keyframes msc-fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    .msc-skeletons { display: flex; gap: 10px; overflow: hidden; }
+    .msc-skel { flex: none; width: 150px; border-radius: 14px; background: var(--msc-card); border: 1px solid var(--msc-border); overflow: hidden; animation: msc-pop .4s ease-out both; }
+    .msc-skel:nth-child(2) { animation-delay: .12s; } .msc-skel:nth-child(3) { animation-delay: .24s; }
+    .msc-skel-img, .msc-skel-line { position: relative; overflow: hidden; background: #eceef2; }
+    .msc-skel-img { aspect-ratio: 1 / 1; }
+    .msc-skel-line { height: 9px; border-radius: 5px; margin: 10px 10px 0; }
+    .msc-skel-line.short { width: 45%; margin-bottom: 12px; }
+    .msc-skel-img::after, .msc-skel-line::after {
+        content: ''; position: absolute; inset: 0; transform: translateX(-100%);
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .75), transparent);
+        animation: msc-shimmer 1.3s ease-in-out infinite;
+    }
+    @keyframes msc-shimmer { to { transform: translateX(100%); } }
 
     /* ---------- Chân khung chat ---------- */
     .msc-footer { flex: none; background: #fff; border-top: 1px solid var(--msc-border); padding-bottom: env(safe-area-inset-bottom, 0); }
-    /* Câu hỏi mẫu: danh sách dọc, cuộn được, thu gọn được */
-    .msc-samples-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px 0 14px; }
+    .msc-samples-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px 0 16px; }
     .msc-samples-head span { font-size: 11px; font-weight: 800; color: var(--msc-muted); text-transform: uppercase; letter-spacing: .06em; }
     .msc-samples-head button { border: 0; background: none; padding: 6px 4px; font-size: 12px; font-weight: 700; color: var(--msc-primary); cursor: pointer; }
     .msc-samples-head button::after { content: ' ▾'; }
@@ -270,39 +328,44 @@
     .msc-suggestions {
         display: flex; flex-direction: column; gap: 6px;
         max-height: 38vh; max-height: 38dvh; overflow-y: auto; overscroll-behavior: contain;
-        padding: 6px 12px 6px; scrollbar-width: thin; scrollbar-color: #d5d9e0 transparent;
+        padding: 6px 12px 4px; scrollbar-width: thin; scrollbar-color: #d5d9e0 transparent;
     }
     .msc-suggestions::-webkit-scrollbar { width: 5px; }
     .msc-suggestions::-webkit-scrollbar-thumb { background: #d5d9e0; border-radius: 3px; }
-    .msc-suggestions button.is-followup { background: #fff; border-style: dashed; }
     .msc-suggestions:empty, .msc-suggestions.is-collapsed { display: none; }
     .msc-suggestions button {
-        flex: none; display: flex; align-items: flex-start; gap: 8px; width: 100%; min-height: 38px;
+        flex: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 40px;
         text-align: left; font-size: 13px; line-height: 1.4; padding: 8px 12px; border-radius: 12px; white-space: normal; cursor: pointer;
-        border: 1px solid var(--msc-border); background: var(--msc-bg); color: var(--msc-ink-2); transition: all .15s;
+        border: 1px solid var(--msc-border); background: #fafafb; color: #2f3542; transition: border-color .15s, background .15s, color .15s;
     }
-    .msc-suggestions button:hover { border-color: #f6b4a6; color: var(--msc-primary); background: var(--msc-primary-soft); }
-    .msc-input { display: flex; align-items: center; gap: 8px; padding: 10px 12px 4px; margin: 0; }
+    .msc-suggestions button::after { content: '↗'; flex: none; font-size: 13px; color: var(--msc-faint); transition: color .15s; }
+    .msc-suggestions button:hover { border-color: var(--msc-primary-line); color: var(--msc-primary); background: var(--msc-primary-soft); }
+    .msc-suggestions button:hover::after { color: var(--msc-primary); }
+    .msc-suggestions button.is-followup { background: #fff; border-style: dashed; }
+
+    .msc-input { margin: 0; padding: 10px 12px 4px; }
+    .msc-input-box {
+        display: flex; align-items: center; gap: 6px; padding: 4px 4px 4px 16px;
+        background: var(--msc-bg); border: 1px solid transparent; border-radius: 999px; transition: border-color .15s, background .15s, box-shadow .15s;
+    }
+    .msc-input-box:focus-within { background: #fff; border-color: #f2a491; box-shadow: 0 0 0 4px rgba(228, 37, 8, .1); }
     .msc-input input {
-        flex: 1; min-width: 0; height: 46px; padding: 0 16px; margin: 0;
+        flex: 1; min-width: 0; height: 40px; padding: 0; margin: 0; border: 0; outline: none; box-shadow: none; background: transparent;
         font-family: inherit; font-size: 15px; color: var(--msc-text);
-        background: var(--msc-bg); border: 1px solid transparent; border-radius: 999px; outline: none; box-shadow: none;
-        transition: border-color .15s, background .15s, box-shadow .15s;
     }
-    .msc-input input::placeholder { color: #9aa1ad; }
-    .msc-input input:focus { background: #fff; border-color: #f3a593; box-shadow: 0 0 0 4px rgba(228, 37, 8, .1); }
+    .msc-input input:focus { outline: none; box-shadow: none; }
+    .msc-input input::placeholder { color: var(--msc-faint); }
     .msc-input button {
-        flex: none; width: 46px; height: 46px; border: 0; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
-        color: #fff; background: linear-gradient(135deg, #f0360f, var(--msc-primary)); box-shadow: 0 8px 16px -8px rgba(228, 37, 8, .9);
-        transition: transform .15s, opacity .15s;
+        flex: none; width: 40px; height: 40px; border: 0; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+        color: #fff; background: var(--msc-primary); box-shadow: 0 8px 16px -8px rgba(228, 37, 8, .9); transition: transform .15s, background .15s, opacity .15s;
     }
-    .msc-input button:hover { transform: scale(1.05); }
+    .msc-input button:hover { background: var(--msc-primary-dark); transform: scale(1.05); }
     .msc-input button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
-    .msc-note { margin: 0; padding: 2px 12px 9px; font-size: 10.5px; color: #9aa1ad; text-align: center; }
+    .msc-note { margin: 0; padding: 4px 12px 9px; font-size: 10.5px; color: var(--msc-faint); text-align: center; }
 
     /* ---------- Mobile: toàn màn hình ---------- */
     @media (max-width: 640px), (max-height: 500px) {
-        .msc-fab { right: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); height: 54px; width: 54px; padding: 0; justify-content: center; }
+        .msc-fab { right: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); height: 56px; width: 56px; padding: 0; justify-content: center; }
         .msc-fab-icon { background: transparent; }
         .msc-fab-label { display: none; }
         .msc-panel {
@@ -312,7 +375,7 @@
         @keyframes msc-in-mobile { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
         .msc-header { padding-top: calc(12px + env(safe-area-inset-top, 0px)); }
         .msc-messages { padding: 14px 12px 10px; }
-        .msc-card { width: 140px; }
+        .msc-card { width: 142px; }
         .msc-input input { font-size: 16px; } /* >= 16px để iPhone không tự phóng to khi gõ */
     }
     @media (max-width: 640px) {
@@ -320,16 +383,18 @@
     }
     /* Màn hình rất thấp (xoay ngang / bàn phím ảo đang mở): thu gọn phần đầu & chân */
     @media (max-height: 500px) {
-        .msc-note, .msc-suggestions, .msc-samples-head { display: none; }
+        .msc-note, .msc-suggestions, .msc-samples-head, .msc-hero { display: none; }
         .msc-header { padding-top: 6px; padding-bottom: 6px; }
         .msc-avatar { width: 32px; height: 32px; }
         .msc-status { display: none; }
         .msc-input { padding: 6px 12px; }
-        .msc-input input, .msc-input button { height: 40px; }
-        .msc-input button { width: 40px; }
+    }
+    @media (max-width: 480px) {
+        .msc-demo-btn { width: 32px; height: 32px; padding: 0; justify-content: center; }
+        .msc-demo-label { display: none; }
     }
     @media (max-width: 360px) {
-        .msc-card { width: 132px; }
+        .msc-card, .msc-skel { width: 132px; }
         .msc-row.is-bot .msc-mini-avatar { display: none; }
         .msc-messages { padding-left: 10px; padding-right: 10px; }
         .msc-outfit { padding: 8px; }
@@ -342,7 +407,8 @@
     }
     html.msc-lock, html.msc-lock body { overflow: hidden !important; }
     @media (prefers-reduced-motion: reduce) {
-        .msc-fab-ring, .msc-panel, .msc-dots i { animation: none !important; }
+        .msc-fab-ring, .msc-panel, .msc-row.is-new, .msc-orb, .msc-think-text, .msc-skel, .msc-skel-img::after, .msc-skel-line::after,
+        .msc-row.is-thinking .msc-mini-avatar { animation: none !important; }
     }
 </style>
 
@@ -370,6 +436,7 @@
     let generation = 0; // tăng khi bấm "cuộc trò chuyện mới" để bỏ câu trả lời đang chờ
 
     const SPARK = '<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>';
+    const SPARK_BIG = '<svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M19 14l.9 2.1L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.9z" opacity=".7"/></svg>';
 
     let messages = load();
     let busy = false;
@@ -407,13 +474,14 @@
     }
     const money = v => Number(v).toLocaleString('vi-VN') + 'đ';
     const safeUrl = url => (/^(https?:)?\/\//i.test(url || '') || String(url || '').startsWith('/')) ? url : '#';
+    const clock = t => t ? new Date(t).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : '';
 
     function cardHtml(p) {
         const swatches = (p.swatches || []).slice(0, 5)
             .map(s => `<span class="msc-swatch" style="background:${/^#[0-9a-f]{3,8}$/i.test(s.hex) ? s.hex : '#ccc'}" title="${escapeHtml(s.name)}"></span>`).join('');
         // Nhiều size thì hiển thị dạng khoảng: "Size S–XXL"
-        const list = p.sizes || [];
-        const sizes = !list.length ? '' : (list.length > 3 ? `Size ${list[0]}–${list[list.length - 1]}` : 'Size ' + list.join(' · '))
+        const sizeList = p.sizes || [];
+        const sizes = !sizeList.length ? '' : (sizeList.length > 3 ? `Size ${sizeList[0]}–${sizeList[sizeList.length - 1]}` : 'Size ' + sizeList.join(' · '))
             .replace('Size FREE', 'Free size');
         return `
             <a class="msc-card" href="${escapeHtml(safeUrl(p.url))}">
@@ -422,31 +490,62 @@
                     ${p.discount ? `<span class="msc-badge">-${p.discount}%</span>` : ''}
                 </div>
                 <div class="msc-card-body">
+                    ${p.category ? `<div class="msc-card-cat">${escapeHtml(p.category)}</div>` : ''}
                     <div class="msc-card-name">${escapeHtml(p.name)}</div>
                     <div class="msc-price"><b>${money(p.price)}</b>${p.original_price ? `<s>${money(p.original_price)}</s>` : ''}</div>
                     ${swatches || sizes ? `<div class="msc-meta"><span class="msc-swatches">${swatches}</span><span class="msc-sizes" title="${escapeHtml(sizes)}">${escapeHtml(sizes)}</span></div>` : ''}
-                    <span class="msc-card-btn">Xem sản phẩm</span>
+                    <span class="msc-card-btn">Xem chi tiết <span aria-hidden="true">→</span></span>
                 </div>
             </a>`;
     }
 
-    function botRow(inner) {
-        return `<div class="msc-row is-bot"><span class="msc-mini-avatar" aria-hidden="true">${SPARK}</span><div class="msc-col">${inner}</div></div>`;
+    const THINK_STEPS = ['Đang đọc hiểu câu hỏi...', 'Đang phân tích nhu cầu...', 'Đang tìm trong kho hàng...', 'Đang chọn sản phẩm phù hợp...'];
+    let thinkTimer = null;
+    function thinkingHtml() {
+        const skel = '<div class="msc-skel"><div class="msc-skel-img"></div><div class="msc-skel-line"></div><div class="msc-skel-line short"></div></div>';
+        return `<div class="msc-row is-bot is-new is-thinking"><span class="msc-mini-avatar" aria-hidden="true">${SPARK}</span>
+            <div class="msc-col"><div class="msc-sender">MODESPORT AI</div>
+                <div class="msc-thinking" id="msc-typing" role="status">
+                    <div class="msc-think-line"><span class="msc-orb" aria-hidden="true"></span><span class="msc-think-text">${THINK_STEPS[0]}</span></div>
+                    <div class="msc-skeletons" aria-hidden="true">${skel}${skel}${skel}</div>
+                </div>
+            </div></div>`;
+    }
+    function startThinking() {
+        list.insertAdjacentHTML('beforeend', thinkingHtml());
+        let step = 0;
+        clearInterval(thinkTimer);
+        thinkTimer = setInterval(() => {
+            const el = document.querySelector('#msc-typing .msc-think-text');
+            if (!el) return clearInterval(thinkTimer);
+            step = Math.min(step + 1, THINK_STEPS.length - 1);
+            el.textContent = THINK_STEPS[step];
+            el.classList.remove('is-swap'); void el.offsetWidth; el.classList.add('is-swap');
+        }, 1300);
+    }
+    function stopThinking() { clearInterval(thinkTimer); thinkTimer = null; }
+
+    function botRow(inner, isNew) {
+        return `<div class="msc-row is-bot${isNew ? ' is-new' : ''}"><span class="msc-mini-avatar" aria-hidden="true">${SPARK}</span><div class="msc-col"><div class="msc-sender">MODESPORT AI</div>${inner}</div></div>`;
     }
 
-    function welcomeHtml() {
-        return botRow(`
-            <div class="msc-bubble"><p>Xin chào! 👋 Tôi có thể giúp bạn tìm quần áo thể thao phù hợp.</p><p>Bạn đang muốn tìm sản phẩm gì? Bạn có thể chọn nhanh một <strong>câu hỏi gợi ý</strong> bên dưới.</p></div>
-`);
+    function heroHtml() {
+        return `<div class="msc-hero">
+            <div class="msc-hero-avatar">${SPARK_BIG}</div>
+            <h3>Xin chào! 👋</h3>
+            <p>Mình là trợ lý AI của MODESPORT. Hãy cho mình biết bạn cần tìm gì, mình sẽ gợi ý sản phẩm phù hợp nhất.</p>
+            <div class="msc-skills"><span>🔎 Tìm sản phẩm</span><span>📏 Tư vấn size</span><span>👕 Phối cả bộ</span><span>💰 Lọc theo giá</span><span>🚚 Ship & đổi trả</span></div>
+        </div>`;
     }
 
-    function messageHtml(m) {
+    function messageHtml(m, isNew) {
+        const time = m.time ? `<div class="msc-time">${clock(m.time)}</div>` : '';
         if (m.role === 'user') {
-            return `<div class="msc-row is-user"><div class="msc-bubble">${escapeHtml(m.text)}</div></div>`;
+            return `<div class="msc-row is-user${isNew ? ' is-new' : ''}"><div class="msc-col"><div class="msc-bubble">${escapeHtml(m.text)}</div>${time}</div></div>`;
         }
         let inner = `<div class="msc-bubble">${formatText(m.reply)}</div>`;
         if (m.analysis && m.analysis.length) {
-            inner += `<div class="msc-analysis"><span class="msc-analysis-label">AI hiểu</span>${m.analysis.map(a => `<span class="msc-tag">${escapeHtml(a)}</span>`).join('')}</div>`;
+            inner += `<div class="msc-analysis"><span class="msc-analysis-label">✦ AI hiểu bạn cần</span>${m.analysis.map(a => `<span class="msc-tag">${escapeHtml(a)}</span>`).join('')}</div>`;
         }
         if (m.products && m.products.length) {
             inner += `<div class="msc-cards">${m.products.map(cardHtml).join('')}</div>`;
@@ -460,14 +559,20 @@
         if (m.links && m.links.length) {
             inner += `<div class="msc-links">${m.links.map(l => `<a class="msc-link" href="${escapeHtml(safeUrl(l.url))}">${escapeHtml(l.label)} →</a>`).join('')}</div>`;
         }
-        if (m.source) {
-            inner += `<div class="msc-source">${m.source === 'gemini' ? '✦ Phân tích bởi Gemini AI' : '✦ Phân tích bởi bộ NLP tiếng Việt'} · dữ liệu từ website</div>`;
+        const meta = [clock(m.time), m.source ? (m.source === 'gemini' ? 'Phân tích bởi Gemini AI' : 'Phân tích bởi bộ NLP tiếng Việt') : ''].filter(Boolean).join(' · ');
+        if (meta) {
+            inner += `<div class="msc-source">${meta}</div>`;
         }
-        return botRow(inner);
+        return botRow(inner, isNew);
     }
 
-    function render() {
-        list.innerHTML = welcomeHtml() + messages.map(messageHtml).join('');
+    function render(animateLast) {
+        let html = heroHtml();
+        if (messages.length) {
+            html += '<div class="msc-divider">Hôm nay</div>';
+            html += messages.map((m, i) => messageHtml(m, animateLast && i === messages.length - 1)).join('');
+        }
+        list.innerHTML = html;
         list.querySelectorAll('img[data-fallback]').forEach(img => {
             img.addEventListener('error', () => { img.removeAttribute('data-fallback'); img.src = root.dataset.placeholder; }, { once: true });
         });
@@ -483,7 +588,7 @@
         list.scrollTop = last.role === 'bot' && lastUser ? Math.max(0, lastUser.offsetTop - 8) : list.scrollHeight;
     }
 
-    // Hàng câu hỏi mẫu (theo đề bài) luôn nằm sát ô nhập; gợi ý nối tiếp sau mỗi câu trả lời xếp phía trước
+    // Câu hỏi gợi ý luôn nằm sát ô nhập; gợi ý hỏi tiếp sau mỗi câu trả lời xếp phía trước
     function setSuggestions(followUps) {
         const extra = (followUps || []).filter(s => !samples.includes(s));
         const chip = (s, cls) => `<button type="button" class="${cls}" data-ask="${escapeHtml(s)}">${escapeHtml(s)}</button>`;
@@ -521,10 +626,10 @@
         setSamplesCollapsed(true); // nhường chỗ cho câu trả lời (bấm "Hiện" để mở lại gợi ý)
         sendBtn.disabled = true;
         input.value = '';
-        messages.push({ role: 'user', text });
+        messages.push({ role: 'user', text, time: Date.now() });
         save();
-        render();
-        list.insertAdjacentHTML('beforeend', botRow('<div class="msc-typing" id="msc-typing"><span class="msc-dots"><i></i><i></i><i></i></span>AI đang phân tích...</div>'));
+        render(true);
+        startThinking();
         list.scrollTop = list.scrollHeight;
 
         try {
@@ -539,19 +644,20 @@
             if (!res.ok) throw new Error('Xin lỗi, hệ thống đang bận. Bạn vui lòng thử lại sau.');
             const data = await res.json();
             if (myGeneration !== generation) return; // đã bắt đầu cuộc trò chuyện mới
-            messages.push({ role: 'bot', ...data });
+            messages.push({ role: 'bot', ...data, time: Date.now() });
             setSuggestions(data.suggestions);
         } catch (err) {
             if (myGeneration !== generation) return;
-            messages.push({ role: 'bot', reply: err.message || 'Không thể kết nối tới máy chủ.' });
+            messages.push({ role: 'bot', reply: err.message || 'Không thể kết nối tới máy chủ.', time: Date.now() });
             if (!input.value) input.value = text; // giữ lại câu hỏi để gửi lại
             setSuggestions([text]);
         } finally {
             if (myGeneration === generation) {
+                stopThinking();
                 busy = false;
                 sendBtn.disabled = false;
                 save();
-                render();
+                render(true);
                 if (canAutofocus()) input.focus();
             }
         }
@@ -561,6 +667,7 @@
     document.getElementById('msc-close').addEventListener('click', close);
     document.getElementById('msc-reset').addEventListener('click', async () => {
         generation++;
+        stopThinking();
         setSamplesCollapsed(false);
         busy = false;
         sendBtn.disabled = false;
@@ -602,7 +709,7 @@
         }
     });
     mobile.addEventListener?.('change', () => lockPage(!panel.hidden));
-    // Thu gọn / mở rộng danh sách câu hỏi mẫu (ghi nhớ trong phiên)
+    // Thu gọn / mở rộng danh sách câu hỏi gợi ý (ghi nhớ trong phiên)
     function setSamplesCollapsed(collapsed) {
         suggestionBox.classList.toggle('is-collapsed', collapsed);
         samplesToggle.setAttribute('aria-expanded', String(!collapsed));

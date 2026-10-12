@@ -8,6 +8,8 @@ Tài liệu bàn giao chức năng **chatbot AI tư vấn sản phẩm** của w
 
 1. [Checklist nhanh trước buổi demo](#1-checklist-nhanh-trước-buổi-demo)
 2. [Chức năng AI làm được gì](#2-chức-năng-ai-làm-được-gì)
+   - [2.2. Chatbot hoạt động như thế nào? (giải thích dễ hiểu)](#22-chatbot-hoạt-động-như-thế-nào-giải-thích-dễ-hiểu)
+   - [2.3. Hành trình của một câu hỏi (chi tiết từng bước)](#23-hành-trình-của-một-câu-hỏi-chi-tiết-từng-bước)
 3. [Cài đặt và chạy trên XAMPP](#3-cài-đặt-và-chạy-trên-xampp)
 4. [Sử dụng khung chat](#4-sử-dụng-khung-chat)
 5. [Chế độ Demo – 5 tình huống bắt buộc](#5-chế-độ-demo--5-tình-huống-bắt-buộc)
@@ -32,6 +34,8 @@ Tài liệu bàn giao chức năng **chatbot AI tư vấn sản phẩm** của w
 
 ## 2. Chức năng AI làm được gì
 
+### 2.1. Đáp ứng yêu cầu đề bài
+
 | Yêu cầu đề bài | Cách đáp ứng |
 |---|---|
 | 1. Hiểu câu hỏi bằng ngôn ngữ tự nhiên | Gemini AI phân tích câu hỏi thành tiêu chí (JSON) + bộ phân tích tiếng Việt tự viết (hiểu cả câu không dấu, "300k", "1tr2", "1m75", "70kg"...) |
@@ -43,6 +47,170 @@ Tài liệu bàn giao chức năng **chatbot AI tư vấn sản phẩm** của w
 | 7. Không trả lời tuỳ tiện thông tin ngoài dữ liệu | Sản phẩm/giá/size luôn lấy từ database; câu hỏi ngoài phạm vi bị từ chối lịch sự; không có hàng đúng yêu cầu thì nói rõ tiêu chí nào chưa đáp ứng |
 
 Ngoài ra chatbot **hiểu câu hỏi nối tiếp** (ví dụ hỏi "Tìm áo bóng đá nam" rồi hỏi tiếp "Còn màu trắng không?") và tư vấn size theo chiều cao/cân nặng.
+
+### 2.2. Chatbot hoạt động như thế nào? (giải thích dễ hiểu)
+
+Hãy hình dung chatbot như **một nhân viên bán hàng** đứng trong cửa hàng, có **kho hàng** phía sau và một **cuốn sổ quy định** của shop. Mỗi khi khách hỏi, nhân viên này làm 6 bước:
+
+```
+  Khách hỏi
+     │
+     ▼
+① NGHE HIỂU ──► ② ĐO SIZE ──► ③ VÀO KHO TÌM HÀNG ──► ④ SOẠN CÂU TRẢ LỜI ──► ⑤ ĐƯA HÀNG CHO KHÁCH XEM
+     ▲                                                                              │
+     └──────────────────────── ⑥ GHI NHỚ CÂU CHUYỆN ◄───────────────────────────────┘
+```
+
+| Bước | Nhân viên làm gì | Trong hệ thống |
+|---|---|---|
+| **① Nghe hiểu** | Nghe khách nói rồi ghi ra một **"phiếu yêu cầu"**: khách là nam hay nữ, chơi môn gì, cần áo hay quần, màu gì, size gì, bao nhiêu tiền... | Trí tuệ nhân tạo **Gemini của Google** đọc câu hỏi và điền phiếu. Nếu mất mạng hoặc Gemini bận, một **bộ đọc hiểu tiếng Việt do nhóm tự viết** điền phiếu thay, nên chatbot không bao giờ "đứng hình" |
+| **② Đo size** | Nếu khách cho biết chiều cao, cân nặng thì tra **bảng size** của shop để chọn size phù hợp | Tra bảng size nam/nữ; ưu tiên theo cân nặng |
+| **③ Vào kho tìm hàng** | Cầm phiếu yêu cầu vào kho, chỉ lấy **hàng thật đang bán, còn hàng**, đúng màu, đúng size, đúng tầm giá. Nếu khách cần cả bộ thì ghép áo + quần sao cho tổng tiền vừa ngân sách | Tìm trong **cơ sở dữ liệu sản phẩm** của website (chính là kho hàng hiển thị trên web) |
+| **④ Soạn câu trả lời** | Nói cho khách biết đã tìm được gì. Nếu không có hàng đúng hoàn toàn thì **nói thật** là thiếu tiêu chí nào và đưa mẫu gần nhất | Câu trả lời được soạn từ chính hàng vừa tìm; Gemini chỉ giúp **diễn đạt cho tự nhiên**, không được thêm sản phẩm hay giá nào khác |
+| **⑤ Đưa hàng cho khách xem** | Bày sản phẩm ra cho khách xem, khách thích món nào thì dẫn tới quầy món đó | Hiện các **thẻ sản phẩm** có ảnh, giá, màu, size; bấm vào thẻ là mở trang sản phẩm để đặt mua |
+| **⑥ Ghi nhớ câu chuyện** | Nhớ khách vừa hỏi gì, để khi khách nói "còn màu trắng không?" thì hiểu là vẫn đang nói về món cũ | Lưu lại nội dung cuộc trò chuyện đang diễn ra |
+
+**Câu hỏi về shop** (phí ship, đổi trả, thanh toán, liên hệ...): nhân viên mở **cuốn sổ quy định** để trả lời đúng như chính sách đã đăng trên website. **Mã giảm giá** và **danh mục hàng** thì xem trực tiếp trên hệ thống.
+
+**Câu hỏi không liên quan đến shop** (thời tiết, kiến thức chung...) hoặc **món shop không bán** (đồ bơi, đồ võ...): nhân viên lịch sự nói là không hỗ trợ, **không đoán bừa**.
+
+**Ví dụ – Demo 5:** khách hỏi *"Tôi là nam, cao 1m72 nặng 65kg, muốn mua đồ chạy bộ màu đen dưới 500k."*
+
+1. **Nghe hiểu** → phiếu yêu cầu: *Nam · Chạy bộ · Màu đen · Cao 1m72, nặng 65kg · Giá dưới 500.000đ*.
+2. **Đo size** → tra bảng size nam: 1m72 và 65kg đều ứng với size **L**.
+3. **Vào kho** → chỉ lấy đồ chạy bộ dành cho nam, **còn màu đen size L**, giá không quá 500.000đ.
+4. **Soạn câu trả lời** → "Bạn nên mặc size L… Mình tìm được 6 sản phẩm…".
+5. **Đưa hàng** → 6 thẻ sản phẩm, bấm vào là mở trang mua.
+
+Trên màn hình, dòng **"AI hiểu"** dưới câu trả lời chính là **phiếu yêu cầu** ở bước ①, giúp người xem thấy rõ AI đã phân tích câu hỏi ra sao.
+
+**Vì sao có thể tin câu trả lời?** Vì nhân viên này **chỉ được bán hàng có trong kho**: mọi tên sản phẩm, giá, màu, size đều lấy từ dữ liệu thật của website, còn AI chỉ làm hai việc là *hiểu câu hỏi* và *nói cho dễ nghe*.
+
+### 2.3. Hành trình của một câu hỏi (chi tiết từng bước)
+
+Ví dụ xuyên suốt là **Demo 5**:
+
+> *"Tôi là nam, cao 1m72 nặng 65kg, muốn mua đồ chạy bộ màu đen dưới 500k."*
+
+#### Sơ đồ tổng quát
+
+```
+ NGƯỜI DÙNG                           HỆ THỐNG
+ ──────────                           ────────
+ ① Gõ câu hỏi, bấm Gửi
+ ② Thấy tin nhắn của mình +  ──────► ③ Nhận câu hỏi, kiểm tra hợp lệ
+    hiệu ứng "AI đang làm việc"       ④ Lấy lại trí nhớ cuộc trò chuyện
+                                      ⑤ HIỂU câu hỏi → "phiếu yêu cầu"
+                                      ⑥ Câu hỏi nối tiếp? → ghép với lần trước
+                                      ⑦ TƯ VẤN SIZE (nếu có chiều cao/cân nặng)
+                                      ⑧ HỎI CHÍNH SÁCH? → tra sổ quy định
+                                      ⑨ TÌM HÀNG trong kho (hoặc phối bộ đồ)
+                                      ⑩ SOẠN câu trả lời từ hàng tìm được
+ ⑫ Thấy câu trả lời + thẻ   ◄──────  ⑪ Gửi kết quả về + ghi nhớ
+    sản phẩm, bấm để mua
+```
+
+Thường mất **2–5 giây**. Câu đã hỏi trong ngày được trả lời gần như ngay lập tức nhờ bộ nhớ đệm.
+
+#### ① Người dùng gõ câu hỏi
+
+Gõ vào ô **"Nhập câu hỏi của bạn..."** rồi nhấn Enter hoặc nút gửi. Cũng có thể bấm một câu trong mục **Gợi ý cho bạn** hoặc chọn từ nút **▶ Demo**.
+
+#### ② Màn hình phản hồi ngay lập tức
+
+Chưa cần chờ máy chủ, giao diện đã:
+
+- Hiện tin nhắn của khách (bong bóng đỏ bên phải) kèm giờ gửi.
+- Thu gọn mục gợi ý để nhường chỗ cho câu trả lời.
+- Bật hiệu ứng **"AI đang làm việc"**: quả cầu xoay, dòng chữ đổi lần lượt *Đang đọc hiểu câu hỏi → Đang phân tích nhu cầu → Đang tìm trong kho hàng → Đang chọn sản phẩm phù hợp*, kèm 3 thẻ sản phẩm mờ.
+- Khoá nút gửi để tránh gửi trùng.
+
+#### ③ Máy chủ nhận câu hỏi
+
+Trình duyệt gửi câu hỏi lên máy chủ kèm mã bảo mật. Máy chủ kiểm tra câu hỏi không rỗng, không quá 500 ký tự, và người dùng không gửi quá 30 câu/phút (chống spam).
+
+#### ④ Lấy lại "trí nhớ"
+
+Máy chủ mở lại cuộc trò chuyện đang diễn ra (20 tin nhắn gần nhất) và **tiêu chí tìm kiếm lần trước**, để hiểu được các câu nối tiếp như "còn màu trắng không?".
+
+#### ⑤ Hiểu câu hỏi: hai "bộ não" cùng đọc
+
+| Bộ não | Làm gì | Khi nào dùng |
+|---|---|---|
+| **Bộ đọc tiếng Việt** (nhóm tự viết) | Tách số đo, giá tiền, màu, môn, loại sản phẩm theo luật; hiểu cả câu gõ không dấu | **Luôn chạy** |
+| **Gemini AI** (Google) | Hiểu ngôn ngữ tự nhiên, cách diễn đạt đa dạng, ngữ cảnh hội thoại | Khi có mạng và còn lượt dùng |
+
+Hai kết quả được gộp lại: **con số** (giá, chiều cao, cân nặng) lấy theo bộ đọc tiếng Việt vì chính xác; **phân loại** (môn, màu, giới tính...) lấy theo Gemini vì hiểu ngữ cảnh tốt hơn. Kết quả là một **phiếu yêu cầu**:
+
+| Mục | Giá trị |
+|---|---|
+| Giới tính | Nam |
+| Môn thể thao | Chạy bộ |
+| Màu | Đen |
+| Chiều cao / cân nặng | 172 cm / 65 kg |
+| Giá | Tối đa 500.000đ |
+| Khách muốn | Xem sản phẩm + tư vấn size |
+
+Nếu Gemini lỗi, mất mạng hoặc hết lượt, phiếu vẫn được điền bằng bộ đọc tiếng Việt, nên chatbot **không bao giờ đứng hình**.
+
+#### ⑥ Có phải câu hỏi nối tiếp không?
+
+Nếu câu mới chỉ là *"Còn màu trắng không?"*, hệ thống lấy phiếu lần trước (nam, chạy bộ, dưới 500k...) rồi **chỉ đổi màu sang trắng**. Câu *"rẻ hơn"* thì hạ mức giá xuống dưới mẫu rẻ nhất vừa đưa ra. Demo 5 là câu hỏi mới nên bỏ qua bước này.
+
+#### ⑦ Tư vấn size
+
+Khách có nêu chiều cao và cân nặng nên hệ thống tra **bảng size nam**: 1m72 ứng với size L, 65kg ứng với size L, vậy kết luận **size L**. Nếu hai chỉ số lệch nhau, shop ưu tiên theo cân nặng.
+
+Size L được ghi thêm vào phiếu để lọc hàng ở bước ⑨.
+
+#### ⑧ Có hỏi về chính sách không?
+
+Nếu khách hỏi phí ship, đổi trả, thanh toán, liên hệ..., hệ thống tra **sổ quy định** (khớp với chính sách đăng trên website). Mã giảm giá và danh mục sản phẩm được đọc trực tiếp từ hệ thống. Demo 5 không hỏi phần này.
+
+#### ⑨ Vào kho tìm hàng
+
+Hệ thống tìm trong **kho dữ liệu sản phẩm thật** của website, chỉ giữ sản phẩm thoả **tất cả** điều kiện:
+
+1. Đang bán (đã kích hoạt)
+2. Dành cho nam (hoặc unisex)
+3. Môn chạy bộ
+4. Giá sau khuyến mãi ≤ 500.000đ
+5. **Cùng một phiên bản phải vừa màu đen, vừa size L, vừa còn hàng**
+
+Sau đó **chấm điểm** để xếp hạng (đúng mục đích, đúng kiểu dáng, sản phẩm nổi bật, đang giảm giá...) và chọn **6 sản phẩm** tốt nhất.
+
+- **Không đủ hàng:** hệ thống nới dần điều kiện (bỏ size → bỏ màu → bỏ giá) và **ghi lại đã nới tiêu chí nào** để nói thật với khách. Giới tính và môn thể thao không bao giờ bị nới.
+- **Khách cần "một bộ đồ"** (như Demo 4): hệ thống tìm áo và quần riêng, ghép thành từng cặp **cùng giới tính** có tổng tiền vừa ngân sách, rồi chọn 3 bộ hợp lý nhất.
+
+#### ⑩ Soạn câu trả lời
+
+1. Hệ thống tự soạn **bản nháp** từ đúng số hàng vừa tìm được: *"Với cao 1m72, nặng 65kg, bạn nên mặc size L... Mình tìm được 6 sản phẩm chạy bộ nam màu đen dưới 500.000đ..."*
+2. Nếu còn lượt, **Gemini viết lại** bản nháp cho tự nhiên, thân thiện hơn, kèm quy định **không được thêm** sản phẩm, giá hay chính sách nào khác.
+3. Thẻ sản phẩm luôn lấy **trực tiếp từ kho**, nên giá và đường link luôn đúng.
+
+#### ⑪ Gửi kết quả về và ghi nhớ
+
+Máy chủ trả về: câu trả lời; 6 thẻ sản phẩm (ảnh, giá, % giảm, màu, size, link); dòng **"AI hiểu bạn cần"** (chính là phiếu yêu cầu ở bước ⑤); các gợi ý hỏi tiếp ("Còn màu trắng không?"...); và nguồn phân tích (Gemini AI hay bộ NLP tiếng Việt). Đồng thời phiếu được lưu lại làm trí nhớ cho câu hỏi kế tiếp.
+
+#### ⑫ Người dùng thấy kết quả
+
+Hiệu ứng chờ biến mất, câu trả lời trượt lên. Màn hình tự cuộn để **câu hỏi nằm trên cùng**, khách đọc câu trả lời từ đầu:
+
+- Lời tư vấn: size L và danh sách sản phẩm
+- Ô **"AI hiểu bạn cần"**: *Giới tính: Nam · Môn: Chạy bộ · Màu: đen · Size đề xuất: L · Giá: dưới 500.000đ*
+- Hàng thẻ sản phẩm vuốt ngang. **Bấm vào thẻ để mở trang sản phẩm và đặt mua**; khung chat vẫn giữ nguyên cuộc trò chuyện.
+
+#### Các nhánh đặc biệt
+
+| Tình huống | Hệ thống làm gì | Người dùng thấy |
+|---|---|---|
+| Hỏi ngoài phạm vi ("Thời tiết hôm nay?") | Không tìm hàng, không đoán | Lời từ chối lịch sự kèm gợi ý câu nên hỏi |
+| Hỏi món shop không bán ("đồ bơi") | Không tìm hàng | "Shop chưa kinh doanh sản phẩm dành cho bơi lội" |
+| Có hàng nhưng thiếu tiêu chí ("quần short màu hồng") | Nới tiêu chí màu | "Chưa có sản phẩm đúng **màu hồng**", kèm các mẫu gần nhất |
+| Mất mạng / Gemini hết lượt | Dùng bộ đọc tiếng Việt và câu trả lời soạn sẵn | Vẫn có kết quả đúng; dòng nguồn ghi "bộ NLP tiếng Việt" |
+| Gửi quá nhanh / máy chủ lỗi | Báo lỗi, giữ lại câu hỏi | Thông báo thân thiện, câu hỏi còn trong ô nhập để gửi lại |
+
+> **Câu chốt khi trình bày:** AI chỉ làm hai việc là *hiểu câu hỏi* và *nói cho dễ nghe*. Sản phẩm, giá, size đều lấy từ kho dữ liệu thật của shop, nên chatbot không thể "bịa" ra hàng không có.
 
 ---
 
