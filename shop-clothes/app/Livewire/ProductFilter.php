@@ -154,8 +154,11 @@ class ProductFilter extends Component
                 WHEN 'XL' THEN 5
                 WHEN 'XXL' THEN 6
                 WHEN 'XXXL' THEN 7
+                WHEN 'FREE' THEN 999
                 ELSE 99
             END")
+            ->orderByRaw('LENGTH(code)')
+            ->orderBy('code')
             ->orderBy('name')
             ->get();
     }

@@ -11,7 +11,7 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $roots = [
-            ['name' => 'Áo thể thao', 'image' => 'https://picsum.photos/seed/ao/400/500', 'children' => ['Áo thun tập gym', 'Áo chạy bộ', 'Áo khoác thể thao']],
+            ['name' => 'Áo thể thao', 'image' => 'https://picsum.photos/seed/ao/400/500', 'children' => ['Áo thun tập gym', 'Áo chạy bộ', 'Áo khoác thể thao', 'Áo bóng đá']],
             ['name' => 'Quần thể thao', 'image' => 'https://picsum.photos/seed/quan/400/500', 'children' => ['Quần short tập', 'Quần jogger', 'Quần nỉ']],
             ['name' => 'Giày thể thao', 'image' => 'https://picsum.photos/seed/giay/400/500', 'children' => ['Giày chạy bộ', 'Giày tập gym', 'Giày bóng rổ']],
             ['name' => 'Phụ kiện', 'image' => 'https://picsum.photos/seed/phukien/400/500', 'children' => ['Nón thể thao', 'Túi tập gym', 'Băng cổ tay']],

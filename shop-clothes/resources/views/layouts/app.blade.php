@@ -100,6 +100,9 @@
         </template>
     </div>
 
+    <!-- AI Sport Assistant (chatbot) -->
+    <x-chatbot />
+
     <!-- Livewire Scripts -->
     @livewireScripts
 
@@ -114,7 +117,7 @@
             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
             x-transition:leave-end="opacity-0 translate-y-4 scale-90"
             @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
-            class="fixed bottom-6 right-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-900 text-white shadow-xl hover:bg-red-500 transition-colors duration-300"
+            style="bottom: 96px;" class="fixed right-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-900 text-white shadow-xl hover:bg-red-500 transition-colors duration-300"
             aria-label="Cuộn lên đầu"
         >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>

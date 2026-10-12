@@ -22,7 +22,7 @@
         </div>
 
         {{-- Page Numbers --}}
-        <div class="flex items-center gap-1.5 order-1 sm:order-2">
+        <div class="flex flex-wrap items-center justify-center gap-1.5 order-1 sm:order-2">
             {{-- Previous --}}
             @if ($paginator->onFirstPage())
                 <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-300 cursor-not-allowed">

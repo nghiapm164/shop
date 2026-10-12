@@ -85,6 +85,7 @@
     <!-- Footer -->
     <x-footer-ndstyle />
     
+    <x-chatbot />
     @livewireScripts
     @stack('scripts')
 </body>

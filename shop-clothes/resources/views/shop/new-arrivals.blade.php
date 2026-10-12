@@ -11,12 +11,7 @@
         ->limit(16)
         ->get();
 
-    $newCategories = \App\Models\Category::where('is_active', true)
-        ->whereNull('parent_id')
-        ->withCount(['products' => fn($q) => $q->where('is_active', true)->latest('products.created_at')])
-        ->orderByDesc('products_count')
-        ->limit(6)
-        ->get();
+    $newCategories = \App\Models\Category::rootsWithProductCount(6);
 @endphp
 
 {{-- Hero Banner --}}

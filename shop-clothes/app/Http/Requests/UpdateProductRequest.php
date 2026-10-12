@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Support\ProductAttributes;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -40,6 +41,10 @@ class UpdateProductRequest extends FormRequest
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('products', 'slug')->ignore($productId)],
             'category_id' => ['required', 'exists:categories,id'],
             'brand_id' => ['required', 'exists:brands,id'],
+            'gender' => ['nullable', Rule::in(array_keys(ProductAttributes::GENDERS))],
+            'sport' => ['nullable', Rule::in(array_keys(ProductAttributes::SPORTS))],
+            'purpose' => ['nullable', Rule::in(array_keys(ProductAttributes::PURPOSES))],
+            'style' => ['nullable', Rule::in(array_keys(ProductAttributes::STYLES))],
             'price' => ['required', 'numeric', 'min:0'],
             'sale_price' => ['nullable', 'numeric', 'min:0', 'lte:price'],
             'sku' => ['nullable', 'string', 'max:100', Rule::unique('products', 'sku')->ignore($productId)],

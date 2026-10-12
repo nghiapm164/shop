@@ -80,6 +80,26 @@ class Category extends Model
     }
 
     /**
+     * Danh mục gốc đang hoạt động kèm tổng số sản phẩm đang bán (gồm cả danh mục con),
+     * sắp xếp theo số sản phẩm giảm dần.
+     */
+    public static function rootsWithProductCount(int $limit = 6)
+    {
+        return static::where('is_active', true)
+            ->whereNull('parent_id')
+            ->with('children:id,parent_id')
+            ->get()
+            ->each(function (Category $category) {
+                $category->products_count = Product::where('is_active', true)
+                    ->whereIn('category_id', $category->children->pluck('id')->push($category->id))
+                    ->count();
+            })
+            ->sortByDesc('products_count')
+            ->take($limit)
+            ->values();
+    }
+
+    /**
      * Scope query to active categories
      */
     public function scopeActive($query)

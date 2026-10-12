@@ -11,6 +11,7 @@ use App\Http\Controllers\AddressController;
 
 use App\Http\Controllers\OrderLookupController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminCategoryController;
@@ -117,6 +118,10 @@ Route::post('/order-lookup', [OrderLookupController::class, 'search'])->name('or
 // Contact form
 Route::get('/contact', [ContactController::class, 'index'])->name('pages.contact');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
+
+// AI chatbot tư vấn sản phẩm
+Route::post('/chatbot/message', [ChatbotController::class, 'message'])->middleware('throttle:30,1')->name('chatbot.message');
+Route::post('/chatbot/reset', [ChatbotController::class, 'reset'])->name('chatbot.reset');
 
 // Static pages
 Route::view('/about', 'pages.about')->name('pages.about');

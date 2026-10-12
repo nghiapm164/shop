@@ -39,6 +39,7 @@ class Size extends Model
         return match ($code) {
             'XXL' => '2XL',
             'XXXL' => '3XL',
+            'FREE' => 'Free Size',
             default => ($code !== '' ? $code : $this->name),
         };
     }

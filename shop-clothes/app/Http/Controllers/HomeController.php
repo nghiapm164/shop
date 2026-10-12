@@ -60,13 +60,8 @@ class HomeController extends Controller
             ->values();
 
         // 5. Danh mục nổi bật (Featured categories)
-        // Lấy 6 danh mục gốc (không có parent_id), đếm số lượng sản phẩm bên trong và sắp xếp lấy nhiều nhất
-        $categories = Category::where('is_active', true)
-            ->whereNull('parent_id')
-            ->withCount('products')
-            ->orderByDesc('products_count')
-            ->limit(6)
-            ->get();
+        // Lấy 6 danh mục gốc (không có parent_id), đếm số lượng sản phẩm bên trong (kể cả danh mục con) và sắp xếp lấy nhiều nhất
+        $categories = Category::rootsWithProductCount(6);
 
         // 6. Thương hiệu nổi bật (Featured brands)
         // Lấy 6 thương hiệu ngẫu nhiên đang được kích hoạt, sắp xếp theo tên

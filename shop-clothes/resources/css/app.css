@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer base {
+	/* Chặn tràn ngang trên mobile (phần tử trang trí/absolute lòi ra ngoài làm trang bị kéo rộng) */
+	html {
+		overflow-x: clip;
+	}
+
 	:root {
 		/* ── Brand Color System ── */
 		--brand-primary: #ef4444;
@@ -161,15 +166,15 @@
 		overflow-x: hidden;
 	}
 
+	/* Vệt sáng trang trí góc phải trên – vẽ gọn trong khung để không làm tràn ngang trên mobile */
 	.store-shell::before {
 		content: '';
 		position: absolute;
-		width: 380px;
-		height: 380px;
-		border-radius: 9999px;
-		background: radial-gradient(circle, rgba(239, 68, 68, 0.08) 0%, rgba(239, 68, 68, 0) 72%);
-		top: -220px;
-		right: -220px;
+		width: min(160px, 100%);
+		height: 160px;
+		background: radial-gradient(circle 190px at calc(100% + 30px) -30px, rgba(239, 68, 68, 0.08) 0%, rgba(239, 68, 68, 0) 72%);
+		top: 0;
+		right: 0;
 		pointer-events: none;
 		z-index: 0;
 	}

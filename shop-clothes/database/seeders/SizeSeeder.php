@@ -21,6 +21,19 @@ class SizeSeeder extends Seeder
             ['name' => 'Extra Large', 'code' => 'XL'],
             ['name' => 'Double Extra Large', 'code' => 'XXL'],
             ['name' => 'Triple Extra Large', 'code' => 'XXXL'],
+            // Size giày
+            ['name' => 'Size 36', 'code' => '36'],
+            ['name' => 'Size 37', 'code' => '37'],
+            ['name' => 'Size 38', 'code' => '38'],
+            ['name' => 'Size 39', 'code' => '39'],
+            ['name' => 'Size 40', 'code' => '40'],
+            ['name' => 'Size 41', 'code' => '41'],
+            ['name' => 'Size 42', 'code' => '42'],
+            ['name' => 'Size 43', 'code' => '43'],
+            ['name' => 'Size 44', 'code' => '44'],
+            ['name' => 'Size 45', 'code' => '45'],
+            // Phụ kiện, dụng cụ tập
+            ['name' => 'Free Size', 'code' => 'FREE'],
         ];
 
         foreach ($sizes as $size) {

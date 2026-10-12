@@ -232,6 +232,24 @@
                         </div>
                         @error('sale_price')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
                     </div>
+                    {{-- Thuộc tính phục vụ chatbot AI tư vấn sản phẩm --}}
+                    @foreach ([
+                        'gender' => ['Giới tính', \App\Support\ProductAttributes::GENDERS],
+                        'sport' => ['Môn thể thao', \App\Support\ProductAttributes::SPORTS],
+                        'purpose' => ['Mục đích sử dụng', \App\Support\ProductAttributes::PURPOSES],
+                        'style' => ['Kiểu dáng', \App\Support\ProductAttributes::STYLES],
+                    ] as $attrField => [$attrLabel, $attrOptions])
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $attrLabel }}</label>
+                            <select name="{{ $attrField }}" class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400 transition">
+                                <option value="">-- Không xác định --</option>
+                                @foreach ($attrOptions as $attrValue => $attrText)
+                                    <option value="{{ $attrValue }}" @selected(old($attrField, $product->{$attrField}) === $attrValue)>{{ $attrText }}</option>
+                                @endforeach
+                            </select>
+                            @error($attrField)<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
+                        </div>
+                    @endforeach
                     <div class="lg:col-span-2">
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">Mô tả ngắn</label>
                         <textarea name="short_description" rows="2" class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400 transition">{{ old('short_description', $product->short_description) }}</textarea>
